@@ -425,3 +425,4 @@ C:\Users\Ahmet Kaan\Documents\team6ticketing\obj\Debug\netcoreapp3.1\WebApplicat
 C:\Users\Ahmet Kaan\Documents\team6ticketing\obj\Debug\netcoreapp3.1\WebApplication1.pdb
 C:\Users\Ahmet Kaan\Documents\team6ticketing\obj\Debug\netcoreapp3.1\WebApplication1.genruntimeconfig.cache
 C:\Users\Ahmet Kaan\Documents\team6ticketing\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Company.cshtml.g.cs
+C:\Users\gamew\source\repos\team6ticketing\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Company.cshtml.g.cs

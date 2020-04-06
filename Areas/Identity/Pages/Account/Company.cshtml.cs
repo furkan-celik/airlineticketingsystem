@@ -60,12 +60,6 @@ namespace WebApplication1.Areas.Identity.Pages.Account
             [Required]
             [PersonalData]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
-            [Display(Name = "Company ID")]
-            public int Id { get; set; }
-
-            [Required]
-            [PersonalData]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
             [Display(Name = "Company Description")]
             public string Description { get; set; }
 
@@ -83,7 +77,7 @@ namespace WebApplication1.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var comp = new Company { Id = Input.Id, Name = Input.Name, Description= Input.Description };
+                var comp = new Company { Name = Input.Name, Description= Input.Description };
                 //var result = await _userManager.CreateAsync(comp, Input.Name);
                 //if (result.Succeeded)
                 //{
