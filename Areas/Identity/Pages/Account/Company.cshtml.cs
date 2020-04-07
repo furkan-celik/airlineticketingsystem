@@ -63,6 +63,11 @@ namespace WebApplication1.Areas.Identity.Pages.Account
             [Display(Name = "Company Description")]
             public string Description { get; set; }
 
+            [PersonalData]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
+            [Display(Name = "Company Logo")]
+            public string LogoLocation { get; set; }
+
         }
 
         public async Task OnGetAsync(string returnUrl = null)
