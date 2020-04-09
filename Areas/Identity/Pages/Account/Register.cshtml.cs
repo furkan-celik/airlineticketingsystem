@@ -99,6 +99,12 @@ namespace WebApplication1.Areas.Identity.Pages.Account
                         _userManager.AddToRoleAsync(user, "CompAdmin").Wait();
                         _logger.LogInformation("WebAdmin created a new company admin account with password.");
                     }
+                    else if(_userManager.Users.Count() == 0)
+                    {
+                        _userManager.AddToRoleAsync(user, "WebAdmin").Wait();
+                        _logger.LogInformation("WebAdmin created a with password.");
+                        Input.CId = null;
+                    }
                     else
                     {
                         _userManager.AddToRoleAsync(user, "User").Wait();

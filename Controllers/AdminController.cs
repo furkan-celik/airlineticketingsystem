@@ -25,8 +25,17 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> CreateAsync()
         {
+            string[] fixedRoles = new string[] { "WebAdmin", "UserAdmin", "User" };
+            foreach (var item in fixedRoles)
+            {
+                if (!await roleManager.RoleExistsAsync(item))
+                {
+                    await roleManager.CreateAsync(new AppRole() { Name = item });
+                }
+            }
+
             return View();
         }
 
