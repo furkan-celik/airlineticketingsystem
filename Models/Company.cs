@@ -17,5 +17,6 @@ namespace WebApplication1.Models
         public string Type { get; set; }
 
         public ICollection<Event> Events { get; set; }
+        public ICollection<AppUser> Managers { get; set; }
     }
 }

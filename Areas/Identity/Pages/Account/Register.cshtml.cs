@@ -73,9 +73,12 @@ namespace WebApplication1.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [HiddenInput(DisplayValue = false)]
+            public int? CId { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task OnGetAsync(string returnUrl = null, int? CId = null)
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -91,8 +94,17 @@ namespace WebApplication1.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    _userManager.AddToRoleAsync(user, "WebAdmin").Wait();
-                    _logger.LogInformation("User created a new account with password.");
+                    if (User.IsInRole("WebAdmin"))
+                    {
+                        _userManager.AddToRoleAsync(user, "CompAdmin").Wait();
+                        _logger.LogInformation("WebAdmin created a new company admin account with password.");
+                    }
+                    else
+                    {
+                        _userManager.AddToRoleAsync(user, "User").Wait();
+                        _logger.LogInformation("User created a new account with password.");
+                        Input.CId = null;
+                    }
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

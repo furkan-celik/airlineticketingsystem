@@ -808,3 +808,8 @@ C:\Users\gamew\source\repos\team6ticketing\obj\Debug\netcoreapp3.1\Razor\Views\F
 C:\Users\gamew\source\repos\team6ticketing\obj\Debug\netcoreapp3.1\Razor\Views\Flights\Details.cshtml.g.cs
 C:\Users\gamew\source\repos\team6ticketing\obj\Debug\netcoreapp3.1\Razor\Views\Flights\Edit.cshtml.g.cs
 C:\Users\gamew\source\repos\team6ticketing\obj\Debug\netcoreapp3.1\Razor\Views\Flights\Index.cshtml.g.cs
+C:\Users\gamew\source\repos\team6ticketing\obj\Debug\netcoreapp3.1\Razor\Views\Companies\Create.cshtml.g.cs
+C:\Users\gamew\source\repos\team6ticketing\obj\Debug\netcoreapp3.1\Razor\Views\Companies\Delete.cshtml.g.cs
+C:\Users\gamew\source\repos\team6ticketing\obj\Debug\netcoreapp3.1\Razor\Views\Companies\Details.cshtml.g.cs
+C:\Users\gamew\source\repos\team6ticketing\obj\Debug\netcoreapp3.1\Razor\Views\Companies\Edit.cshtml.g.cs
+C:\Users\gamew\source\repos\team6ticketing\obj\Debug\netcoreapp3.1\Razor\Views\Companies\Index.cshtml.g.cs

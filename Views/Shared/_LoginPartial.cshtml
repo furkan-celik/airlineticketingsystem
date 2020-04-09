@@ -29,7 +29,7 @@
         @if ((await AuthorizationService.AuthorizeAsync(User, "ReqWebAdmin")).Succeeded)
         {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Company">Add Company</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Companies" asp-action="Index">Show Companies</a>
         </li>
         }
     </ul>
