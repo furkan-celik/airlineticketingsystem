@@ -422,7 +422,6 @@ C:\Users\Ahmet Kaan\Documents\team6ticketing\obj\Debug\netcoreapp3.1\WebApplicat
 C:\Users\Ahmet Kaan\Documents\team6ticketing\obj\Debug\netcoreapp3.1\WebApplication1.pdb
 C:\Users\Ahmet Kaan\Documents\team6ticketing\obj\Debug\netcoreapp3.1\WebApplication1.genruntimeconfig.cache
 C:\Users\Ahmet Kaan\Documents\team6ticketing\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Company.cshtml.g.cs
-C:\Users\gamew\source\repos\team6ticketing\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Company.cshtml.g.cs
 C:\Users\Ahmet Kaan\Documents\team6ticketing_4\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\Ahmet Kaan\Documents\team6ticketing_4\bin\Debug\netcoreapp3.1\appsettings.json
 C:\Users\Ahmet Kaan\Documents\team6ticketing_4\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
