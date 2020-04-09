@@ -21,7 +21,7 @@ namespace WebApplication1.Models
         public string TC { get; set; }
 
         [ForeignKey("Company")]
-        public int CId { get; set; }
+        public int? ManagingCompanyId { get; set; }
 
         public Company ManagingCompany { get; set; }
         public ICollection<Address> Addresses { get; set; }

@@ -2,16 +2,10 @@
 
 namespace WebApplication1.Migrations
 {
-    public partial class CompUserRelation : Migration
+    public partial class SmallFix : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "CId",
-                table: "AspNetUsers",
-                nullable: false,
-                defaultValue: 0);
-
             migrationBuilder.AddColumn<int>(
                 name: "ManagingCompanyId",
                 table: "AspNetUsers",
@@ -42,12 +36,21 @@ namespace WebApplication1.Migrations
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
-                name: "CId",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
                 name: "ManagingCompanyId",
                 table: "AspNetUsers");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_CId",
+                table: "AspNetUsers",
+                column: "CId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_Companies_CId",
+                table: "AspNetUsers",
+                column: "CId",
+                principalTable: "Companies",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
     }
 }

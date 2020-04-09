@@ -16,7 +16,8 @@
             <div class="container">
                 @if ((await AuthorizationService.AuthorizeAsync(User, "ReqCompAdmin")).Succeeded)
                 {
-                    <img id="img_logo" alt="company logo" src="Url.Content(UserManager.GetUserAsync(User).Result.ManagingCompany.LogoLocation)"/>
+                    <img id="img_logo" alt="company logo" src="Url.Content(UserManager.GetUserAsync(User).Result.ManagingCompany.LogoLocation)" />
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@UserManager.GetUserAsync(User).Result.ManagingCompany.Name</a>
                 }
                 else
                 {

@@ -9,8 +9,8 @@ using WebApplication1.Data;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200409122249_CompUserRelation")]
-    partial class CompUserRelation
+    [Migration("20200409141044_SmallFix2")]
+    partial class SmallFix2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -189,9 +189,6 @@ namespace WebApplication1.Migrations
 
                     b.Property<DateTime?>("Birthday")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<int>("CId")
-                        .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
