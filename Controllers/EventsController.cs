@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
-namespace WebApplication1.Views
+namespace WebApplication1.Controllers
 {
-    public class EventsController : Controller
+    public class EventsController : Microsoft.AspNetCore.Mvc.Controller
     {
         private readonly ApplicationDbContext _context;
 
@@ -45,13 +46,16 @@ namespace WebApplication1.Views
             return View(@event);
         }
 
+        [Authorize(Roles = "WebAdmin,CompAdmin")]
         // GET: Events/Create
         public IActionResult Create()
         {
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Description");
+            ViewData["FlightNo"] = new SelectList(_context.Flights, "FlightNo", "FlightNo");
             return View();
         }
 
+        [Authorize(Roles = "WebAdmin,CompAdmin")]
         // POST: Events/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -66,9 +70,11 @@ namespace WebApplication1.Views
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Description", @event.CompanyId);
+            ViewData["FlightNo"] = new SelectList(_context.Flights, "FlightNo", "FlightNo");
             return View(@event);
         }
 
+        [Authorize(Roles = "WebAdmin,CompAdmin")]
         // GET: Events/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -86,6 +92,7 @@ namespace WebApplication1.Views
             return View(@event);
         }
 
+        [Authorize(Roles = "WebAdmin,CompAdmin")]
         // POST: Events/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -122,6 +129,7 @@ namespace WebApplication1.Views
             return View(@event);
         }
 
+        [Authorize(Roles = "WebAdmin,CompAdmin")]
         // GET: Events/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -141,6 +149,7 @@ namespace WebApplication1.Views
             return View(@event);
         }
 
+        [Authorize(Roles = "WebAdmin,CompAdmin")]
         // POST: Events/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

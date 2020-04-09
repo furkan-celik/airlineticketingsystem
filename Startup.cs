@@ -37,6 +37,16 @@ namespace WebApplication1
                 .AddDefaultUI();
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ReqAdmin",
+                     policy => policy.RequireRole("WebAdmin", "CompAdmin"));
+                options.AddPolicy("ReqWebAdmin",
+                    policy => policy.RequireRole("WebAdmin"));
+                options.AddPolicy("ReqCompAdmin",
+                    policy => policy.RequireRole("CompAdmin"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,7 +75,7 @@ namespace WebApplication1
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Events}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

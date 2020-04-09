@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using WebApplication1.Data;
 using WebApplication1.Models;
 
 namespace WebApplication1.Areas.Identity.Pages.Account
@@ -83,35 +84,8 @@ namespace WebApplication1.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var comp = new Company { Name = Input.Name, Description= Input.Description };
-                //var result = await _userManager.CreateAsync(comp, Input.Name);
-                //if (result.Succeeded)
-                //{
-                //    _logger.LogInformation("User created a new account with password.");
-
-                //    var code = await _userManager.GenerateEmailConfirmationTokenAsync(company);
-                //    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                //    var callbackUrl = Url.Page(
-                //        "/Account/ConfirmEmail",
-                //        pageHandler: null,
-                //        values: new { area = "Identity", userId = company.Id, code = code },
-                //        protocol: Request.Scheme);
-
-
-
-                //    if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                //    {
-                //        return RedirectToPage("RegisterConfirmation", new { Id = Input.Id });
-                //    }
-                //    else
-                //    {
-                //        await _signInManager.SignInAsync(company, isPersistent: false);
-                //        return LocalRedirect(returnUrl);
-                //    }
-                //}
-                //foreach (var error in result.Errors)
-                //{
-                //    ModelState.AddModelError(string.Empty, error.Description);
-                //}
+                ApplicationDbContext._context.Companies.Add(comp);
+                ApplicationDbContext._context.SaveChanges();
             }
 
             // If we got this far, something failed, redisplay form

@@ -9,8 +9,7 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
-    [Authorize(Roles = "WebAdmin")]
-    public class AdminController : Controller
+    public class AdminController : Microsoft.AspNetCore.Mvc.Controller
     {
 
         private readonly RoleManager<AppRole> roleManager;

@@ -9,6 +9,8 @@ namespace WebApplication1.Data
 {
     public class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, string>
     {
+        public static ApplicationDbContext _context;
+
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<CreditCard> CreditCards { get; set; }
@@ -23,6 +25,7 @@ namespace WebApplication1.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+            _context = this;
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
