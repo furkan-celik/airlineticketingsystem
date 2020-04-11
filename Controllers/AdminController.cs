@@ -25,9 +25,29 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CreateAsync()
+        public IActionResult Create()
         {
-            string[] fixedRoles = new string[] { "WebAdmin", "UserAdmin", "User" };
+            
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(AppRole role)
+        {
+
+            //Vol1. Normal Role adding(ıt should be use in final product
+
+            //var roleExist = await roleManager.RoleExistsAsync(role.Name);
+
+            //if (!roleExist)
+            //{
+            //    var result = await roleManager.CreateAsync(role);
+            //}
+            //return View();
+
+            //Vol2. Auto adding for roles to local databases for developers
+            string[] fixedRoles = new string[] { "WebAdmin", "CompAdmin", "User" };
             foreach (var item in fixedRoles)
             {
                 if (!await roleManager.RoleExistsAsync(item))
@@ -36,18 +56,6 @@ namespace WebApplication1.Controllers
                 }
             }
 
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(AppRole role)
-        {
-            var roleExist = await roleManager.RoleExistsAsync(role.Name);
-
-            if (!roleExist)
-            {
-                var result = await roleManager.CreateAsync(role);
-            }
             return View();
         }
     }
