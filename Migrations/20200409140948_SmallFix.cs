@@ -38,19 +38,6 @@ namespace WebApplication1.Migrations
             migrationBuilder.DropColumn(
                 name: "ManagingCompanyId",
                 table: "AspNetUsers");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_CId",
-                table: "AspNetUsers",
-                column: "CId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUsers_Companies_CId",
-                table: "AspNetUsers",
-                column: "CId",
-                principalTable: "Companies",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
         }
     }
 }

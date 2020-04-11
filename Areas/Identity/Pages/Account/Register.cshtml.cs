@@ -75,10 +75,10 @@ namespace WebApplication1.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             [HiddenInput(DisplayValue = false)]
-            public int? CId { get; set; }
+            public int? ManagingCompanyId { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null, int? CId = null)
+        public async Task OnGetAsync(string returnUrl = null, int? ManagingCompanyId = null)
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -103,13 +103,13 @@ namespace WebApplication1.Areas.Identity.Pages.Account
                     {
                         _userManager.AddToRoleAsync(user, "WebAdmin").Wait();
                         _logger.LogInformation("WebAdmin created a with password.");
-                        Input.CId = null;
+                        Input.ManagingCompanyId = null;
                     }
                     else
                     {
                         _userManager.AddToRoleAsync(user, "User").Wait();
                         _logger.LogInformation("User created a new account with password.");
-                        Input.CId = null;
+                        Input.ManagingCompanyId = null;
                     }
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
