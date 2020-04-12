@@ -8,6 +8,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using System.Web;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+
 
 namespace WebApplication1.Controllers
 {
@@ -15,6 +19,8 @@ namespace WebApplication1.Controllers
     public class CompaniesController : Controller
     {
         private readonly ApplicationDbContext _context;
+
+       
 
         public CompaniesController(ApplicationDbContext context)
         {
@@ -46,6 +52,7 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Companies/Create
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -56,16 +63,47 @@ namespace WebApplication1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,LogoLocation,Description,Type")] Company company)
+        public async Task<IActionResult> Create([Bind("Id,Name,LogoLocation,Description,Type")] Company company, IFormFile file)
         {
             if (ModelState.IsValid)
             {
+
+
+                //UploadFile(file, company.Id);
+                var fileName = file.FileName;
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    file.CopyTo(fileStream);
+                }
+
+                company.LogoLocation = fileName;
+
                 _context.Add(company);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(company);
         }
+
+
+
+        public async void UploadFile(IFormFile file, int? id)
+        {
+            var fileName = file.FileName;
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                file.CopyTo(fileStream);
+            }
+
+            var company = await _context.Companies
+                .FirstOrDefaultAsync(m => m.Id == id);
+            company.LogoLocation = fileName;
+            _context.Update(company);
+
+        }
+
 
         // GET: Companies/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -76,6 +114,7 @@ namespace WebApplication1.Controllers
             }
 
             var company = await _context.Companies.FindAsync(id);
+            
             if (company == null)
             {
                 return NotFound();
