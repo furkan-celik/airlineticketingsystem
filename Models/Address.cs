@@ -12,7 +12,7 @@ namespace WebApplication1.Models
         public int Id { get; set; }
         [Required]
         [ForeignKey("AppUser")]
-        public string UserId { get; set; }
+        public string OwnerId { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]

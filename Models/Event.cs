@@ -21,9 +21,10 @@ namespace WebApplication1.Models
         [Required]
         public DateTime Date { get; set; }
         [Required]
-        [ForeignKey("Flights")]
         public string FlightNo { get; set; }
 
         public Company Organizer { get; set; }
+        [ForeignKey("FlightNo")]
+        public Flight Flight { get; set; }
     }
 }

@@ -11,8 +11,7 @@ namespace WebApplication1.Models
     {
         public int Id { get; set; }
         [Required]
-        [ForeignKey("User")]
-        public string UserId { get; set; }
+        public string OwnerId { get; set; }
         [Required]
         [ForeignKey("Event")]
         public int EventId { get; set; }

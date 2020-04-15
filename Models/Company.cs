@@ -8,9 +8,6 @@ using System.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-
-
-
 namespace WebApplication1.Models
 {
     public class Company
@@ -25,20 +22,8 @@ namespace WebApplication1.Models
         public string Description { get; set; }
         public string Type { get; set; }
 
-
         public ICollection<Event> Events { get; set; }
-        public ICollection<AppUser> Managers { get; set; }
-
-
-     
-
-        
-        
-
-        
-        
-
-      
+        public ICollection<AppUser> Managers { get; set; }      
     }
 
  
