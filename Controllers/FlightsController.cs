@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
@@ -11,10 +13,11 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
-    [Authorize(Roles = "WebAdmin,CompAdmin")]
+    
     public class FlightsController : Controller
     {
         private readonly ApplicationDbContext _context;
+
 
         public FlightsController(ApplicationDbContext context)
         {
@@ -22,10 +25,41 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Flights
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    return View(await _context.Flights.ToListAsync());
+        //}
+        
+        public IActionResult Index(string arr,string dest, DateTime date)
         {
-            return View(await _context.Flights.ToListAsync());
+            ViewData["CityId"] = new SelectList(_context.Cities, "CityName", "CityName");
+            ViewData["Err"] = "";
+            ViewData["Date"] = @DateTime.Now.ToString("yyyy-MM-dd");
+
+            var flights = from selectList in _context.Flights
+                    select selectList;
+
+            if (!String.IsNullOrEmpty(arr) && !String.IsNullOrEmpty(dest))
+            {
+                ViewData["Date"] = date.ToString("yyyy-MM-dd");
+                if (string.Equals(arr, dest))
+                {
+                    ViewData["Err"] = "Destination and Arrival can't be the same. Please do another search.";
+
+                }
+                //else if(date != null){
+                //    ViewData["Err"] = date.ToString("MM-dd-yyyy");
+
+                //}
+                else {
+                    
+                    flights = flights.Where(selectList => selectList.Destination.Equals(dest) && selectList.Arrival.Equals(arr) && selectList.ETA.Date.Equals(date.Date));
+                }
+                
+            }
+            return View(flights.ToList());
         }
+       
 
         // GET: Flights/Details/5
         public async Task<IActionResult> Details(string id)
@@ -46,23 +80,32 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Flights/Create
+        [HttpGet]
+        [Authorize(Roles = "WebAdmin,CompAdmin")]
         public IActionResult Create()
         {
+            ViewData["CityId"] = new SelectList(_context.Cities, "CityName", "CityName");
             return View();
         }
 
         // POST: Flights/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "WebAdmin,CompAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FlightNo,Destination,Arrival,ETA")] Flight flight)
         {
-            if (ModelState.IsValid)
+            if (flight.Destination != flight.Arrival)
             {
-                _context.Add(flight);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(flight);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+           
+                ViewData["CityId"] = new SelectList(_context.Cities, "CityName", "CityName");
             }
             return View(flight);
         }
@@ -70,6 +113,8 @@ namespace WebApplication1.Controllers
         // GET: Flights/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
+            ViewData["Err"] = "";
+            ViewData["CityId"] = new SelectList(_context.Cities, "CityName", "CityName");
             if (id == null)
             {
                 return NotFound();
@@ -90,30 +135,39 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("FlightNo,Destination,Arrival,ETA")] Flight flight)
         {
+            ViewData["Err"] = "";
+            ViewData["CityId"] = new SelectList(_context.Cities, "CityName", "CityName");
             if (id != flight.FlightNo)
             {
                 return NotFound();
             }
-
+            
             if (ModelState.IsValid)
             {
-                try
+                if (flight.Arrival.Equals(flight.Destination))
                 {
-                    _context.Update(flight);
-                    await _context.SaveChangesAsync();
+                    ViewData["Err"] = "Destination and Arrival can't be the same city";
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!FlightExists(flight.FlightNo))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(flight);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!FlightExists(flight.FlightNo))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(flight);
         }

@@ -28,9 +28,12 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Companies
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Companies.ToListAsync());
+
+            var companies = from selectList in _context.Companies
+                          select selectList;
+            return View(companies);
         }
 
         // GET: Companies/Details/5
