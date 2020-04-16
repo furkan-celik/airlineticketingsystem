@@ -6,18 +6,8 @@ namespace WebApplication1.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Events_Flights_FlightNo1",
-                table: "Events");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Events_FlightNo1",
-                table: "Events");
-
-            migrationBuilder.DropColumn(
-                name: "FlightNo1",
-                table: "Events");
-
+            
             migrationBuilder.AlterColumn<string>(
                 name: "FlightNo",
                 table: "Events",
@@ -25,18 +15,7 @@ namespace WebApplication1.Migrations
                 oldClrType: typeof(string),
                 oldType: "longtext CHARACTER SET utf8mb4");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Events_FlightNo",
-                table: "Events",
-                column: "FlightNo");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Events_Flights_FlightNo",
-                table: "Events",
-                column: "FlightNo",
-                principalTable: "Flights",
-                principalColumn: "FlightNo",
-                onDelete: ReferentialAction.Cascade);
+            
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
