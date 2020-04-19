@@ -28,5 +28,7 @@ namespace WebApplication1.Models
         public Company Organizer { get; set; }
         [ForeignKey("FlightNo")]
         public Flight Flight { get; set; }
+        public ICollection<Ticket> Tickets { get; set; }
+        public ICollection<Reservation> Reservations { get; set; }
     }
 }

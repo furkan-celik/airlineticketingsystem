@@ -15,8 +15,13 @@ namespace WebApplication1.Models
         public string OwnerId { get; set; }
         [Required]
         public DateTime ProcessTime { get; set; }
+        [Required]
+        public int EventId { get; set; }
 
         public AppUser Owner { get; set; }
-        public ICollection<Offer> Offers { get; set; }
+        [ForeignKey("EventId")]
+        public Event Event { get; set; }
+        public ICollection<OfferTicket> Offers { get; set; }
+        public ICollection<Seat> Seats { get; set; }
     }
 }

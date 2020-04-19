@@ -20,5 +20,7 @@ namespace WebApplication1.Models
         public float Price { get; set; }
 
         public Event Event { get; set; }
+        public ICollection<OfferTicket> Tickets { get; set; }
+        public ICollection<Reservation> Reservations { get; set; }
     }
 }

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200419155050_TicketSeatFK")]
+    partial class TicketSeatFK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -497,6 +499,21 @@ namespace WebApplication1.Migrations
                     b.ToTable("Seats");
                 });
 
+            modelBuilder.Entity("WebApplication1.Models.SeatTicket", b =>
+                {
+                    b.Property<int>("SeatId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TicketId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SeatId", "TicketId");
+
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("SeatTicket");
+                });
+
             modelBuilder.Entity("WebApplication1.Models.SeatType", b =>
                 {
                     b.Property<int>("Id")
@@ -688,7 +705,7 @@ namespace WebApplication1.Migrations
                         .IsRequired();
 
                     b.HasOne("WebApplication1.Models.Ticket", "Ticket")
-                        .WithMany("Seats")
+                        .WithMany()
                         .HasForeignKey("TicketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -696,6 +713,21 @@ namespace WebApplication1.Migrations
                     b.HasOne("WebApplication1.Models.SeatType", "SeatType")
                         .WithMany("Collection")
                         .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.SeatTicket", b =>
+                {
+                    b.HasOne("WebApplication1.Models.Seat", "Seat")
+                        .WithMany("Tickets")
+                        .HasForeignKey("SeatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApplication1.Models.Ticket", "Ticket")
+                        .WithMany("Seats")
+                        .HasForeignKey("TicketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

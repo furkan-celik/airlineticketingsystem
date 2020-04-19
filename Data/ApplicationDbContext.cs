@@ -35,9 +35,8 @@ namespace WebApplication1.Data
             base.OnModelCreating(builder);
             builder.Entity<CreditCard>().HasKey(o => new { o.CardNumber, o.CardDate });
             builder.Entity<AppUser>().Property(p => p.Gender).HasConversion(v => v.ToString(), v => (Genders)Enum.Parse(typeof(Genders), v));
-            //builder.Entity<Address>().ToTable("Address");
-            
-            
+
+            builder.Entity<OfferTicket>().HasKey(o => new { o.OfferId, o.TicketId });
         }
     }
 }

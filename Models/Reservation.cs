@@ -18,5 +18,7 @@ namespace WebApplication1.Models
 
         public AppUser Owner { get; set; }
         public Event Event { get; set; }
+
+        public ICollection<Seat> Seats { get; set; }
     }
 }
