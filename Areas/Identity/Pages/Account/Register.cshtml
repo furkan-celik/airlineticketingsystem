@@ -38,7 +38,10 @@
                 <input asp-for="Input.ConfirmPassword" class="form-control" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <input asp-for="Input.ManagingCompanyId" type="text" value="@HttpContext.Session.GetInt32("ManagingCompanyId").Value" />
+            @if (HttpContext.Session.GetInt32("ManagingCompanyId").HasValue)
+            {
+                <input asp-for="Input.ManagingCompanyId" type="hidden" value="@HttpContext.Session.GetInt32("ManagingCompanyId").Value" />
+            }
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
     </div>
