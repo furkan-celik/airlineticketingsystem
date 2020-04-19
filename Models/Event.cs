@@ -15,8 +15,10 @@ namespace WebApplication1.Models
         public int CompanyId { get; set; }
         [Required]
         public string Name { get; set; }
-        public DateTime RefundTime { get; set; }
-        public DateTime ResCancelTime { get; set; }
+        [DataType(DataType.Time)]
+        public TimeSpan RefundTime { get; set; }
+        [DataType(DataType.Time)]
+        public TimeSpan ResCancelTime { get; set; }
         public float RefundPortion { get; set; }
         [Required]
         public DateTime Date { get; set; }

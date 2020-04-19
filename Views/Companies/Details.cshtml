@@ -28,21 +28,22 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
-        @if (Model.Managers != null) foreach (var manager in @Model.Managers)
-        {
-            <dt class="col-sm-2">
-                @Html.DisplayName(manager.Name)
-                @Html.DisplayName(manager.Surname)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.Display(manager.Name)
-                @Html.Display(manager.Surname)
-            </dd>
-        }
+        @if (ViewData["Managers"] != null) foreach (var manager in (ViewData["Managers"] as List<AppUser>))
+            {
+                @Html.DisplayText("test")
+                <dt class="col-sm-2">
+                    @Html.DisplayName(manager.Name)
+                    @Html.DisplayName(manager.Surname)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.Display(manager.Name)
+                    @Html.Display(manager.Surname)
+                </dd>
+            }
     </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-area="Identity" asp-page="/Account/Register" asp-route-ManagingCompanyId="@Model.Id">Add User</a> |
+    <a asp-action="AddUser" asp-route-id="@Model.Id">Add User</a> |
     <a asp-action="Index">Back to List</a>
 </div>

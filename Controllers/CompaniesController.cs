@@ -51,6 +51,12 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
+            if (company.Managers != null)
+                ViewData["Managers"] = company.Managers.ToList<AppUser>();
+            else
+                ViewData["Managers"] = null;
+
+            ViewData["Companies"] = new SelectList(_context.Companies, "Id", "Name");
             return View(company);
         }
 
@@ -190,9 +196,10 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Companies/AddUser
-        public IActionResult AddUser()
+        public IActionResult AddUser(int id)
         {
-            return View();
+            HttpContext.Session.SetInt32("ManagingCompanyId", id);
+            return Redirect("~/Identity/Account/Register");
         }
 
         // POST: Companies/AddUser

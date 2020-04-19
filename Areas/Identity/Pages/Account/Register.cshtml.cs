@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 using WebApplication1.Models;
 
 namespace WebApplication1.Areas.Identity.Pages.Account
@@ -91,13 +92,21 @@ namespace WebApplication1.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = new AppUser { UserName = Input.Email, Email = Input.Email, Name = Input.Name, Surname = Input.Surname };
+
+                if (HttpContext.Session.GetInt32("ManagingCompanyId").HasValue && User.IsInRole("WebAdmin"))
+                {
+                    user.ManagingCompanyId = Input.ManagingCompanyId;
+                }
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    if (User.IsInRole("WebAdmin"))
+                    if (HttpContext.Session.GetInt32("ManagingCompanyId").HasValue && User.IsInRole("WebAdmin"))
                     {
                         _userManager.AddToRoleAsync(user, "CompAdmin").Wait();
                         _logger.LogInformation("WebAdmin created a new company admin account with password.");
+                        Data.ApplicationDbContext._context.Companies.Find(user.ManagingCompanyId).Managers.Add(user);
+                        Data.ApplicationDbContext._context.SaveChanges();
                     }
                     else if(_userManager.Users.Count() == 1)
                     {

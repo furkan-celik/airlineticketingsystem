@@ -37,6 +37,9 @@ namespace WebApplication1
                 .AddDefaultUI();
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+                options.IdleTimeout = TimeSpan.FromMinutes(10));
 
             services.AddAuthorization(options =>
             {
@@ -65,6 +68,8 @@ namespace WebApplication1
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseSession();
 
             app.UseRouting();
 
