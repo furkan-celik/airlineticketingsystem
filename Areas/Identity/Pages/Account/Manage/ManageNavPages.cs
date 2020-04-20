@@ -28,7 +28,7 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
 
         public static string ChangePasswordNavClass(ViewContext viewContext) => PageNavClass(viewContext, ChangePassword);
 
-        public static string AddressesNavClass(ViewContext viewContext) => PageNavClass(viewContext, ChangePassword);
+        public static string AddressesNavClass(ViewContext viewContext) => PageNavClass(viewContext, Addresses);
 
         public static string ExternalLoginsNavClass(ViewContext viewContext) => PageNavClass(viewContext, ExternalLogins);
 

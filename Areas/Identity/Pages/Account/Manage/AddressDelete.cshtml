@@ -1,9 +1,9 @@
 ﻿@page
-@model WebApplication1.Areas.Identity.Pages.Account.Manage.addresses.DeleteModel
+@model DeleteModel
 
 @{
     ViewData["Title"] = "Delete";
-    Layout = "~/Areas/Identity/Pages/Account/Manage/_Layout.cshtml";
+    ViewData["ActivePage"] = ManageNavPages.Addresses;
 }
 
 <h1>Delete</h1>
@@ -36,6 +36,6 @@
     <form method="post">
         <input type="hidden" asp-for="Address.Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-page="./Index">Back to List</a>
+        <a asp-page="./AddressIndex">Back to List</a>
     </form>
 </div>

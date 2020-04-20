@@ -1,9 +1,9 @@
 ﻿@page
-@model WebApplication1.Areas.Identity.Pages.Account.Manage.addresses.CreateModel
+@model CreateModel
 
 @{
     ViewData["Title"] = "Create";
-    Layout = "~/Areas/Identity/Pages/Account/Manage/_Layout.cshtml";
+    ViewData["ActivePage"] = ManageNavPages.Addresses;
 }
 
 <h1>Create</h1>
@@ -32,7 +32,7 @@
 </div>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="./AddressIndex">Back to List</a>
 </div>
 
 @section Scripts {

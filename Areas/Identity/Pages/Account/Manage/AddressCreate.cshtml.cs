@@ -12,8 +12,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Runtime.CompilerServices;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApplication1.Areas.Identity.Pages.Account.Manage.addresses
-{
+namespace WebApplication1.Areas.Identity.Pages.Account.Manage
+{ 
     public class CreateModel : PageModel
     {
         private readonly WebApplication1.Data.ApplicationDbContext _context;
@@ -41,7 +41,7 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage.addresses
         public class InputModel
         {
             [Required]
-            [Display(Name = "Name of Address")]
+            [Display(Name = "Name of the Address")]
             public string Name { get; set; }
 
             [Required]
@@ -89,7 +89,7 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage.addresses
                 var entry = _context.Add(new Address());
                 entry.CurrentValues.SetValues(AddressVM);
                 await _context.SaveChangesAsync();
-                return RedirectToPage("./Index");
+                return RedirectToPage("./AddressIndex");
             //}
 
                 

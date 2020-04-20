@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
-namespace WebApplication1.Areas.Identity.Pages.Account.Manage.addresses
+namespace WebApplication1.Areas.Identity.Pages.Account.Manage
 {
     public class DeleteModel : PageModel
     {
@@ -63,7 +63,7 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage.addresses
             {
                 _context.Addresses.Remove(address); 
                 await _context.SaveChangesAsync();
-                return RedirectToPage("./Index");
+                return RedirectToPage("./AddressIndex");
             }
             catch (DbUpdateException /* ex */)
             {
