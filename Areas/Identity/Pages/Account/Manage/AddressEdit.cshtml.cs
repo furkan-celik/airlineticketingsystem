@@ -11,15 +11,15 @@ using WebApplication1.Models;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.Logging;
 
-namespace WebApplication1.Areas.Identity.Pages.Account.Manage.addresses
+namespace WebApplication1.Areas.Identity.Pages.Account.Manage
 {
     public class EditModel : PageModel
     {
         private readonly WebApplication1.Data.ApplicationDbContext _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-
         public EditModel(WebApplication1.Data.ApplicationDbContext context,
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager)
@@ -29,6 +29,10 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage.addresses
             _signInManager = signInManager;
         }
 
+
+        [BindProperty]
+        public InputModel Input { get; set; }
+
         public Address Address { get; set; }
 
         [TempData]
@@ -37,20 +41,17 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage.addresses
         [BindProperty]
         public AdressVM AddressVM { get; set; }
 
-        [BindProperty]
-        public InputModel Input { get; set; }
 
         public class InputModel
         {
             [Required]
-            [Display(Name = "Name of Address")]
+            [Display(Name = "Name")]
             public string Name { get; set; }
 
             [Required]
             [Display(Name = "Address")]
             public string AddressLine { get; set; }
         }
-
 
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -71,13 +72,24 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage.addresses
 
         public async Task<IActionResult> OnPostAsync(int id)
         {
+          
+
             var addressToUpdate = await _context.Addresses.FindAsync(id);
-            var user = await _userManager.GetUserAsync(User);
+
             if (addressToUpdate == null)
             {
                 return NotFound();
             }
+
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
             
+
             var Userid = _signInManager.Context.User.Claims.FirstOrDefault().Value;
             addressToUpdate.OwnerId = Userid;
             addressToUpdate.Owner = user;
@@ -88,16 +100,17 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage.addresses
             //AddressVM.Name = Input.Name;
             //AddressVM.AddressLine = Input.AddressLine;
 
-            //var entry = _context.(new Address());
+    
+            
             //entry.CurrentValues.SetValues(AddressVM);
-
-            await _context.SaveChangesAsync();
-            return RedirectToPage("./Index");
-
 
             
 
-            return Page();
+            var entry = _context.Addresses.Update(addressToUpdate);
+            entry.CurrentValues.SetValues(addressToUpdate);
+            await _context.SaveChangesAsync();
+            return RedirectToPage("./AddressIndex");
+            
         }
 
         private bool AddressExists(int id)

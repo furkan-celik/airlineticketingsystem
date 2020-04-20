@@ -11,15 +11,15 @@ using WebApplication1.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 
-namespace WebApplication1.Areas.Identity.Pages.Account.Manage.addresses
+namespace WebApplication1.Areas.Identity.Pages.Account.Manage
 {
-    public class IndexModel : PageModel
+    public class AddressModel : PageModel
     {
         private readonly WebApplication1.Data.ApplicationDbContext _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
 
-        public IndexModel(WebApplication1.Data.ApplicationDbContext context,
+        public AddressModel(WebApplication1.Data.ApplicationDbContext context,
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager)
         {
@@ -41,9 +41,8 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage.addresses
             Address = await _context.Addresses
                 .Where(a => a.OwnerId == Userid)
                 .Include(a => a.Owner).ToListAsync();
-                
 
-
+         
         }
     }
 }
