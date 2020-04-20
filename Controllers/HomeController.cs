@@ -6,11 +6,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebApplication1.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using WebApplication1.Data;
+using System.Web;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace WebApplication1.Controllers
 {
     public class HomeController : Microsoft.AspNetCore.Mvc.Controller
     {
+
+
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)

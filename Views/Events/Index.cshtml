@@ -5,73 +5,147 @@
 }
 
 <h1>Index</h1>
-@if((await AuthorizationService.AuthorizeAsync(User, "ReqAdmin")).Succeeded)
+@if ((await AuthorizationService.AuthorizeAsync(User, "ReqAdmin")).Succeeded)
 {
     <p>
         <a asp-action="Create">Create New</a>
+        @*<asp:Timer ID="timerTest" runat="server" Interval="1000" OnTick="timerTest_tick"></asp:Timer>
+
+        <asp:UpdatePanel itemid="up" runat="server" UpdateMode="Conditional">
+
+            <ContentTemplate>
+
+                <asp:Literal ID="litMsg" runat="server">
+
+                </asp:Literal>
+            </ContentTemplate>
+
+            <Triggers>
+                <asp:AsyncPostBackTrigger ControlID="timerTest" EventName="tick">
+
+                </asp:AsyncPostBackTrigger>
+            </Triggers>
+
+        </asp:UpdatePanel>*@
     </p>
 }
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RefundTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ResCancelTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RefundPortion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FlightNo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Organizer)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RefundTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ResCancelTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RefundPortion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FlightNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Organizer.Description)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-            @if ((await AuthorizationService.AuthorizeAsync(User, "ReqAdmin")).Succeeded)
+
+@if (User.IsInRole("WebAdmin") || User.IsInRole("CompAdmin"))
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RefundTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ResCancelTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RefundPortion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FlightNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Organizer)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
             {
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RefundTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ResCancelTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RefundPortion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FlightNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Organizer.Description)
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "ReqAdmin")).Succeeded)
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        }
+                    </td>
+                </tr>
             }
-            </td>
-        </tr>
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+
+}
+
+@if (User.IsInRole("User"))
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Organizer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FlightNo)
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Organizer.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FlightNo)
+                    </td>
+
+                    <td>
+                        <a asp-action="Buy" asp-route-id="@item.Id">Buy Ticket</a> |
+                        <a asp-action="ReservationNow" asp-route-id="@item.Id" asp-controller="Reservation">Reservation Now</a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+}
