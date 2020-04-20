@@ -53,6 +53,18 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
             public string AddressLine { get; set; }
         }
 
+        private async Task LoadAsync(int? id)
+        {
+            
+
+            Address = await _context.Addresses.FindAsync(id);
+            
+            Input = new InputModel
+            {
+                Name = Address.Name,
+                AddressLine = Address.AddressLine
+            };
+        }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -62,11 +74,12 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
             }
 
             Address = await _context.Addresses.FindAsync(id);
-
+            
             if (Address == null)
             {
                 return NotFound();
             }
+            await LoadAsync(id);
             return Page();
         }
 
@@ -88,13 +101,22 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
                 return NotFound();
             }
 
-            
 
+           // Address.Name = Input.Name;
+           // Address.AddressLine = Input.AddressLine;
             var Userid = _signInManager.Context.User.Claims.FirstOrDefault().Value;
             addressToUpdate.OwnerId = Userid;
             addressToUpdate.Owner = user;
-            addressToUpdate.Name = Input.Name;
-            addressToUpdate.AddressLine = Input.AddressLine;
+            if(addressToUpdate.Name != Input.Name)
+            {
+                addressToUpdate.Name = Input.Name;
+            }
+            if(addressToUpdate.AddressLine != Input.AddressLine)
+            {
+                addressToUpdate.AddressLine = Input.AddressLine;
+            }
+            
+            
             //AddressVM.OwnerId = Userid;
             //AddressVM.Owner = user;
             //AddressVM.Name = Input.Name;
