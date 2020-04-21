@@ -138,9 +138,8 @@
                     </td>
 
                     <td>
-                        <a asp-action="Buy" asp-route-id="@item.Id">Buy Ticket</a> |
-                        <a asp-action="ReservationNow" asp-route-id="@item.Id" asp-controller="Reservation">Reservation Now</a>
-
+                        <a asp-action="ReservationNow" asp-route-id="@item.Id" asp-controller="Reservation" class="btn btn-warning">Reservation Now</a>
+                        <a asp-action="Buy" asp-route-id="@item.Id" class="btn btn-primary">Buy Ticket</a>
                     </td>
                 </tr>
             }

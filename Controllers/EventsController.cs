@@ -8,20 +8,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebApplication1.Controllers
 {
     public class EventsController : Microsoft.AspNetCore.Mvc.Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<AppUser> _userManager;
 
-        public EventsController(ApplicationDbContext context)
+        public EventsController(ApplicationDbContext context, UserManager<AppUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
 
-     
+
 
         // GET: Events
         public async Task<IActionResult> Index()
@@ -70,6 +73,31 @@ namespace WebApplication1.Controllers
             {
                 _context.Add(@event);
                 await _context.SaveChangesAsync();
+
+                //Create seats for event
+                string seatLet = "abcdef";
+                int i = 0;
+                int c = 1;
+                int r = 0;
+                int t = 1;
+                while (i < 30)
+                {
+                    if (c > 2) { t = 2; }
+                    Seat seat = new Seat();
+                    seat.Id = 0;
+                    seat.Row = seatLet.ElementAt(r).ToString();
+                    seat.Col = c;
+                    seat.EventId = @event.Id;
+                    seat.Availability = true;
+                    seat.TypeId = t;
+                    seat.ReservationId = null;
+                    seat.TicketId = null;
+                    _context.Add(seat);
+                    await _context.SaveChangesAsync();
+                    r++;
+                    i++;
+                    if (r > 5) { r = 0; c++; }
+                }
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Description", @event.CompanyId);
@@ -163,6 +191,100 @@ namespace WebApplication1.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Buy(int? id)
+        {
+            ViewData["Err"] = "";
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var @event = await _context.Events
+                .Include(x => x.Organizer)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (@event == null)
+            {
+                return NotFound();
+            }
+
+
+
+            return View(@event);
+        }
+
+
+        //POST: Events/
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Buy(int id, int type, int countOfSeats)
+        {
+            //Reservation res = new Reservation();
+            //res.EventId = id;
+            //res.OwnerId = _userManager.GetUserId(HttpContext.User);
+            //_context.Add(res);
+            //await _context.SaveChangesAsync();
+
+            var seatList = _context.Seats.Where(a => a.Availability == true && a.EventId == id && a.TypeId == type).ToList();
+            ViewData["Err"] = "";
+
+            if (seatList == null)
+            {
+                ViewData["Err"] = "There isn't any seat left in choosen class";
+                var @event = await _context.Events
+             .Include(x => x.Organizer)
+             .FirstOrDefaultAsync(m => m.Id == id);
+
+                if (@event == null)
+                {
+                    return NotFound();
+                }
+                return View(@event);
+            }
+            else if (seatList.Count() < countOfSeats)
+            {
+                ViewData["Err"] = "There isn't enough seats for you to buy";
+                var @event = await _context.Events
+              .Include(x => x.Organizer)
+              .FirstOrDefaultAsync(m => m.Id == id);
+
+                if (@event == null)
+                {
+                    return NotFound();
+                }
+                return View(@event);
+            }
+            else
+            {
+                int counter = 0;
+                while (counter < countOfSeats)
+                {
+                    Ticket tic = new Ticket();
+                    tic.ProcessTime = DateTime.Now;
+                    tic.EventId = id;
+                    tic.OwnerId = _userManager.GetUserId(HttpContext.User);
+                    _context.Add(tic);
+                    await _context.SaveChangesAsync();
+
+                    Seat seat = seatList.ElementAt(counter);
+                    seat.TicketId = (int)tic.Id;
+                    seat.Availability = false;
+                    _context.Update(seat);
+                    await _context.SaveChangesAsync();
+
+                    counter++;
+
+                }
+
+
+                return RedirectToAction(nameof(Index));
+
+            }
+
+        }
+
 
         private bool EventExists(int id)
         {
