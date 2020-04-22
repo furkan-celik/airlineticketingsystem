@@ -22,14 +22,14 @@ namespace WebApplication1.Models
         [Required]
         [ForeignKey("SeatType")]
         public int TypeId { get; set; }
-        //public int TicketId { get; set; }
-        //public int ReservationId { get; set; }
-
-        public Event Event { get; set; }
-        public SeatType SeatType { get; set; }
-        [ForeignKey("ReservationId")]
-        public int? ReservationId { get; set; }
-        [ForeignKey("TicketId")]
         public int? TicketId { get; set; }
+        public int? ReservationId { get; set; }
+
+        public virtual Event Event { get; set; }
+        public virtual SeatType SeatType { get; set; }
+        [ForeignKey("ReservationId")]
+        public virtual Reservation Reservation { get; set; }
+        [ForeignKey("TicketId")]
+        public virtual Ticket Ticket { get; set; }
     }
 }

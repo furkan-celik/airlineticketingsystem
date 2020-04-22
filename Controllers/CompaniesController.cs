@@ -20,7 +20,7 @@ namespace WebApplication1.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-       
+
 
         public CompaniesController(ApplicationDbContext context)
         {
@@ -32,7 +32,7 @@ namespace WebApplication1.Controllers
         {
 
             var companies = from selectList in _context.Companies
-                          select selectList;
+                            select selectList;
             return View(companies);
         }
 
@@ -50,6 +50,8 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
+
+            //await _context.Users.ForEachAsync((AppUser x) => { });
 
             if (company.Managers != null)
                 ViewData["Managers"] = company.Managers.ToList<AppUser>();
@@ -123,7 +125,7 @@ namespace WebApplication1.Controllers
             }
 
             var company = await _context.Companies.FindAsync(id);
-            
+
             if (company == null)
             {
                 return NotFound();
@@ -202,20 +204,45 @@ namespace WebApplication1.Controllers
             return Redirect("~/Identity/Account/Register");
         }
 
-        // POST: Companies/AddUser
+        // GET: Companies/MoveUser
+        public IActionResult MoveUser(string id)
+        {
+            ViewData["Companies"] = new SelectList(_context.Companies, "Id", "Name");
+            return PartialView(_context.Users.Find(id));
+        }
+
+        // Post: Companies/MoveUser
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddUser([Bind("Id,Name,LogoLocation,Description,Type")] Company company)
+        public async Task<IActionResult> MoveUser(string id, [Bind("Id, ManagingCompanyId")] AppUser user)
         {
-            if (ModelState.IsValid)
+            if (id != user.Id)
             {
-                _context.Add(company);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            return View(company);
+            try
+            {
+                var mci = user.ManagingCompanyId;
+                user = _context.Users.Find(id);
+                user.ManagingCompanyId = mci;
+                _context.Update(user);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CompanyExists(user.ManagingCompanyId.Value))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return RedirectToAction("Details", new { id = user.ManagingCompanyId });
         }
 
         private bool CompanyExists(int id)
