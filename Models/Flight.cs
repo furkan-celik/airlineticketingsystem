@@ -12,7 +12,7 @@ namespace WebApplication1.Models
         [Key]
         public string FlightNo { get; set; }
         [Required]
-        public string Destination { get; set; }
+        public string Departure { get; set; }
         [Required]
         public string Arrival { get; set; }
         public DateTime ETA { get; set; }

@@ -44,7 +44,7 @@ namespace WebApplication1.Controllers
                 ViewData["Date"] = date.ToString("yyyy-MM-dd");
                 if (string.Equals(arr, dest))
                 {
-                    ViewData["Err"] = "Destination and Arrival can't be the same. Please do another search.";
+                    ViewData["Err"] = "Departure and Arrival can't be the same. Please do another search.";
 
                 }
                 //else if(date != null){
@@ -53,7 +53,7 @@ namespace WebApplication1.Controllers
                 //}
                 else {
                     
-                    flights = flights.Where(selectList => selectList.Destination.Equals(dest) && selectList.Arrival.Equals(arr) && selectList.ETA.Date.Equals(date.Date));
+                    flights = flights.Where(selectList => selectList.Departure.Equals(dest) && selectList.Arrival.Equals(arr) && selectList.ETA.Date.Equals(date.Date));
                 }
                 
             }
@@ -94,9 +94,9 @@ namespace WebApplication1.Controllers
         [Authorize(Roles = "WebAdmin,CompAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FlightNo,Destination,Arrival,ETA")] Flight flight)
+        public async Task<IActionResult> Create([Bind("FlightNo,Departure,Arrival,ETA")] Flight flight)
         {
-            if (flight.Destination != flight.Arrival)
+            if (flight.Departure != flight.Arrival)
             {
                 if (ModelState.IsValid)
                 {
@@ -133,7 +133,7 @@ namespace WebApplication1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("FlightNo,Destination,Arrival,ETA")] Flight flight)
+        public async Task<IActionResult> Edit(string id, [Bind("FlightNo,Departure,Arrival,ETA")] Flight flight)
         {
             ViewData["Err"] = "";
             ViewData["CityId"] = new SelectList(_context.Cities, "CityName", "CityName");
@@ -144,9 +144,9 @@ namespace WebApplication1.Controllers
             
             if (ModelState.IsValid)
             {
-                if (flight.Arrival.Equals(flight.Destination))
+                if (flight.Arrival.Equals(flight.Departure))
                 {
-                    ViewData["Err"] = "Destination and Arrival can't be the same city";
+                    ViewData["Err"] = "Departure and Arrival can't be the same city";
                 }
                 else
                 {
