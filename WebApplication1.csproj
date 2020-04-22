@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200422113510_eventrefundtime.cs" />
+    <Compile Remove="Migrations\20200422113510_eventrefundtime.Designer.cs" />
+    <Compile Remove="Migrations\20200422114428_eventrefundtimeV2.cs" />
+    <Compile Remove="Migrations\20200422114428_eventrefundtimeV2.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <COMReference Include="{bee4bfec-6683-3e67-9167-3c0cbc68f40a}">
       <Guid>bee4bfec-6683-3e67-9167-3c0cbc68f40a</Guid>
       <VersionMajor>2</VersionMajor>

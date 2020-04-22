@@ -27,10 +27,38 @@ namespace WebApplication1.Controllers
 
 
         // GET: Events
-        public async Task<IActionResult> Index()
+        public IActionResult Index(string arr, string dest, DateTime date)
         {
-            var applicationDbContext = _context.Events.Include(x => x.Organizer);
-            return View(await applicationDbContext.ToListAsync());
+            //var applicationDbContext = _context.Events.Include(x => x.Organizer);
+            //return View(await applicationDbContext.ToListAsync());
+
+             ViewData["CityId"] = new SelectList(_context.Cities, "CityName", "CityName");
+             ViewData["Err"] = "";
+             ViewData["Date"] = @DateTime.Now.ToString("yyyy-MM-dd");
+
+            var events = from selectList in _context.Events.Include(x => x.Organizer)
+                    select selectList;
+
+            if (!String.IsNullOrEmpty(arr) && !String.IsNullOrEmpty(dest))
+            {
+                ViewData["Date"] = date.ToString("yyyy-MM-dd");
+                if (string.Equals(arr, dest))
+                {
+                    ViewData["Err"] = "Destination and Arrival can't be the same. Please do another search.";
+
+                }
+                //else if(date != null){
+                //    ViewData["Err"] = date.ToString("MM-dd-yyyy");
+
+                //}
+                else {
+
+                    events = events.Where(selectList => selectList.Name == dest + "-" + arr && selectList.Date.Date.Equals(date.Date));
+                    //flights = flights.Where(selectList => selectList.Destination.Equals(dest) && selectList.Arrival.Equals(arr) && selectList.ETA.Date.Equals(date.Date));
+                }
+                
+            }
+            return View(events.ToList());
         }
 
         // GET: Events/Details/5
@@ -69,6 +97,8 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CompanyId,Name,RefundTime,ResCancelTime,RefundPortion,Date,FlightNo")] Event @event)
         {
+            var eventMan = _context.Flights.Where(a => a.FlightNo == @event.FlightNo).ToList();
+            @event.Name = eventMan.ElementAt(0).Destination + "-" + eventMan.ElementAt(0).Arrival;
             if (ModelState.IsValid)
             {
                 _context.Add(@event);
