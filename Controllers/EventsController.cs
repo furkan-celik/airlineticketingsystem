@@ -98,7 +98,7 @@ namespace WebApplication1.Controllers
         public async Task<IActionResult> Create([Bind("Id,CompanyId,Name,RefundTime,ResCancelTime,RefundPortion,Date,FlightNo")] Event @event)
         {
             var eventMan = _context.Flights.Where(a => a.FlightNo == @event.FlightNo).ToList();
-            @event.Name = eventMan.ElementAt(0).Destination + "-" + eventMan.ElementAt(0).Arrival;
+            @event.Name = eventMan.ElementAt(0).Departure + "-" + eventMan.ElementAt(0).Arrival;
             if (ModelState.IsValid)
             {
                 _context.Add(@event);
