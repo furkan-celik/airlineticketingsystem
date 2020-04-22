@@ -19,8 +19,8 @@ namespace WebApplication1.Models
         [Required]
         public float Price { get; set; }
 
-        public Event Event { get; set; }
-        public ICollection<OfferTicket> Tickets { get; set; }
-        public ICollection<Reservation> Reservations { get; set; }
+        public virtual Event Event { get; set; }
+        public virtual ICollection<OfferTicket> Tickets { get; set; }
+        public virtual ICollection<Reservation> Reservations { get; set; }
     }
 }

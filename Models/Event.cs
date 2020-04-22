@@ -25,10 +25,10 @@ namespace WebApplication1.Models
         [Required]
         public string FlightNo { get; set; }
 
-        public Company Organizer { get; set; }
+        public virtual Company Organizer { get; set; }
         [ForeignKey("FlightNo")]
-        public Flight Flight { get; set; }
-        public ICollection<Ticket> Tickets { get; set; }
-        public ICollection<Reservation> Reservations { get; set; }
+        public virtual Flight Flight { get; set; }
+        public virtual ICollection<Ticket> Tickets { get; set; }
+        public virtual ICollection<Reservation> Reservations { get; set; }
     }
 }

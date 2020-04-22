@@ -29,7 +29,7 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseMySql(
+                options.UseLazyLoadingProxies().UseMySql(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<AppRole>()

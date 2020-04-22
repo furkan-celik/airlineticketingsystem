@@ -19,6 +19,6 @@ namespace WebApplication1.Models
         [Required]
         public string AddressLine { get; set; }
 
-        public AppUser Owner { get; set; }
+        public virtual AppUser Owner { get; set; }
     }
 }

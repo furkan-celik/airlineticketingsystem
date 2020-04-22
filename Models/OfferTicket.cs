@@ -8,9 +8,9 @@ namespace WebApplication1.Models
     public class OfferTicket
     {
         public int TicketId { get; set; }
-        public Ticket Ticket { get; set; }
+        public virtual Ticket Ticket { get; set; }
 
         public int OfferId { get; set; }
-        public Offer Offer { get; set; }
+        public virtual Offer Offer { get; set; }
     }
 }

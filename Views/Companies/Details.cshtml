@@ -28,18 +28,27 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
-        @if (ViewData["Managers"] != null) foreach (var manager in (ViewData["Managers"] as List<AppUser>))
+        @if (ViewData["Managers"] != null)
+        {
+            <dt class="col-sm-12">
+                Managers of Company
+            </dt>
+            foreach (var manager in (ViewData["Managers"] as List<AppUser>))
             {
-                @Html.DisplayText("test")
                 <dt class="col-sm-2">
-                    @Html.DisplayName(manager.Name)
-                    @Html.DisplayName(manager.Surname)
-                </dt>
-                <dd class="col-sm-10">
                     @Html.Display(manager.Name)
                     @Html.Display(manager.Surname)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayName(manager.Name)
+                    @Html.DisplayName(manager.Surname)
+                </dd>
+                <dd class="col-sm-12">
+                    <a href="#" class="viewMove" data-target="/Companies/MoveUser/@manager.Id">Move Manager</a>
                 </dd>
             }
+
+        }
     </dl>
 </div>
 <div>
@@ -47,3 +56,38 @@
     <a asp-action="AddUser" asp-route-id="@Model.Id">Add User</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modelView">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Move Manager</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+    $("body").on("click", ".viewMove", function () {
+        var url = $(this).data("target");
+        $.get(url, function (data) { }).done(function (data) {
+            $("#modelView .modal-body").html(data);
+            $(".modal").modal("show");
+        })
+            .fail(function () {
+                $("#modelView .modal-body").text("Error!!");
+                $(".model").modal("show");
+            })
+    });
+</script>
