@@ -9,6 +9,6 @@ namespace WebApplication1.Models
         [Required]
         public string Name { get; set; }
 
-        public ICollection<Seat> Collection { get; set; }
+        public virtual ICollection<Seat> Collection { get; set; }
     }
 }

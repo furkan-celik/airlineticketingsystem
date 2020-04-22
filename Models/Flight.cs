@@ -17,7 +17,7 @@ namespace WebApplication1.Models
         public string Arrival { get; set; }
         public DateTime ETA { get; set; }
 
-        public ICollection<Event> Events { get; set; }
-        public ICollection<Offer> Offers { get; set; }
+        public virtual ICollection<Event> Events { get; set; }
+        public virtual ICollection<Offer> Offers { get; set; }
     }
 }

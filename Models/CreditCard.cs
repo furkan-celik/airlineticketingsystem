@@ -15,6 +15,6 @@ namespace WebApplication1.Models
         [ForeignKey("AppUser")]
         public string UserId { get; set; }
 
-        public AppUser Owner { get; set; }
+        public virtual AppUser Owner { get; set; }
     }
 }

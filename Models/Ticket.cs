@@ -18,10 +18,10 @@ namespace WebApplication1.Models
         [Required]
         public int EventId { get; set; }
 
-        public AppUser Owner { get; set; }
+        public virtual AppUser Owner { get; set; }
         [ForeignKey("EventId")]
-        public Event Event { get; set; }
-        public ICollection<OfferTicket> Offers { get; set; }
-        public ICollection<Seat> Seats { get; set; }
+        public virtual Event Event { get; set; }
+        public virtual ICollection<OfferTicket> Offers { get; set; }
+        public virtual ICollection<Seat> Seats { get; set; }
     }
 }

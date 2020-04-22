@@ -23,8 +23,8 @@ namespace WebApplication1.Models
         [ForeignKey("Company")]
         public int? ManagingCompanyId { get; set; }
 
-        public Company ManagingCompany { get; set; }
-        public ICollection<Address> Addresses { get; set; }
-        public ICollection<CreditCard> CreditCards { get; set; }
+        public virtual Company ManagingCompany { get; set; }
+        public virtual ICollection<Address> Addresses { get; set; }
+        public virtual ICollection<CreditCard> CreditCards { get; set; }
     }
 }
