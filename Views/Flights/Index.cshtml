@@ -26,7 +26,7 @@
             <select id="dest" name="dest" class="form-control" asp-items="ViewBag.CityId"></select>
         </div>*@
             <div class="form-group">
-                @Html.DropDownList("dest", ViewData["CityId"] as SelectList, "Destination", new { required = "required" })
+                @Html.DropDownList("dest", ViewData["CityId"] as SelectList, "Departure", new { required = "required" })
             </div>
             @*<div class="form-group">
             <label id="arr" class="control-label"></label>
@@ -56,7 +56,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Destination)
+                @Html.DisplayNameFor(model => model.Departure)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Arrival)
@@ -72,7 +72,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Destination)
+                    @Html.DisplayFor(modelItem => item.Departure)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Arrival)
