@@ -28,18 +28,103 @@ namespace WebApplication1.Controllers
             _userManager = userManager;
         }
 
- 
         [HttpGet]
-        public IActionResult ReservationNow(int Id)
+        public async Task<IActionResult> ReservationNow(int? id)
         {
-            Reservation res = new Reservation();
-            res.EventId = Id;
-            res.OwnerId = _userManager.GetUserId(HttpContext.User);
-            _context.Add(res);
-            _context.SaveChanges();
-            return View(res);
+            ViewData["Err"] = "";
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-           
+            var @event = await _context.Events
+                .Include(x => x.Organizer)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (@event == null)
+            {
+                return NotFound();
+            }
+
+
+
+            return View(@event);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReservationNow(int id, int type, int countOfSeats)
+        {
+            
+
+            var seatList = _context.Seats.Where(a => a.Availability == true && a.EventId == id && a.TypeId == type).ToList();
+            ViewData["Err"] = "";
+
+            if (seatList == null)
+            {
+                ViewData["Err"] = "There isn't any seat left in choosen class";
+                var @event = await _context.Events
+             .Include(x => x.Organizer)
+             .FirstOrDefaultAsync(m => m.Id == id);
+
+                if (@event == null)
+                {
+                    return NotFound();
+                }
+                return View(@event);
+            }
+            else if (countOfSeats > 4)
+            {
+                ViewData["Err"] = "You can reserve at most 4 seats";
+                var @event = await _context.Events
+              .Include(x => x.Organizer)
+              .FirstOrDefaultAsync(m => m.Id == id);
+
+                if (@event == null)
+                {
+                    return NotFound();
+                }
+                return View(@event);
+            }
+            else if (seatList.Count < countOfSeats)
+            {
+                ViewData["Err"] = "There isn't enough seats for you to buy";
+                var @event = await _context.Events
+              .Include(x => x.Organizer)
+              .FirstOrDefaultAsync(m => m.Id == id);
+
+                if (@event == null)
+                {
+                    return NotFound();
+                }
+                return View(@event);
+            }
+            else
+            {
+                int counter = 0;
+                while (counter < countOfSeats)
+                {
+                    Reservation res = new Reservation();
+                    res.EventId = id;
+                    res.OwnerId = _userManager.GetUserId(HttpContext.User);
+                    _context.Add(res);
+                    await _context.SaveChangesAsync();
+
+                    Seat seat = seatList.ElementAt(counter);
+                    seat.ReservationId = res.Id;
+                    seat.Availability = false;
+                    _context.Update(seat);
+                    await _context.SaveChangesAsync();
+
+                    counter++;
+
+                }
+
+
+                return RedirectToAction("Index", "Events");
+
+            }
+
         }
     }
 }
