@@ -11,25 +11,59 @@
         <a asp-action="Create">Create New</a>
         @*<asp:Timer ID="timerTest" runat="server" Interval="1000" OnTick="timerTest_tick"></asp:Timer>
 
-        <asp:UpdatePanel itemid="up" runat="server" UpdateMode="Conditional">
+            <asp:UpdatePanel itemid="up" runat="server" UpdateMode="Conditional">
 
-            <ContentTemplate>
+                <ContentTemplate>
 
-                <asp:Literal ID="litMsg" runat="server">
+                    <asp:Literal ID="litMsg" runat="server">
 
-                </asp:Literal>
-            </ContentTemplate>
+                    </asp:Literal>
+                </ContentTemplate>
 
-            <Triggers>
-                <asp:AsyncPostBackTrigger ControlID="timerTest" EventName="tick">
+                <Triggers>
+                    <asp:AsyncPostBackTrigger ControlID="timerTest" EventName="tick">
 
-                </asp:AsyncPostBackTrigger>
-            </Triggers>
+                    </asp:AsyncPostBackTrigger>
+                </Triggers>
 
-        </asp:UpdatePanel>*@
+            </asp:UpdatePanel>*@
     </p>
 }
 
+@using (Html.BeginForm("Index", "Events", FormMethod.Get))
+{
+
+    <br />
+    <h4>Search for Flights</h4>
+    <p style="color:crimson"> @ViewData["Err"]</p>
+    <div class="row">
+
+        <div class="col-md-4">
+
+           
+            <div class="form-group">
+                @Html.DropDownList("dest", ViewData["CityId"] as SelectList, "From", new { required = "required" })
+            </div>
+          
+            <div class="form-group">
+                @Html.DropDownList("arr", ViewData["CityId"] as SelectList, "To", new { required = "required" })
+            </div>
+            <div class="form-group">
+                <label for="date"></label>
+                <input type="date" id="date"
+                       name="date" value=@ViewData["Date"]
+                       min=@DateTime.Now.ToString("yyyy-MM-dd") max="2100-06-14">
+            </div>
+
+
+
+            <div class="form-group">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+
+}
 @if (User.IsInRole("WebAdmin") || User.IsInRole("CompAdmin"))
 {
     <table class="table">
