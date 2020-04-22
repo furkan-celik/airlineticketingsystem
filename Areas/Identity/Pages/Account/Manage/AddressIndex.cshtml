@@ -6,7 +6,7 @@
     ViewData["ActivePage"] = ManageNavPages.Addresses;
 }
 
-<h4>@ViewData["Title"]</h4>
+<h1>Adress Edit</h1>
 
 <p>
     <a asp-page="./AddressCreate">Create New</a>
@@ -40,7 +40,6 @@
             </td>
             <td>
                 <a asp-page="./AddressEdit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./AddressDetails" asp-route-id="@item.Id">Details</a> |
                 <a asp-page="./AddressDelete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
