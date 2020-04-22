@@ -4,16 +4,14 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>Event</h4>
+<h3>Create Event</h3>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="CompanyId" class="control-label"></label>
+                <label asp-for="CompanyId" class="control-label">Company</label>
                 <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.CompanyId"></select>
             </div>
             @*<div class="form-group">
@@ -22,17 +20,17 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>*@
             <div class="form-group">
-                <label asp-for="RefundTime" class="control-label"></label>
+                <label asp-for="RefundTime" class="control-label">Refund Time</label>
                 <input asp-for="RefundTime" class="form-control" />
                 <span asp-validation-for="RefundTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ResCancelTime" class="control-label"></label>
+                <label asp-for="ResCancelTime" class="control-label">Reservation Cancel Time</label>
                 <input asp-for="ResCancelTime" class="form-control" />
                 <span asp-validation-for="ResCancelTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RefundPortion" class="control-label"></label>
+                <label asp-for="RefundPortion" class="control-label">Refund Portion</label>
                 <input asp-for="RefundPortion" class="form-control" />
                 <span asp-validation-for="RefundPortion" class="text-danger"></span>
             </div>
@@ -42,21 +40,19 @@
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FlightNo" class="control-label"></label>
+                <label asp-for="FlightNo" class="control-label">Flight No</label>
                 <select asp-for="FlightNo" class="form-control" asp-items="ViewBag.FlightNo"></select>
                 <a class="nav-link text-dark" asp-area="" asp-controller="Flights" asp-action="Create">Create New Flight</a>
             </div>
             <div class="form-group">
                 <input asp-for="Name" type="hidden" value="empty" class="form-control" />
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary" /> |
+                <a asp-action="Index">Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

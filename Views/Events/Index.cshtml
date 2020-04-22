@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h3>Events</h3>
 @if ((await AuthorizationService.AuthorizeAsync(User, "ReqAdmin")).Succeeded)
 {
     <p>
@@ -42,12 +42,10 @@
 
            
             <div class="form-group">
-                @Html.DropDownList("dest", ViewData["CityId"] as SelectList, "From", new { required = "required" })
+                <a> @Html.DropDownList("dest", ViewData["CityId"] as SelectList, "From", new { required = "required" }) </a>
+                <a style="margin:20px"> @Html.DropDownList("arr", ViewData["CityId"] as SelectList, "To", new { required = "required" }) </a>
             </div>
-          
-            <div class="form-group">
-                @Html.DropDownList("arr", ViewData["CityId"] as SelectList, "To", new { required = "required" })
-            </div>
+
             <div class="form-group">
                 <label for="date"></label>
                 <input type="date" id="date"
