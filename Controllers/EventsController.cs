@@ -238,6 +238,7 @@ namespace WebApplication1.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "User")]
         [HttpGet]
         public async Task<IActionResult> Buy(int? id)
         {
@@ -261,7 +262,7 @@ namespace WebApplication1.Controllers
             return View(@event);
         }
 
-
+        [Authorize(Roles = "User")]
         //POST: Events/
         [HttpPost]
         [ValidateAntiForgeryToken]

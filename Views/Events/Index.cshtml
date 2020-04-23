@@ -131,7 +131,7 @@
 
 }
 
-@if (User.IsInRole("User"))
+@if (!User.IsInRole("WebAdmin") && !User.IsInRole("CompAdmin"))
 {
     <table class="table">
         <thead>

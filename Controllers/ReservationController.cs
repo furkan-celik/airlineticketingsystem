@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace WebApplication1.Controllers
 {
+    [Authorize(Roles = "User")]
     public class ReservationController : Controller
     {
         private ApplicationDbContext _context;
