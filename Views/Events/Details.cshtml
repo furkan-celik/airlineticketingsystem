@@ -58,6 +58,8 @@
     @if ((await AuthorizationService.AuthorizeAsync(User, "ReqAdmin")).Succeeded)
     {
         <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+        @if ((User.IsInRole("WebAdmin")) || (User.IsInRole("CompAdmin")))
+            @Html.ActionLink("Add Offer", "CreateForEvent", "Offers", new { EventId = Model.Id }, null)
     }
     <a asp-action="Index">Back to List</a>
 </div>

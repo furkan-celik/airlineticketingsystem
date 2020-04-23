@@ -9,6 +9,10 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Web;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace WebApplication1.Controllers
 {
@@ -314,6 +318,7 @@ namespace WebApplication1.Controllers
             }
 
         }
+       
 
 
         private bool EventExists(int id)
