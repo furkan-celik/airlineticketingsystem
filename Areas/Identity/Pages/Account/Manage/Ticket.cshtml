@@ -1,0 +1,51 @@
+﻿@page
+@model TicketModel
+@{
+    ViewData["Title"] = "Ticket";
+    ViewData["ActivePage"] = ManageNavPages.Tickets;
+}
+
+<h4>@ViewData["Title"]</h4>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.tickets[0].Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.tickets[0].Event)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.tickets[0].Event.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.tickets[0].Event.FlightNo)
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.tickets)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Event.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Event.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Event.FlightNo)
+            </td>
+            
+            
+        </tr>
+        }
+    </tbody>
+</table>
