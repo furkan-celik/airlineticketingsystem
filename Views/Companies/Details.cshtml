@@ -4,10 +4,9 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h3>Company Details</h3>
 
 <div>
-    <h4>Company</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -30,25 +29,25 @@
         </dd>
         @if (ViewData["Managers"] != null)
         {
-            <dt class="col-sm-12">
-                Managers of Company
+            <dt class="col-sm-2">
+                Manager
             </dt>
             foreach (var manager in (ViewData["Managers"] as List<AppUser>))
-            {
+            { @*
                 <dt class="col-sm-2">
                     @Html.Display(manager.Name)
                     @Html.Display(manager.Surname)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayName(manager.Name)
-                    @Html.DisplayName(manager.Surname)
-                </dd>
-                <dd class="col-sm-12">
-                    <a href="#" class="viewMove" data-target="/Companies/MoveUser/@manager.Id">Move Manager</a>
-                </dd>
-            }
+                </dt>*@
+            <dd class="col-sm-10">
+                @Html.DisplayName(manager.Name)
+                @Html.DisplayName(manager.Surname)
+                <a style="margin:20px" href="#" class="viewMove" data-target="/Companies/MoveUser/@manager.Id">Move Manager</a>
+            </dd>
+            <dt class="col-sm-2"></dt>
 
         }
+
+    }
     </dl>
 </div>
 <div>

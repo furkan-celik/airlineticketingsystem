@@ -3,8 +3,8 @@
     ViewData["Title"] = "Buy";
 }
 
-<h1>Buy Page</h1>
-<h3>Buy ticket now?</h3>
+
+<h3>Buy ticket</h3>
 <div>
 
     <hr />
@@ -16,7 +16,7 @@
             @Html.DisplayFor(model => model.Organizer.Description)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FlightNo)
+            @*@Html.DisplayNameFor(model => model.FlightNo)*@Flight No
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FlightNo)
@@ -47,13 +47,13 @@
     <dl class="row">
 
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.RefundTime)
+            @*@Html.DisplayNameFor(model => model.RefundTime)*@Refund Time
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.RefundTime)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.RefundPortion)
+            @*@Html.DisplayNameFor(model => model.RefundPortion)*@Refund Portion
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.RefundPortion)

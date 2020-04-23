@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h3>Events</h3>
+<h2>Events</h2>
 @if ((await AuthorizationService.AuthorizeAsync(User, "ReqAdmin")).Succeeded)
 {
     <p>
@@ -71,19 +71,19 @@
                     @Html.DisplayNameFor(model => model.Name)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.RefundTime)
+                    @*@Html.DisplayNameFor(model => model.RefundTime)*@Refund Time
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ResCancelTime)
+                    @*@Html.DisplayNameFor(model => model.ResCancelTime)*@Res. Cancel Time
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.RefundPortion)
+                    @*@Html.DisplayNameFor(model => model.RefundPortion)*@Refund Portion
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Date)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FlightNo)
+                    @*@Html.DisplayNameFor(model => model.FlightNo)*@Flight No
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Organizer)
@@ -120,7 +120,7 @@
                         <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                         @if ((await AuthorizationService.AuthorizeAsync(User, "ReqAdmin")).Succeeded)
                         {
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete </a><label> | </label>
                             <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                         }
                     </td>
@@ -146,7 +146,7 @@
                     @Html.DisplayNameFor(model => model.Date)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FlightNo)
+                    @*@Html.DisplayNameFor(model => model.FlightNo)*@Flight No
                 </th>
 
                 <th></th>
