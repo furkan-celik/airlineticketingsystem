@@ -29,6 +29,7 @@ namespace WebApplication1.Controllers
             _signInManager = signInManager;
         }
 
+        public string flightno { get; set; }
         // GET: Offers
         public async Task<IActionResult> Index()
         {
@@ -96,8 +97,9 @@ namespace WebApplication1.Controllers
 
         // GET: Bills/CreateForCustomer
         [Authorize(Roles = "WebAdmin,CompAdmin")]
-        public ActionResult CreateForEvent(int EventId)
+        public ActionResult CreateForEvent(int EventId, string Flightno)
         {
+            ViewData["flightno"] = Flightno;
             // TODO: Verify that customer_id is valid and return HttpNotFound() if not.
             return View(new Offer { EventId = EventId });
         }
@@ -107,6 +109,11 @@ namespace WebApplication1.Controllers
         [Authorize(Roles = "WebAdmin,CompAdmin")]
         public async Task<ActionResult> CreateForEvent([Bind("Id,EventId,Name,Description,Price")] Offer offer)
         {
+            var eventid = offer.EventId;
+            var user = await _userManager.GetUserAsync(User);
+            var selectedevent = await _context.Events.FindAsync(eventid);
+            
+
             // TODO: The usual POST stuff like validating and saving the entity.
             if (ModelState.IsValid)
             {

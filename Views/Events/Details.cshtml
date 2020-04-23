@@ -59,10 +59,10 @@
     {
         <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
         @if (User.IsInRole("WebAdmin"))
-            @Html.ActionLink("Add Offer", "CreateForEvent", "Offers", new { EventId = Model.Id }, null)
+            @Html.ActionLink("Add Offer", "CreateForEvent", "Offers", new { EventId = Model.Id , Flightno = Model.FlightNo }, null)
         @if ((bool)ViewData["samecomp"] == true)
         {
-            @Html.ActionLink("Add Offer", "CreateForEvent", "Offers", new { EventId = Model.Id }, null)
+            @Html.ActionLink("Add Offer", "CreateForEvent", "Offers", new { EventId = Model.Id , Flightno = Model.FlightNo }, null)
         }
 
 
