@@ -54,6 +54,9 @@
     <thead>
         <tr>
             <th>
+                @*@Html.DisplayNameFor(model => model.FlightNo)*@Flight No
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Departure)
             </th>
             <th>
@@ -62,28 +65,33 @@
             <th>
                 @Html.DisplayNameFor(model => model.ETA)
             </th>
+
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Departure)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Arrival)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ETA)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.FlightNo">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.FlightNo">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.FlightNo">Delete</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FlightNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Departure)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Arrival)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ETA)
+            </td>
+
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.FlightNo">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.FlightNo">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.FlightNo">Delete</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>
