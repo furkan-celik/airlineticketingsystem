@@ -25,10 +25,12 @@ namespace WebApplication1.Controllers
         {
             _context = context;
             _userManager = userManager;
+            
+            
         }
 
 
-
+        
 
         // GET: Events
         public IActionResult Index(string arr, string dest, DateTime date)
@@ -68,11 +70,21 @@ namespace WebApplication1.Controllers
         // GET: Events/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            
+            var user = await _userManager.GetUserAsync(User);
+            var selectedevent = await _context.Events.FindAsync(id);
             if (id == null)
             {
                 return NotFound();
             }
-
+            if(user.ManagingCompanyId==selectedevent.CompanyId)
+            {
+                ViewData["samecomp"] = true;
+            }
+            else
+            {
+                ViewData["samecomp"] = false;
+            }
             var @event = await _context.Events
                 .Include(x => x.Organizer)
                 .FirstOrDefaultAsync(m => m.Id == id);
