@@ -326,12 +326,16 @@ namespace WebApplication1.Controllers
                 }
 
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Successful));
 
             }
 
         }
-       
+
+        public IActionResult Successful()
+        {
+            return View();
+        }
 
 
         private bool EventExists(int id)

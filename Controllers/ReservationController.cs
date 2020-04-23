@@ -122,10 +122,16 @@ namespace WebApplication1.Controllers
                 }
 
 
-                return RedirectToAction("Index", "Events");
+                return RedirectToAction(nameof(Successful));
 
             }
 
+        }
+
+        //Successful
+        public IActionResult Successful()
+        {
+            return View();
         }
     }
 }
