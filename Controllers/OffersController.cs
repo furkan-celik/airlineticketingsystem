@@ -8,23 +8,45 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace WebApplication1.Controllers
 {
     public class OffersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public OffersController(ApplicationDbContext context)
+        public OffersController(ApplicationDbContext context,
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager)
         {
             _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         // GET: Offers
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Offers.Include(o => o.Event);
-            return View(await applicationDbContext.ToListAsync());
+            var user = await _userManager.GetUserAsync(User);
+            var mancompid = user.ManagingCompanyId;
+            if (mancompid == null)
+            {
+                var applicationDbContext = _context.Offers.Include(o => o.Event);
+                return View(await applicationDbContext.ToListAsync());
+            }
+            else
+            {
+                var applicationDbContext = _context.Offers
+                    .Where(o => o.Event.CompanyId == mancompid)
+                    .Include(o => o.Event);
+                return View(await applicationDbContext.ToListAsync());
+            }
+
         }
 
         // GET: Offers/Details/5
