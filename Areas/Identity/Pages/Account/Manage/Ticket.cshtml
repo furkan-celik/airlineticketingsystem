@@ -47,10 +47,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Event.FlightNo)
             </td>
-            @foreach (var item2 in item.Seats)
-            {
-                @Html.DisplayFor(modelItem => item2.Row) @Html.DisplayFor(modelItem => item2.Col)
-            }
+            <td>
+                @foreach (var item2 in item.Seats)
+                {
+                    @Html.DisplayFor(modelItem => item2.Col) @Html.DisplayFor(modelItem => item2.Row)
+                }
+            </td>
+           
 
 
         </tr>
