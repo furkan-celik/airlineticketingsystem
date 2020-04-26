@@ -9,15 +9,27 @@ namespace WebApplication1.Models
 {
     public class Flight
     {
-        [Key]
+        public int Id { get; set; }
+        [Required]
+        [ForeignKey("Company")]
+        public int CompanyId { get; set; }
+        [Required]
+        public string Name { get; set; }
+        [DataType(DataType.Time)]
+        public TimeSpan RefundTime { get; set; }
+        [DataType(DataType.Time)]
+        public TimeSpan ResCancelTime { get; set; }
+        public float RefundPortion { get; set; }
+        [Required]
+        public DateTime Date { get; set; }
         public string FlightNo { get; set; }
         [Required]
-        public string Departure { get; set; }
-        [Required]
-        public string Arrival { get; set; }
-        public DateTime ETA { get; set; }
+        public int RouteId { get; set; }
 
-        public virtual ICollection<Event> Events { get; set; }
-        public virtual ICollection<Offer> Offers { get; set; }
+        public virtual Company Organizer { get; set; }
+        [ForeignKey("RouteId")]
+        public virtual Route Route { get; set; }
+        public virtual ICollection<Ticket> Tickets { get; set; }
+        public virtual ICollection<Reservation> Reservations { get; set; }
     }
 }

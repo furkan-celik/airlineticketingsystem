@@ -101,7 +101,7 @@ namespace WebApplication1.Controllers
         public IActionResult Create()
         {
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Description");
-            ViewData["FlightNo"] = new SelectList(_context.Flights, "FlightNo", "FlightNo");
+            ViewData["FlightNo"] = new SelectList(_context.Routes, "FlightNo", "FlightNo");
             return View();
         }
 
@@ -111,9 +111,9 @@ namespace WebApplication1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CompanyId,Name,RefundTime,ResCancelTime,RefundPortion,Date,FlightNo")] Event @event)
+        public async Task<IActionResult> Create([Bind("Id,CompanyId,Name,RefundTime,ResCancelTime,RefundPortion,Date,FlightNo")] Flight @event)
         {
-            var eventMan = _context.Flights.Where(a => a.FlightNo == @event.FlightNo).ToList();
+            var eventMan = _context.Routes.Where(a => a.RouteId == @event.RouteId).ToList();
             @event.Name = eventMan.ElementAt(0).Departure + "-" + eventMan.ElementAt(0).Arrival;
             if (ModelState.IsValid)
             {
@@ -133,7 +133,7 @@ namespace WebApplication1.Controllers
                     seat.Id = 0;
                     seat.Row = seatLet.ElementAt(r).ToString();
                     seat.Col = c;
-                    seat.EventId = @event.Id;
+                    seat.FlightId = @event.Id;
                     seat.Availability = true;
                     seat.TypeId = t;
                     seat.ReservationId = null;
@@ -147,7 +147,7 @@ namespace WebApplication1.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Description", @event.CompanyId);
-            ViewData["FlightNo"] = new SelectList(_context.Flights, "FlightNo", "FlightNo");
+            ViewData["RouteId"] = new SelectList(_context.Routes, "RouteId", "RouteId");
             return View(@event);
         }
 
@@ -175,7 +175,7 @@ namespace WebApplication1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyId,Name,RefundTime,ResCancelTime,RefundPortion,Date,FlightNo")] Event @event)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyId,Name,RefundTime,ResCancelTime,RefundPortion,Date,FlightNo")] Flight @event)
         {
             if (id != @event.Id)
             {
@@ -274,7 +274,7 @@ namespace WebApplication1.Controllers
             //_context.Add(res);
             //await _context.SaveChangesAsync();
 
-            var seatList = _context.Seats.Where(a => a.Availability == true && a.EventId == id && a.TypeId == type).ToList();
+            var seatList = _context.Seats.Where(a => a.Availability == true && a.FlightId == id && a.TypeId == type).ToList();
             ViewData["Err"] = "";
 
             if (seatList == null)

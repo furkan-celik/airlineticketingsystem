@@ -14,12 +14,12 @@ using WebApplication1.Models;
 namespace WebApplication1.Controllers
 {
     
-    public class FlightsController : Controller
+    public class RoutesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
 
-        public FlightsController(ApplicationDbContext context)
+        public RoutesController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -36,7 +36,7 @@ namespace WebApplication1.Controllers
             ViewData["Err"] = "";
             ViewData["Date"] = @DateTime.Now.ToString("yyyy-MM-dd");
 
-            var flights = from selectList in _context.Flights
+            var flights = from selectList in _context.Routes
                     select selectList;
 
             if (!String.IsNullOrEmpty(arr) && !String.IsNullOrEmpty(dest))
@@ -62,21 +62,21 @@ namespace WebApplication1.Controllers
        
 
         // GET: Flights/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var flight = await _context.Flights
-                .FirstOrDefaultAsync(m => m.FlightNo == id);
-            if (flight == null)
+            var routes = await _context.Routes
+                .FirstOrDefaultAsync(m => m.RouteId == id);
+            if (routes == null)
             {
                 return NotFound();
             }
 
-            return View(flight);
+            return View(routes);
         }
 
         // GET: Flights/Create
@@ -94,20 +94,20 @@ namespace WebApplication1.Controllers
         [Authorize(Roles = "WebAdmin,CompAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FlightNo,Departure,Arrival,ETA")] Flight flight)
+        public async Task<IActionResult> Create([Bind("FlightNo,Departure,Arrival,ETA")] Route route)
         {
-            if (flight.Departure != flight.Arrival)
+            if (route.Departure != route.Arrival)
             {
                 if (ModelState.IsValid)
                 {
-                    _context.Add(flight);
+                    _context.Add(route);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
            
                 ViewData["CityId"] = new SelectList(_context.Cities, "CityName", "CityName");
             }
-            return View(flight);
+            return View(route);
         }
 
         // GET: Flights/Edit/5
@@ -120,12 +120,12 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var flight = await _context.Flights.FindAsync(id);
-            if (flight == null)
+            var routes = await _context.Routes.FindAsync(id);
+            if (routes == null)
             {
                 return NotFound();
             }
-            return View(flight);
+            return View(routes);
         }
 
         // POST: Flights/Edit/5
@@ -133,18 +133,18 @@ namespace WebApplication1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("FlightNo,Departure,Arrival,ETA")] Flight flight)
+        public async Task<IActionResult> Edit(int id, [Bind("FlightNo,Departure,Arrival,ETA")] Route route)
         {
             ViewData["Err"] = "";
             ViewData["CityId"] = new SelectList(_context.Cities, "CityName", "CityName");
-            if (id != flight.FlightNo)
+            if (id != route.RouteId)
             {
                 return NotFound();
             }
             
             if (ModelState.IsValid)
             {
-                if (flight.Arrival.Equals(flight.Departure))
+                if (route.Arrival.Equals(route.Departure))
                 {
                     ViewData["Err"] = "Departure and Arrival can't be the same city";
                 }
@@ -152,12 +152,12 @@ namespace WebApplication1.Controllers
                 {
                     try
                     {
-                        _context.Update(flight);
+                        _context.Update(route);
                         await _context.SaveChangesAsync();
                     }
                     catch (DbUpdateConcurrencyException)
                     {
-                        if (!FlightExists(flight.FlightNo))
+                        if (!RouteExists(route.RouteId))
                         {
                             return NotFound();
                         }
@@ -169,25 +169,25 @@ namespace WebApplication1.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
-            return View(flight);
+            return View(route);
         }
 
         // GET: Flights/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var flight = await _context.Flights
-                .FirstOrDefaultAsync(m => m.FlightNo == id);
-            if (flight == null)
+            var route = await _context.Routes
+                .FirstOrDefaultAsync(m => m.RouteId == id);
+            if (route == null)
             {
                 return NotFound();
             }
 
-            return View(flight);
+            return View(route);
         }
 
         // POST: Flights/Delete/5
@@ -195,15 +195,15 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var flight = await _context.Flights.FindAsync(id);
-            _context.Flights.Remove(flight);
+            var flight = await _context.Routes.FindAsync(id);
+            _context.Routes.Remove(flight);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool FlightExists(string id)
+        private bool RouteExists(int id)
         {
-            return _context.Flights.Any(e => e.FlightNo == id);
+            return _context.Routes.Any(e => e.RouteId == id);
         }
     }
 }

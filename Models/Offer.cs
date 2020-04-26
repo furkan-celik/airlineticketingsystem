@@ -10,8 +10,8 @@ namespace WebApplication1.Models
     public class Offer
     {
         public int Id { get; set; }
-        [ForeignKey("Event")]
-        public int EventId { get; set; }
+        [ForeignKey("Flight")]
+        public int FlightId { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
@@ -19,7 +19,7 @@ namespace WebApplication1.Models
         [Required]
         public float Price { get; set; }
 
-        public virtual Event Event { get; set; }
+        public virtual Flight Flight { get; set; }
         public virtual ICollection<OfferTicket> Tickets { get; set; }
         public virtual ICollection<Reservation> Reservations { get; set; }
     }

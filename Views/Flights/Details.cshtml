@@ -1,4 +1,4 @@
-﻿@model WebApplication1.Models.Flight
+﻿@model WebApplication1.Models.Route
 
 @{
     ViewData["Title"] = "Details";
@@ -13,7 +13,7 @@
             @*@Html.DisplayNameFor(model => model.FlightNo)*@Flight No
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FlightNo)
+            @Html.DisplayFor(model => model.RouteId)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Departure)
@@ -36,6 +36,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.FlightNo">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.RouteId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

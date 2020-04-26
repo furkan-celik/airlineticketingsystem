@@ -1,4 +1,4 @@
-﻿@model WebApplication1.Models.Event
+﻿@model WebApplication1.Models.Flight
 
 @{
     ViewData["Title"] = "ReservationNow";
@@ -17,10 +17,10 @@
             @Html.DisplayFor(model => model.Organizer.Description)
         </dd>
         <dt class="col-sm-2">
-            @*@Html.DisplayNameFor(model => model.FlightNo)*@Flight No
+            @*@Html.DisplayNameFor(model => model.FlightNo)*@RouteId
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FlightNo)
+            @Html.DisplayFor(model => model.RouteId)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)

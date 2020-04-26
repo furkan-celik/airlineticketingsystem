@@ -1,5 +1,4 @@
-﻿@model WebApplication1.Models.Flight
-
+﻿@model WebApplication1.Models.Route
 @{
     ViewData["Title"] = "Delete";
 }
@@ -13,7 +12,7 @@
             @*@Html.DisplayNameFor(model => model.FlightNo)*@Flight No
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FlightNo)
+            @Html.DisplayFor(model => model.RouteId)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Departure)
@@ -36,7 +35,7 @@
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="FlightNo" />
+        <input type="hidden" asp-for="RouteId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>

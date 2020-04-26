@@ -30,7 +30,8 @@ namespace WebApplication1
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseLazyLoadingProxies().UseMySql(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("DefaultConnection"),
+                    optionsBuilder => optionsBuilder.ServerVersion(new Version(5,7), Pomelo.EntityFrameworkCore.MySql.Infrastructure.ServerType.MySql)));
             services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<AppRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

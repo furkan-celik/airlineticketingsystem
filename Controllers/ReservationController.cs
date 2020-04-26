@@ -58,7 +58,7 @@ namespace WebApplication1.Controllers
         {
             
 
-            var seatList = _context.Seats.Where(a => a.Availability == true && a.EventId == id && a.TypeId == type).ToList();
+            var seatList = _context.Seats.Where(a => a.Availability == true && a.FlightId == id && a.TypeId == type).ToList();
             ViewData["Err"] = "";
 
             if (seatList == null)
@@ -106,7 +106,7 @@ namespace WebApplication1.Controllers
                 while (counter < countOfSeats)
                 {
                     Reservation res = new Reservation();
-                    res.EventId = id;
+                    res.FlightId = id;
                     res.OwnerId = _userManager.GetUserId(HttpContext.User);
                     _context.Add(res);
                     await _context.SaveChangesAsync();

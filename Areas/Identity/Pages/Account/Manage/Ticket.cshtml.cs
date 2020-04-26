@@ -37,7 +37,7 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
 
             tickets = await _context.Tickets
                 .Where(a => a.OwnerId == Userid)
-                .Include(a => a.Event)
+                .Include(a => a.Flight)
                 .Include(a => a.Seats).ToListAsync();
 
 

@@ -15,10 +15,10 @@
                 @Html.DisplayNameFor(model => model.tickets[0].Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.tickets[0].Event)
+                @Html.DisplayNameFor(model => model.tickets[0].Flight)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.tickets[0].Event.Date)
+                @Html.DisplayNameFor(model => model.tickets[0].Flight.Date)
             </th>
             <th>
                 @*@Html.DisplayNameFor(model => model.tickets[0].Event.FlightNo)*@Flight No
@@ -39,13 +39,13 @@
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Event.Name)
+                @Html.DisplayFor(modelItem => item.Flight.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Event.Date)
+                @Html.DisplayFor(modelItem => item.Flight.Date)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Event.FlightNo)
+                @Html.DisplayFor(modelItem => item.Flight.RouteId)
             </td>
             <td>
                 @foreach (var item2 in item.Seats)

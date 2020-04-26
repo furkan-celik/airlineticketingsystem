@@ -37,14 +37,14 @@ namespace WebApplication1.Controllers
             var mancompid = user.ManagingCompanyId;
             if (mancompid == null)
             {
-                var applicationDbContext = _context.Offers.Include(o => o.Event);
+                var applicationDbContext = _context.Offers.Include(o => o.Flight);
                 return View(await applicationDbContext.ToListAsync());
             }
             else
             {
                 var applicationDbContext = _context.Offers
-                    .Where(o => o.Event.CompanyId == mancompid)
-                    .Include(o => o.Event);
+                    .Where(o => o.Flight.CompanyId == mancompid)
+                    .Include(o => o.Flight);
                 return View(await applicationDbContext.ToListAsync());
             }
 
@@ -59,7 +59,7 @@ namespace WebApplication1.Controllers
             }
 
             var offer = await _context.Offers
-                .Include(o => o.Event)
+                .Include(o => o.Flight)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (offer == null)
             {
@@ -73,7 +73,7 @@ namespace WebApplication1.Controllers
         // GET: Offers/Create
         public IActionResult Create()
         {
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "FlightNo");
+            ViewData["FlightId"] = new SelectList(_context.Events, "Id", "FlightNo");
             return View();
         }
 
@@ -91,7 +91,7 @@ namespace WebApplication1.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "FlightNo", offer.EventId);
+            ViewData["FlightId"] = new SelectList(_context.Events, "Id", "FlightNo", offer.FlightId);
             return View(offer);
         }
 
@@ -101,7 +101,7 @@ namespace WebApplication1.Controllers
         {
             ViewData["flightno"] = Flightno;
             // TODO: Verify that customer_id is valid and return HttpNotFound() if not.
-            return View(new Offer { EventId = EventId });
+            return View(new Offer { FlightId = EventId });
         }
         // POST Bills/CreateForCustomer
         [HttpPost]
@@ -109,7 +109,7 @@ namespace WebApplication1.Controllers
         [Authorize(Roles = "WebAdmin,CompAdmin")]
         public async Task<ActionResult> CreateForEvent([Bind("Id,EventId,Name,Description,Price")] Offer offer)
         {
-            var eventid = offer.EventId;
+            var eventid = offer.FlightId;
             var user = await _userManager.GetUserAsync(User);
             var selectedevent = await _context.Events.FindAsync(eventid);
             
@@ -126,7 +126,7 @@ namespace WebApplication1.Controllers
 
                
             }
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "FlightNo", offer.EventId);
+            ViewData["FlightId"] = new SelectList(_context.Events, "Id", "FlightNo", offer.FlightId);
             return View(offer);
         }
 
@@ -145,7 +145,7 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "FlightNo", offer.EventId);
+            ViewData["FlightId"] = new SelectList(_context.Events, "Id", "FlightNo", offer.FlightId);
             return View(offer);
         }
 
@@ -182,7 +182,7 @@ namespace WebApplication1.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "FlightNo", offer.EventId);
+            ViewData["FlightId"] = new SelectList(_context.Events, "Id", "FlightNo", offer.FlightId);
             return View(offer);
         }
 
@@ -196,7 +196,7 @@ namespace WebApplication1.Controllers
             }
 
             var offer = await _context.Offers
-                .Include(o => o.Event)
+                .Include(o => o.Flight)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (offer == null)
             {

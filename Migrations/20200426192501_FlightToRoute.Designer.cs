@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200426192501_FlightToRoute")]
+    partial class FlightToRoute
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,7 +33,7 @@ namespace WebApplication1.Migrations
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -54,7 +56,7 @@ namespace WebApplication1.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -78,7 +80,7 @@ namespace WebApplication1.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -90,10 +92,10 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -105,7 +107,7 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
@@ -139,7 +141,7 @@ namespace WebApplication1.Migrations
 
                     b.Property<string>("OwnerId")
                         .IsRequired()
-                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -151,7 +153,7 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.AppRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -177,7 +179,7 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.AppUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -310,7 +312,7 @@ namespace WebApplication1.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("OwnerId")
-                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -323,7 +325,7 @@ namespace WebApplication1.Migrations
                     b.ToTable("CreditCards");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Flight", b =>
+            modelBuilder.Entity("WebApplication1.Models.Event", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -336,7 +338,8 @@ namespace WebApplication1.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("FlightNo")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .IsRequired()
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -351,14 +354,11 @@ namespace WebApplication1.Migrations
                     b.Property<TimeSpan>("ResCancelTime")
                         .HasColumnType("time(6)");
 
-                    b.Property<int>("RouteId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("RouteId");
+                    b.HasIndex("FlightNo");
 
                     b.ToTable("Events");
                 });
@@ -376,9 +376,6 @@ namespace WebApplication1.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FlightId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -386,9 +383,14 @@ namespace WebApplication1.Migrations
                     b.Property<float>("Price")
                         .HasColumnType("float");
 
+                    b.Property<string>("RouteId")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("FlightId");
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("RouteId");
 
                     b.ToTable("Offers");
                 });
@@ -417,19 +419,16 @@ namespace WebApplication1.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FlightId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("OfferId")
                         .HasColumnType("int");
 
                     b.Property<string>("OwnerId")
                         .IsRequired()
-                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FlightId");
+                    b.HasIndex("EventId");
 
                     b.HasIndex("OfferId");
 
@@ -440,9 +439,8 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.Route", b =>
                 {
-                    b.Property<int>("RouteId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("RouteId")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Arrival")
                         .IsRequired()
@@ -475,9 +473,6 @@ namespace WebApplication1.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FlightId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("ReservationId")
                         .HasColumnType("int");
 
@@ -493,7 +488,7 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FlightId");
+                    b.HasIndex("EventId");
 
                     b.HasIndex("ReservationId");
 
@@ -530,7 +525,7 @@ namespace WebApplication1.Migrations
 
                     b.Property<string>("OwnerId")
                         .IsRequired()
-                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("ProcessTime")
                         .HasColumnType("datetime(6)");
@@ -618,26 +613,32 @@ namespace WebApplication1.Migrations
                         .HasForeignKey("OwnerId");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Flight", b =>
+            modelBuilder.Entity("WebApplication1.Models.Event", b =>
                 {
                     b.HasOne("WebApplication1.Models.Company", "Organizer")
-                        .WithMany("Flight")
+                        .WithMany("Events")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WebApplication1.Models.Route", "Route")
                         .WithMany("Events")
-                        .HasForeignKey("RouteId")
+                        .HasForeignKey("FlightNo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Offer", b =>
                 {
-                    b.HasOne("WebApplication1.Models.Flight", "Flight")
+                    b.HasOne("WebApplication1.Models.Event", "Event")
                         .WithMany()
-                        .HasForeignKey("FlightId");
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApplication1.Models.Route", null)
+                        .WithMany("Offers")
+                        .HasForeignKey("RouteId");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.OfferTicket", b =>
@@ -657,9 +658,11 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.Reservation", b =>
                 {
-                    b.HasOne("WebApplication1.Models.Flight", "Flight")
+                    b.HasOne("WebApplication1.Models.Event", "Event")
                         .WithMany("Reservations")
-                        .HasForeignKey("FlightId");
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WebApplication1.Models.Offer", null)
                         .WithMany("Reservations")
@@ -674,9 +677,11 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.Seat", b =>
                 {
-                    b.HasOne("WebApplication1.Models.Flight", "Flight")
+                    b.HasOne("WebApplication1.Models.Event", "Event")
                         .WithMany()
-                        .HasForeignKey("FlightId");
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WebApplication1.Models.Reservation", "Reservation")
                         .WithMany("Seats")
@@ -695,7 +700,7 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.Ticket", b =>
                 {
-                    b.HasOne("WebApplication1.Models.Flight", "Flight")
+                    b.HasOne("WebApplication1.Models.Event", "Event")
                         .WithMany("Tickets")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)

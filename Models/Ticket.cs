@@ -20,7 +20,7 @@ namespace WebApplication1.Models
 
         public virtual AppUser Owner { get; set; }
         [ForeignKey("EventId")]
-        public virtual Event Event { get; set; }
+        public virtual Flight Flight { get; set; }
         public virtual ICollection<OfferTicket> Offers { get; set; }
         public virtual ICollection<Seat> Seats { get; set; }
     }

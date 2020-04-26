@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApplication1.Models.Event>
+﻿@model IEnumerable<WebApplication1.Models.Flight>
 
 @{
     ViewData["Title"] = "Index";
@@ -83,7 +83,7 @@
                     @Html.DisplayNameFor(model => model.Date)
                 </th>
                 <th>
-                    @*@Html.DisplayNameFor(model => model.FlightNo)*@Flight No
+                    @*@Html.DisplayNameFor(model => model.FlightNo)*@RouteId
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Organizer)
@@ -111,7 +111,7 @@
                         @Html.DisplayFor(modelItem => item.Date)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.FlightNo)
+                        @Html.DisplayFor(modelItem => item.RouteId)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Organizer.Description)
@@ -146,7 +146,7 @@
                     @Html.DisplayNameFor(model => model.Date)
                 </th>
                 <th>
-                    @*@Html.DisplayNameFor(model => model.FlightNo)*@Flight No
+                    @*@Html.DisplayNameFor(model => model.FlightNo)*@RouteId
                 </th>
 
                 <th></th>
@@ -166,7 +166,7 @@
                         @Html.DisplayFor(modelItem => item.Date)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.FlightNo)
+                        @Html.DisplayFor(modelItem => item.RouteId)
                     </td>
 
                     <td>

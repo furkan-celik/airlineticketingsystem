@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApplication1.Models.Flight>
+﻿@model IEnumerable<WebApplication1.Models.Route>
 
 @{
     ViewData["Title"] = "Index";
@@ -74,7 +74,7 @@
         {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.FlightNo)
+                @Html.DisplayFor(modelItem => item.RouteId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Departure)
@@ -87,9 +87,9 @@
             </td>
 
             <td>
-                <a asp-action="Edit" asp-route-id="@item.FlightNo">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.FlightNo">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FlightNo">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.RouteId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.RouteId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.RouteId">Delete</a>
             </td>
         </tr>
         }

@@ -15,8 +15,8 @@ namespace WebApplication1.Models
         [Required]
         public int Col { get; set; }
         [Required]
-        [ForeignKey("Event")]
-        public int EventId { get; set; }
+        [ForeignKey("Flight")]
+        public int FlightId { get; set; }
         [Required]
         public bool Availability { get; set; }
         [Required]
@@ -25,7 +25,7 @@ namespace WebApplication1.Models
         public int? TicketId { get; set; }
         public int? ReservationId { get; set; }
 
-        public virtual Event Event { get; set; }
+        public virtual Flight Flight { get; set; }
         public virtual SeatType SeatType { get; set; }
         [ForeignKey("ReservationId")]
         public virtual Reservation Reservation { get; set; }

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200426202008_IntRouteId")]
+    partial class IntRouteId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -323,7 +325,7 @@ namespace WebApplication1.Migrations
                     b.ToTable("CreditCards");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Flight", b =>
+            modelBuilder.Entity("WebApplication1.Models.Event", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -335,8 +337,8 @@ namespace WebApplication1.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("FlightNo")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                    b.Property<int?>("FlightNo")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -358,7 +360,7 @@ namespace WebApplication1.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("RouteId");
+                    b.HasIndex("FlightNo");
 
                     b.ToTable("Events");
                 });
@@ -376,9 +378,6 @@ namespace WebApplication1.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FlightId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -388,7 +387,7 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FlightId");
+                    b.HasIndex("EventId");
 
                     b.ToTable("Offers");
                 });
@@ -417,9 +416,6 @@ namespace WebApplication1.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FlightId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("OfferId")
                         .HasColumnType("int");
 
@@ -429,7 +425,7 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FlightId");
+                    b.HasIndex("EventId");
 
                     b.HasIndex("OfferId");
 
@@ -475,9 +471,6 @@ namespace WebApplication1.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FlightId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("ReservationId")
                         .HasColumnType("int");
 
@@ -493,7 +486,7 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FlightId");
+                    b.HasIndex("EventId");
 
                     b.HasIndex("ReservationId");
 
@@ -618,26 +611,26 @@ namespace WebApplication1.Migrations
                         .HasForeignKey("OwnerId");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Flight", b =>
+            modelBuilder.Entity("WebApplication1.Models.Event", b =>
                 {
                     b.HasOne("WebApplication1.Models.Company", "Organizer")
-                        .WithMany("Flight")
+                        .WithMany("Events")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WebApplication1.Models.Route", "Route")
                         .WithMany("Events")
-                        .HasForeignKey("RouteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FlightNo");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Offer", b =>
                 {
-                    b.HasOne("WebApplication1.Models.Flight", "Flight")
+                    b.HasOne("WebApplication1.Models.Event", "Event")
                         .WithMany()
-                        .HasForeignKey("FlightId");
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WebApplication1.Models.OfferTicket", b =>
@@ -657,9 +650,11 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.Reservation", b =>
                 {
-                    b.HasOne("WebApplication1.Models.Flight", "Flight")
+                    b.HasOne("WebApplication1.Models.Event", "Event")
                         .WithMany("Reservations")
-                        .HasForeignKey("FlightId");
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WebApplication1.Models.Offer", null)
                         .WithMany("Reservations")
@@ -674,9 +669,11 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.Seat", b =>
                 {
-                    b.HasOne("WebApplication1.Models.Flight", "Flight")
+                    b.HasOne("WebApplication1.Models.Event", "Event")
                         .WithMany()
-                        .HasForeignKey("FlightId");
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WebApplication1.Models.Reservation", "Reservation")
                         .WithMany("Seats")
@@ -695,7 +692,7 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.Ticket", b =>
                 {
-                    b.HasOne("WebApplication1.Models.Flight", "Flight")
+                    b.HasOne("WebApplication1.Models.Event", "Event")
                         .WithMany("Tickets")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)

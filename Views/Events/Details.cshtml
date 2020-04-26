@@ -1,4 +1,4 @@
-﻿@model WebApplication1.Models.Event
+﻿@model WebApplication1.Models.Flight
 
 @{
     ViewData["Title"] = "Details";
@@ -40,10 +40,10 @@
             @Html.DisplayFor(model => model.Date)
         </dd>
         <dt class="col-sm-2">
-            @*@Html.DisplayNameFor(model => model.FlightNo)*@Flight No
+            @*@Html.DisplayNameFor(model => model.FlightNo)*@RouteId
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FlightNo)
+            @Html.DisplayFor(model => model.RouteId)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Organizer)
@@ -58,10 +58,10 @@
     {
         <a asp-action="Edit" asp-route-id="@Model.Id">Edit </a><label> | </label>
         @if (User.IsInRole("WebAdmin"))
-            @Html.ActionLink("Add Offer", "CreateForEvent", "Offers", new { EventId = Model.Id , Flightno = Model.FlightNo }, null)
+            @Html.ActionLink("Add Offer", "CreateForEvent", "Offers", new { EventId = Model.Id , Flightno = Model.RouteId }, null)
         @if ((bool)ViewData["samecomp"] == true)
         {
-            @Html.ActionLink("Add Offer", "CreateForEvent", "Offers", new { EventId = Model.Id , Flightno = Model.FlightNo }, null)
+            @Html.ActionLink("Add Offer", "CreateForEvent", "Offers", new { EventId = Model.Id , Flightno = Model.RouteId }, null)
         }
 
 
