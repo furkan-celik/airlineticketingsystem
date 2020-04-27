@@ -73,7 +73,7 @@ namespace WebApplication1.Controllers
         // GET: Offers/Create
         public IActionResult Create()
         {
-            ViewData["FlightId"] = new SelectList(_context.Events, "Id", "FlightNo");
+            ViewData["FlightId"] = new SelectList(_context.Flights, "Id", "FlightNo");
             return View();
         }
 
@@ -91,7 +91,7 @@ namespace WebApplication1.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FlightId"] = new SelectList(_context.Events, "Id", "FlightNo", offer.FlightId);
+            ViewData["FlightId"] = new SelectList(_context.Flights, "Id", "FlightNo", offer.FlightId);
             return View(offer);
         }
 
@@ -111,7 +111,7 @@ namespace WebApplication1.Controllers
         {
             var eventid = offer.FlightId;
             var user = await _userManager.GetUserAsync(User);
-            var selectedevent = await _context.Events.FindAsync(eventid);
+            var selectedevent = await _context.Flights.FindAsync(eventid);
             
 
             // TODO: The usual POST stuff like validating and saving the entity.
@@ -126,7 +126,7 @@ namespace WebApplication1.Controllers
 
                
             }
-            ViewData["FlightId"] = new SelectList(_context.Events, "Id", "FlightNo", offer.FlightId);
+            ViewData["FlightId"] = new SelectList(_context.Flights, "Id", "FlightNo", offer.FlightId);
             return View(offer);
         }
 
@@ -145,7 +145,7 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
-            ViewData["FlightId"] = new SelectList(_context.Events, "Id", "FlightNo", offer.FlightId);
+            ViewData["FlightId"] = new SelectList(_context.Flights, "Id", "FlightNo", offer.FlightId);
             return View(offer);
         }
 
@@ -182,7 +182,7 @@ namespace WebApplication1.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FlightId"] = new SelectList(_context.Events, "Id", "FlightNo", offer.FlightId);
+            ViewData["FlightId"] = new SelectList(_context.Flights, "Id", "FlightNo", offer.FlightId);
             return View(offer);
         }
 

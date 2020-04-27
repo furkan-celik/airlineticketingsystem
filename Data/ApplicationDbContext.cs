@@ -14,7 +14,7 @@ namespace WebApplication1.Data
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<CreditCard> CreditCards { get; set; }
-        public DbSet<Flight> Events { get; set; }
+        public DbSet<Flight> Flights { get; set; }
         public DbSet<Route> Routes { get; set; }
         public DbSet<Offer> Offers { get; set; }
         public DbSet<Reservation> Reservations { get; set; }

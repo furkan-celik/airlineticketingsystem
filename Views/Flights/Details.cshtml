@@ -1,41 +1,71 @@
-﻿@model WebApplication1.Models.Route
+﻿@model WebApplication1.Models.Flight
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h3>Flight Details</h3>
+<h3>Event Details</h3>
 
 <div>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @*@Html.DisplayNameFor(model => model.FlightNo)*@Flight No
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @*@Html.DisplayNameFor(model => model.RefundTime)*@Refund Time
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RefundTime)
+        </dd>
+        <dt class="col-sm-2">
+            @*@Html.DisplayNameFor(model => model.ResCancelTime)*@Res. Cancel Time
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ResCancelTime)
+        </dd>
+        <dt class="col-sm-2">
+            @*@Html.DisplayNameFor(model => model.RefundPortion)*@Refund Portion
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RefundPortion)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt class="col-sm-2">
+            @*@Html.DisplayNameFor(model => model.FlightNo)*@RouteId
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.RouteId)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Departure)
+            @Html.DisplayNameFor(model => model.Organizer)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Departure)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Arrival)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Arrival)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ETA)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ETA)
+            @Html.DisplayFor(model => model.Organizer.Description)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.RouteId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    @if ((await AuthorizationService.AuthorizeAsync(User, "ReqAdmin")).Succeeded)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit </a><label> | </label>
+        @if (User.IsInRole("WebAdmin"))
+            @Html.ActionLink("Add Offer", "CreateForEvent", "Offers", new { EventId = Model.Id , Flightno = Model.RouteId }, null)
+        @if ((bool)ViewData["samecomp"] == true)
+        {
+            @Html.ActionLink("Add Offer", "CreateForEvent", "Offers", new { EventId = Model.Id , Flightno = Model.RouteId }, null)
+        }
+
+
+        
+    }
+    <label> | </label><a asp-action="Index"> Back to List</a>
 </div>

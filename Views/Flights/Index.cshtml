@@ -1,17 +1,36 @@
-﻿@model IEnumerable<WebApplication1.Models.Route>
+﻿@model IEnumerable<WebApplication1.Models.Flight>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h2>Flights</h2>
+<h2>Events</h2>
+@if ((await AuthorizationService.AuthorizeAsync(User, "ReqAdmin")).Succeeded)
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+        @*<asp:Timer ID="timerTest" runat="server" Interval="1000" OnTick="timerTest_tick"></asp:Timer>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+            <asp:UpdatePanel itemid="up" runat="server" UpdateMode="Conditional">
 
+                <ContentTemplate>
 
-@using (Html.BeginForm("Index", "Flights", FormMethod.Get))
+                    <asp:Literal ID="litMsg" runat="server">
+
+                    </asp:Literal>
+                </ContentTemplate>
+
+                <Triggers>
+                    <asp:AsyncPostBackTrigger ControlID="timerTest" EventName="tick">
+
+                    </asp:AsyncPostBackTrigger>
+                </Triggers>
+
+            </asp:UpdatePanel>*@
+    </p>
+}
+
+@using (Html.BeginForm("Index", "Events", FormMethod.Get))
 {
 
     <br />
@@ -21,22 +40,16 @@
 
         <div class="col-md-4">
 
-            @*<div class="form-group">
-                    <label id="dest" class="control-label"></label>
-                    <select id="dest" name="dest" class="form-control" asp-items="ViewBag.CityId"></select>
-                </div>*@
+           
             <div class="form-group">
                 <a> @Html.DropDownList("dest", ViewData["CityId"] as SelectList, "From", new { required = "required" }) </a>
-                <a style="margin:20px"> @Html.DropDownList("arr", ViewData["CityId"] as SelectList, "To", new { required = "required" })</a>
+                <a style="margin:20px"> @Html.DropDownList("arr", ViewData["CityId"] as SelectList, "To", new { required = "required" }) </a>
             </div>
-            @*<div class="form-group">
-            <label id="arr" class="control-label"></label>
-            <select id="arr" class="form-control" asp-items="ViewBag.CityId"></select>
-        </div>*@
+
             <div class="form-group">
                 <label for="date"></label>
                 <input type="date" id="date"
-                       name="date" value= @ViewData["Date"]
+                       name="date" value=@ViewData["Date"]
                        min=@DateTime.Now.ToString("yyyy-MM-dd") max="2100-06-14">
             </div>
 
@@ -49,52 +62,121 @@
     </div>
 
 }
+@if (User.IsInRole("WebAdmin") || User.IsInRole("CompAdmin"))
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.RefundTime)*@Refund Time
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.ResCancelTime)*@Res. Cancel Time
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.RefundPortion)*@Refund Portion
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.FlightNo)*@RouteId
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Organizer)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RefundTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ResCancelTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RefundPortion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RouteId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Organizer.Description)
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "ReqAdmin")).Succeeded)
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete </a><label> | </label>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @*@Html.DisplayNameFor(model => model.FlightNo)*@Flight No
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Departure)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Arrival)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ETA)
-            </th>
+}
 
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RouteId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Departure)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Arrival)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ETA)
-            </td>
+@if (!User.IsInRole("WebAdmin") && !User.IsInRole("CompAdmin"))
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Organizer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.FlightNo)*@RouteId
+                </th>
 
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.RouteId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.RouteId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RouteId">Delete</a>
-            </td>
-        </tr>
-        }
-    </tbody>
-</table>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Organizer.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RouteId)
+                    </td>
 
-<asp:Calender ID="Calendar1" runat="server" SelectionMode="DayWeekMonth">
-</asp:Calender>
+                    <td>
+                        <a asp-action="ReservationNow" asp-route-id="@item.Id" asp-controller="Reservation" class="btn btn-warning">Reservation Now</a>
+                        <a asp-action="Buy" asp-route-id="@item.Id" class="btn btn-primary">Buy Ticket</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+}

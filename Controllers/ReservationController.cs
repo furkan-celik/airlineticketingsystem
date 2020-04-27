@@ -38,7 +38,7 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var @event = await _context.Events
+            var @event = await _context.Flights
                 .Include(x => x.Organizer)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
@@ -64,7 +64,7 @@ namespace WebApplication1.Controllers
             if (seatList == null)
             {
                 ViewData["Err"] = "There isn't any seat left in choosen class";
-                var @event = await _context.Events
+                var @event = await _context.Flights
              .Include(x => x.Organizer)
              .FirstOrDefaultAsync(m => m.Id == id);
 
@@ -77,7 +77,7 @@ namespace WebApplication1.Controllers
             else if (countOfSeats > 4)
             {
                 ViewData["Err"] = "You can reserve at most 4 seats";
-                var @event = await _context.Events
+                var @event = await _context.Flights
               .Include(x => x.Organizer)
               .FirstOrDefaultAsync(m => m.Id == id);
 
@@ -90,7 +90,7 @@ namespace WebApplication1.Controllers
             else if (seatList.Count < countOfSeats)
             {
                 ViewData["Err"] = "There isn't enough seats for you to buy";
-                var @event = await _context.Events
+                var @event = await _context.Flights
               .Include(x => x.Organizer)
               .FirstOrDefaultAsync(m => m.Id == id);
 

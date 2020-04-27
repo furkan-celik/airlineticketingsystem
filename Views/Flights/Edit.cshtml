@@ -1,30 +1,51 @@
-﻿@model WebApplication1.Models.Route
+﻿@model WebApplication1.Models.Flight
 
 @{
     ViewData["Title"] = "Edit";
 }
 
 
-<h3>Edit Flight</h3>
+<h3>Edit Event</h3>
 <hr />
-<p style="color:crimson"> @ViewData["Err"]</p>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="RouteId" />
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Departure" class="control-label"></label>
-                <select asp-for="Departure" class="form-control" asp-items="ViewBag.CityId"></select>
+                <label asp-for="CompanyId" class="control-label">Company</label>
+                <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.CompanyId"></select>
+                <span asp-validation-for="CompanyId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Arrival" class="control-label"></label>
-                <select asp-for="Arrival" class="form-control" asp-items="ViewBag.CityId"></select>
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ETA" class="control-label"></label>
-                <input asp-for="ETA" class="form-control" />
-                <span asp-validation-for="ETA" class="text-danger"></span>
+                <label asp-for="RefundTime" class="control-label">Refund Time</label>
+                <input asp-for="RefundTime" class="form-control" />
+                <span asp-validation-for="RefundTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ResCancelTime" class="control-label">Res. Cancel Time</label>
+                <input asp-for="ResCancelTime" class="form-control" />
+                <span asp-validation-for="ResCancelTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RefundPortion" class="control-label">Refund Portion</label>
+                <input asp-for="RefundPortion" class="form-control" />
+                <span asp-validation-for="RefundPortion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RouteId" class="control-label">Flight No</label>
+                <input asp-for="RouteId" class="form-control" />
+                <span asp-validation-for="RouteId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" /> |

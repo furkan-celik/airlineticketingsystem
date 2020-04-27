@@ -81,7 +81,7 @@ namespace WebApplication1
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Events}/{action=Index}/{id?}");
+                    pattern: "{controller=Flights}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
