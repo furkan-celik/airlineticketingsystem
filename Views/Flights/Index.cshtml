@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Events</h2>
+<h2>Flights</h2>
 @if ((await AuthorizationService.AuthorizeAsync(User, "ReqAdmin")).Succeeded)
 {
     <p>
@@ -30,7 +30,7 @@
     </p>
 }
 
-@using (Html.BeginForm("Index", "Events", FormMethod.Get))
+@using (Html.BeginForm("Index", "Flight", FormMethod.Get))
 {
 
     <br />
@@ -83,7 +83,7 @@
                     @Html.DisplayNameFor(model => model.Date)
                 </th>
                 <th>
-                    @*@Html.DisplayNameFor(model => model.FlightNo)*@RouteId
+                    @*@Html.DisplayNameFor(model => model.FlightNo)*@Flight No
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Organizer)
@@ -111,7 +111,7 @@
                         @Html.DisplayFor(modelItem => item.Date)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.RouteId)
+                        @Html.DisplayFor(modelItem => item.FlightNo)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Organizer.Description)
@@ -146,7 +146,7 @@
                     @Html.DisplayNameFor(model => model.Date)
                 </th>
                 <th>
-                    @*@Html.DisplayNameFor(model => model.FlightNo)*@RouteId
+                    @*@Html.DisplayNameFor(model => model.FlightNo)*@FlightNo
                 </th>
 
                 <th></th>
@@ -166,7 +166,7 @@
                         @Html.DisplayFor(modelItem => item.Date)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.RouteId)
+                        @Html.DisplayFor(modelItem => item.FlightNo)
                     </td>
 
                     <td>

@@ -96,7 +96,7 @@ namespace WebApplication1.Controllers
         public IActionResult Create()
         {
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Description");
-            ViewData["FlightNo"] = new SelectList(_context.Routes, "FlightNo", "FlightNo");
+            ViewData["RouteId"] = new SelectList(_context.Routes, "RouteId", "RouteId");
             return View();
         }
 
@@ -106,7 +106,7 @@ namespace WebApplication1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CompanyId,Name,RefundTime,ResCancelTime,RefundPortion,Date,FlightNo")] Flight flight)
+        public async Task<IActionResult> Create([Bind("Id,CompanyId,Name,RefundTime,ResCancelTime,RefundPortion,Date,RouteId,FlightNo")] Flight flight)
         {
             var flightMan = _context.Routes.Where(a => a.RouteId == flight.RouteId).ToList();
             flight.Name = flightMan.ElementAt(0).Departure + "-" + flightMan.ElementAt(0).Arrival;
@@ -170,7 +170,7 @@ namespace WebApplication1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyId,Name,RefundTime,ResCancelTime,RefundPortion,Date,FlightNo")] Flight flight)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyId,Name,RefundTime,ResCancelTime,RefundPortion,Date,RouteId,FlightNo")] Flight flight)
         {
             if (id != flight.Id)
             {

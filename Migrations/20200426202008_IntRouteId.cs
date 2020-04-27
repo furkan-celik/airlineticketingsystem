@@ -5,9 +5,18 @@ namespace WebApplication1.Migrations
 {
     public partial class IntRouteId : Migration
     {
+
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-       
+
+            migrationBuilder.AlterColumn<int>(
+                name: "RouteId",
+                table: "Routes",
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "varchar(255) CHARACTER SET utf8mb4")
+                .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
+
 
             migrationBuilder.AlterColumn<int>(
                 name: "RouteId",

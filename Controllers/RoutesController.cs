@@ -53,7 +53,7 @@ namespace WebApplication1.Controllers
                 //}
                 else {
                     
-                    flights = flights.Where(selectList => selectList.Departure.Equals(dest) && selectList.Arrival.Equals(arr) && selectList.ETA.Date.Equals(date.Date));
+                    flights = flights.Where(selectList => selectList.Departure.Equals(dest) && selectList.Arrival.Equals(arr));// && selectList.ETA.Date.Equals(date.Date));
                 }
                 
             }
@@ -111,7 +111,7 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Flights/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(int id)
         {
             ViewData["Err"] = "";
             ViewData["CityId"] = new SelectList(_context.Cities, "CityName", "CityName");
@@ -133,7 +133,7 @@ namespace WebApplication1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FlightNo,Departure,Arrival,ETA")] Route route)
+        public async Task<IActionResult> Edit(int id, [Bind("RouteId,Departure,Arrival,ETA")] Route route)
         {
             ViewData["Err"] = "";
             ViewData["CityId"] = new SelectList(_context.Cities, "CityName", "CityName");
@@ -193,7 +193,7 @@ namespace WebApplication1.Controllers
         // POST: Flights/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var flight = await _context.Routes.FindAsync(id);
             _context.Routes.Remove(flight);

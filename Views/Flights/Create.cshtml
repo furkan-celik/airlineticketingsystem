@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h3>Create Event</h3>
+<h3>Create Flight</h3>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -15,10 +15,15 @@
                 <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.CompanyId"></select>
             </div>
             @*<div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>*@
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>*@
+            <div class="form-group">
+                <label asp-for="FlightNo" class="control-label">Flight No</label>
+                <input asp-for="FlightNo" class="form-control" />
+                <span asp-validation-for="FlightNo" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="RefundTime" class="control-label">Refund Time</label>
                 <input asp-for="RefundTime" class="form-control" />
@@ -40,9 +45,9 @@
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RouteId" class="control-label">Flight No</label>
+                <label asp-for="RouteId" class="control-label">Route Id</label>
                 <select asp-for="RouteId" class="form-control" asp-items="ViewBag.RouteId"></select>
-                <a class="nav-link text-dark" asp-area="" asp-controller="Flights" asp-action="Create">Create New Flight</a>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Routes" asp-action="Create">Create New Route</a>
             </div>
             <div class="form-group">
                 <input asp-for="Name" type="hidden" value="empty" class="form-control" />

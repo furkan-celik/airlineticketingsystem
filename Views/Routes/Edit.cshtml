@@ -12,7 +12,7 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="FlightNo" />
+            <input type="hidden" asp-for="RouteId" />
             <div class="form-group">
                 <label asp-for="Departure" class="control-label"></label>
                 <select asp-for="Departure" class="form-control" asp-items="ViewBag.CityId"></select>
