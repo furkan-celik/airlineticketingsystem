@@ -215,6 +215,16 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
+            var res = _context.Reservations.Where(a => a.EventId == id).ToList();
+
+            var ticket = _context.Tickets.Where(a => a.EventId == id).ToList();      
+
+            if (res.Count != 0 || ticket.Count != 0)
+            {
+                ViewData["Err"] = "There are reserved and purchased seats in this event";
+                ViewData["Err_2"] = "If you delete this event now all purchases %100 will refunded to customers";
+            }
+
             var @event = await _context.Events
                 .Include(x => x.Organizer)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -232,6 +242,15 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var res = _context.Reservations.Where(a => a.EventId == id);
+            if (res != null) { _context.Reservations.RemoveRange(res); }
+
+            var ticket = _context.Tickets.Where(a => a.EventId == id);
+            if (ticket != null) { _context.Tickets.RemoveRange(ticket); }
+           
+            var seat =  _context.Seats.Where(a => a.EventId == id);
+            _context.Seats.RemoveRange(seat);
+
             var @event = await _context.Events.FindAsync(id);
             _context.Events.Remove(@event);
             await _context.SaveChangesAsync();
