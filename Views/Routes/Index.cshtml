@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Flights</h2>
+<h2>Routes</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -15,7 +15,7 @@
 {
 
     <br />
-    <h4>Search for Flights</h4>
+    <h4>Search for Routes</h4>
     <p style="color:crimson"> @ViewData["Err"]</p>
     <div class="row">
 
@@ -30,15 +30,15 @@
                 <a style="margin:20px"> @Html.DropDownList("arr", ViewData["CityId"] as SelectList, "To", new { required = "required" })</a>
             </div>
             @*<div class="form-group">
-            <label id="arr" class="control-label"></label>
-            <select id="arr" class="form-control" asp-items="ViewBag.CityId"></select>
-        </div>*@
-            <div class="form-group">
-                <label for="date"></label>
-                <input type="date" id="date"
-                       name="date" value= @ViewData["Date"]
-                       min=@DateTime.Now.ToString("yyyy-MM-dd") max="2100-06-14">
-            </div>
+                    <label id="arr" class="control-label"></label>
+                    <select id="arr" class="form-control" asp-items="ViewBag.CityId"></select>
+                </div>*@
+            @*<div class="form-group">
+                    <label for="date"></label>
+                    <input type="date" id="date"
+                           name="date" value= @ViewData["Date"]
+                           min=@DateTime.Now.ToString("yyyy-MM-dd") max="2100-06-14">
+                </div>*@
 
 
 
@@ -54,7 +54,7 @@
     <thead>
         <tr>
             <th>
-                @*@Html.DisplayNameFor(model => model.FlightNo)*@Flight No
+                @*@Html.DisplayNameFor(model => model.FlightNo)*@Route Id
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Departure)
@@ -72,26 +72,26 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RouteId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Departure)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Arrival)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ETA)
-            </td>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RouteId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Departure)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Arrival)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ETA.TimeOfDay)
+                </td>
 
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.RouteId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.RouteId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RouteId">Delete</a>
-            </td>
-        </tr>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.RouteId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.RouteId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.RouteId">Delete</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
