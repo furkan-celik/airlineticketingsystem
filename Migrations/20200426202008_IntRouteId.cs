@@ -7,29 +7,7 @@ namespace WebApplication1.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Events_Routes_RouteId",
-                table: "Events");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Offers_Flights_FlightNo",
-                table: "Offers");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Offers_FlightNo",
-                table: "Offers");
-
-            migrationBuilder.DropColumn(
-                name: "RouteId",
-                table: "Offers");
-
-            migrationBuilder.AlterColumn<int>(
-                name: "RouteId",
-                table: "Routes",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "varchar(255) CHARACTER SET utf8mb4")
-                .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
+       
 
             migrationBuilder.AlterColumn<int>(
                 name: "RouteId",

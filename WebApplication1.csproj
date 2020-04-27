@@ -10,6 +10,8 @@
     <Compile Remove="Migrations\20200422113510_eventrefundtime.Designer.cs" />
     <Compile Remove="Migrations\20200422114428_eventrefundtimeV2.cs" />
     <Compile Remove="Migrations\20200422114428_eventrefundtimeV2.Designer.cs" />
+    <Compile Remove="Migrations\20200427121104_dbfixbug.cs" />
+    <Compile Remove="Migrations\20200427121104_dbfixbug.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
