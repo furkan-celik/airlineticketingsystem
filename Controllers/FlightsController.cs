@@ -30,7 +30,7 @@ namespace WebApplication1.Controllers
         //    return View(await _context.Flights.ToListAsync());
         //}
         
-        public IActionResult Index(string arr,string dest, DateTime date)
+        public IActionResult Index(string arr,string dest)//, DateTime date)
         {
             ViewData["CityId"] = new SelectList(_context.Cities, "CityName", "CityName");
             ViewData["Err"] = "";
@@ -41,7 +41,7 @@ namespace WebApplication1.Controllers
 
             if (!String.IsNullOrEmpty(arr) && !String.IsNullOrEmpty(dest))
             {
-                ViewData["Date"] = date.ToString("yyyy-MM-dd");
+                //ViewData["Date"] = date.ToString("yyyy-MM-dd");
                 if (string.Equals(arr, dest))
                 {
                     ViewData["Err"] = "Departure and Arrival can't be the same. Please do another search.";
@@ -52,8 +52,8 @@ namespace WebApplication1.Controllers
 
                 //}
                 else {
-                    
-                    flights = flights.Where(selectList => selectList.Departure.Equals(dest) && selectList.Arrival.Equals(arr) && selectList.ETA.Date.Equals(date.Date));
+
+                    flights = flights.Where(selectList => selectList.Departure.Equals(dest) && selectList.Arrival.Equals(arr));// && selectList.ETA.Date.Equals(date.Date));
                 }
                 
             }

@@ -3,17 +3,23 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head class="backimg">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Flightviewer</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+        .text-light{
+            color:white;
+        }
+    </style>
 </head>
+
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-md navbar-light border-bottom box-shadow mb-3" style="background-color:gray;height:70px">   @*bg-white*@
+            <div class="container" style="max-width:1400px" >
                 @if ((await AuthorizationService.AuthorizeAsync(User, "ReqCompAdmin")).Succeeded)
                 {
                     <img id="img_logo" alt="company logo" src="Url.Content(UserManager.GetUserAsync(User).Result.ManagingCompany.LogoLocation)" />
@@ -21,7 +27,7 @@
                 }
                 else
                 {
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Flightviewer</a>
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Flightviewer</a><a style="margin-left:10px">|</a> 
                 }
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -36,17 +42,17 @@
                         @if ((await AuthorizationService.AuthorizeAsync(User, "ReqAdmin")).Succeeded)
                         {
                             <li>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Flights" asp-action="Index">Flights</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Offers" asp-action="Index">Offers</a>
                             </li>
                             <li>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Offers" asp-action="Index">Offers</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Flights" asp-action="Index">Routes</a>
                             </li>
                             <li>
                                 <a class="nav-link text-dark" asp-area="" asp-controller="City" asp-action="Index">Cities</a>
                             </li>
                         }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> 
                         </li>
 
                     </ul>
@@ -54,11 +60,13 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
+
 
     <footer class="border-top footer text-muted">
         <div class="container">
