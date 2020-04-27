@@ -69,8 +69,16 @@
         @Html.DropDownList("type", new List<SelectListItem>() { new SelectListItem { Text = "Economy", Value = "2" }, new SelectListItem { Text = "Business", Value = "1" } })
     </div>
     <div class="form-group">
-        <label for="countOfSeats" class="control-label"> Number of tickets: </label>
-        <input type="number" id="countOfSeats" name="countOfSeats" value="1" min="1" />
+        <label for="countOfSeats" class="control-label"> Adult(s): </label>
+        <input type="number" id="countOfSeats" name="countOfSeats" value="1" min="1" />   
+    </div>
+    <div class="form-group">
+        <label for="countOfChild" class="control-label"> Child(ren) (Age 2-12): </label>
+        <input type="number" id="countOfChild" name="countOfChild" value="0" min="0" />
+    </div>
+    <div class="form-group">
+        <label for="countOfBaby" class="control-label"> Infant(s) (Age 0-2): </label>
+        <input type="number" id="countOfBaby" name="countOfBaby" value="0" min="0"/>
     </div>
     <input type="hidden" asp-for="Id" />
     <input type="submit" value="Confirm" class="btn btn-success" /> |

@@ -170,7 +170,7 @@ namespace WebApplication1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyId,Name,RefundTime,ResCancelTime,RefundPortion,Date,RouteId,FlightNo")] Flight flight)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyId,Name,RefundTime,ResCancelTime,RefundPortion,Date,FlightNo")] Flight flight)
         {
             if (id != flight.Id)
             {
@@ -259,7 +259,7 @@ namespace WebApplication1.Controllers
         //POST: Events/
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Buy(int id, int type, int countOfSeats)
+        public async Task<IActionResult> Buy(int id, int type, int countOfSeats, int countOfChild, int countOfBaby)
         {
             //Reservation res = new Reservation();
             //res.EventId = id;
@@ -283,7 +283,7 @@ namespace WebApplication1.Controllers
                 }
                 return View(flight);
             }
-            else if (seatList.Count() < countOfSeats)
+            else if (seatList.Count() < countOfSeats + countOfChild)
             {
                 ViewData["Err"] = "There isn't enough seats for you to buy";
                 var flight = await _context.Flights
@@ -296,10 +296,23 @@ namespace WebApplication1.Controllers
                 }
                 return View(flight);
             }
+            else if (countOfBaby > countOfSeats)
+            {
+                ViewData["Err"] = "Infants cannot be more than adults";
+                var flight = await _context.Flights
+                .Include(x => x.Organizer)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+                if (flight == null)
+                {
+                    return NotFound();
+                }
+                return View(flight);
+            }
             else
             {
                 int counter = 0;
-                while (counter < countOfSeats)
+                while (counter < countOfSeats + countOfChild)
                 {
                     Ticket tic = new Ticket();
                     tic.ProcessTime = DateTime.Now;
@@ -317,7 +330,6 @@ namespace WebApplication1.Controllers
                     counter++;
 
                 }
-
 
                 return RedirectToAction(nameof(Successful));
 

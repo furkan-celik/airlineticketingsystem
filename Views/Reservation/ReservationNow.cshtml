@@ -17,10 +17,10 @@
             @Html.DisplayFor(model => model.Organizer.Description)
         </dd>
         <dt class="col-sm-2">
-            @*@Html.DisplayNameFor(model => model.FlightNo)*@RouteId
+            @*@Html.DisplayNameFor(model => model.FlightNo)*@Flight No
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.RouteId)
+            @Html.DisplayFor(model => model.FlightNo)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
@@ -67,9 +67,17 @@
         <label for="countOfSeats" class="control-label"> Number of tickets: </label>
         <input type="number" id="countOfSeats" name="countOfSeats" value="1" min="1" />
     </div>
+    <div class="form-group">
+        <label for="countOfChild" class="control-label"> Child(ren) (Age 2-12): </label>
+        <input type="number" id="countOfChild" name="countOfChild" value="0" min="0"/>
+    </div>
+    <div class="form-group">
+        <label for="countOfBaby" class="control-label"> Infant(s) (Age 0-2): </label>
+        <input type="number" id="countOfBaby" name="countOfBaby" value="0" min="0"/>
+    </div>
     <input type="hidden" asp-for="Id" />
     <input type="submit" value="Confirm" class="btn btn-success" /> |
-    <a asp-action="Index" asp-controller="Events">Back to List</a>
+    <a asp-action="Index" asp-controller="Flights">Back to List</a>
 </form>
 
 

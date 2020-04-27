@@ -54,7 +54,7 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ReservationNow(int id, int type, int countOfSeats)
+        public async Task<IActionResult> ReservationNow(int id, int type, int countOfSeats, int countOfChild, int countOfBaby)
         {
             
 
@@ -74,7 +74,7 @@ namespace WebApplication1.Controllers
                 }
                 return View(@event);
             }
-            else if (countOfSeats > 4)
+            else if (countOfChild + countOfSeats > 4)
             {
                 ViewData["Err"] = "You can reserve at most 4 seats";
                 var @event = await _context.Flights
@@ -87,9 +87,22 @@ namespace WebApplication1.Controllers
                 }
                 return View(@event);
             }
-            else if (seatList.Count < countOfSeats)
+            else if (seatList.Count < countOfSeats + countOfChild)
             {
                 ViewData["Err"] = "There isn't enough seats for you to buy";
+                var @event = await _context.Flights
+              .Include(x => x.Organizer)
+              .FirstOrDefaultAsync(m => m.Id == id);
+
+                if (@event == null)
+                {
+                    return NotFound();
+                }
+                return View(@event);
+            }
+            else if (countOfBaby > countOfSeats)
+            {
+                ViewData["Err"] = "Infants cannot be more than adults";
                 var @event = await _context.Flights
               .Include(x => x.Organizer)
               .FirstOrDefaultAsync(m => m.Id == id);
@@ -103,7 +116,7 @@ namespace WebApplication1.Controllers
             else
             {
                 int counter = 0;
-                while (counter < countOfSeats)
+                while (counter < countOfSeats + countOfChild)
                 {
                     Reservation res = new Reservation();
                     res.FlightId = id;
