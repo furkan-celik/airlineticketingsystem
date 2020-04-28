@@ -71,7 +71,7 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        public async Task<IActionResult> SearchResults(int arr, int dest, DateTime date)
+        public IActionResult SearchResults(int arr, int dest, DateTime date)
         {
             var flights = from selectList in _context.Flights.Include(x => x.Organizer)
                           select selectList;
@@ -91,7 +91,7 @@ namespace WebApplication1.Controllers
                 }
             }
 
-            return PartialView(flights);
+            return PartialView(flights.Include(x => x.Route).ToList());
         }
 
         // GET: Events/Details/5
