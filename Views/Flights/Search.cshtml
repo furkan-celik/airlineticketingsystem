@@ -215,6 +215,20 @@
 
 <body>
     <div id="booking" class="section">
+
+        <nav class="navbar navbar-expand-sm navbar-toggleable-md navbar-light border-bottom box-shadow mb-3" style="background-color:transparent;height:70px">
+            @*bg-white*@
+            <div class="container" style="max-width:1400px">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+
         <div class="section-center">
             <div class="container">
                 <div class="row">
@@ -385,6 +399,13 @@
                     $(".pop").modal("show");
                 })
         })
+
+        $(document).ready(function () {
+            //Handles menu drop down
+            $('.dropdown-menu').find('form').click(function (e) {
+                e.stopPropagation();
+            });
+        });
 
     </script>
 </body>

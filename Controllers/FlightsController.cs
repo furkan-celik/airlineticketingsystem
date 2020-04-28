@@ -64,6 +64,11 @@ namespace WebApplication1.Controllers
 
         public IActionResult Search()
         {
+            if(User.IsInRole("WebAdmin") || User.IsInRole("CompAdmin"))
+            {
+                return RedirectToAction("Index");
+            }
+
             ViewData["AirportId"] = new SelectList(_context.Airports, "Id", "AirportName");
             ViewData["Err"] = "";
             ViewData["Date"] = @DateTime.Now.ToString("yyyy-MM-dd");
