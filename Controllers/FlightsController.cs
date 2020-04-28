@@ -113,6 +113,8 @@ namespace WebApplication1.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(flight);
+
+                _context.SeatTypes.Add(new SeatType() { Name = "Standard" });
                 await _context.SaveChangesAsync();
 
                 //Create seats for event
@@ -170,7 +172,7 @@ namespace WebApplication1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyId,Name,RefundTime,ResCancelTime,RefundPortion,Date,FlightNo")] Flight flight)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyId,Name,RefundTime,ResCancelTime,RefundPortion,Date,FlightNo,RouteId")] Flight flight)
         {
             if (id != flight.Id)
             {

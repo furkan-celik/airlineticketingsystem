@@ -46,6 +46,8 @@
                 <label asp-for="FlightNo" class="control-label">Flight No</label>
                 <input asp-for="FlightNo" class="form-control" />
                 <span asp-validation-for="FlightNo" class="text-danger"></span>
+                <input asp-for="RouteId" type="hidden" class="form-control"/>
+                <span asp-validation-for="RouteId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" /> |
