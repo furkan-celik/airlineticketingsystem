@@ -11,7 +11,7 @@ namespace WebApplication1.Models
     {
         public int Id { get; set; }
         [ForeignKey("Flight")]
-        public int FlightId { get; set; }
+        public int? FlightId { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
