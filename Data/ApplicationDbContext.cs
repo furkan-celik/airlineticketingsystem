@@ -20,7 +20,7 @@ namespace WebApplication1.Data
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Seat> Seats { get; set; }
         public DbSet<City> Cities { get; set; }
-
+        public DbSet<Airport> Airports { get; set; }
         public DbSet<SeatType> SeatTypes { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
 

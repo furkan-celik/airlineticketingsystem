@@ -12,11 +12,15 @@ namespace WebApplication1.Models
         [Key]
         public int RouteId { get; set; }
         [Required]
-        public string Departure { get; set; }
+        public int DepartureId { get; set; }
         [Required]
-        public string Arrival { get; set; }
+        public int ArrivalId { get; set; }
         public DateTime ETA { get; set; }
 
-        public virtual ICollection<Flight> Events { get; set; }
+        [ForeignKey("DepartureId")]
+        public virtual Airport DepartureAirport { get; set; }
+        [ForeignKey("ArrivalId")]
+        public virtual Airport ArrivalAirport { get; set; }
+        public virtual ICollection<Flight> Flights { get; set; }
     }
 }

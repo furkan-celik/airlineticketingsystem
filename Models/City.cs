@@ -13,5 +13,6 @@ namespace WebApplication1.Models
         [Required]
         public string CityName { get; set; }
        
+        public virtual ICollection<Airport> Airports { get; set; }
     }
 }

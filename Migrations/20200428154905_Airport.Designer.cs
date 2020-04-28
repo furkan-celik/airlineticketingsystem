@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200428154905_Airport")]
+    partial class Airport
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,7 +167,7 @@ namespace WebApplication1.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("Airports");
+                    b.ToTable("Airport");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.AppRole", b =>
@@ -649,7 +651,7 @@ namespace WebApplication1.Migrations
                         .IsRequired();
 
                     b.HasOne("WebApplication1.Models.Route", "Route")
-                        .WithMany("Flights")
+                        .WithMany("Events")
                         .HasForeignKey("RouteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

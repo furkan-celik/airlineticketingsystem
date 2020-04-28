@@ -28,19 +28,20 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Events
-        public IActionResult Index(string arr, string dest, DateTime date)
+        public IActionResult Index(int? arr, int? dest, DateTime date)
         {
             //var applicationDbContext = _context.Events.Include(x => x.Organizer);
             //return View(await applicationDbContext.ToListAsync());
 
-             ViewData["CityId"] = new SelectList(_context.Cities, "CityName", "CityName");
-             ViewData["Err"] = "";
-             ViewData["Date"] = @DateTime.Now.ToString("yyyy-MM-dd");
+            var list = new SelectList(_context.Airports, "Id", "AirportName");
+            ViewData["AirportId"] = list;
+            ViewData["Err"] = "";
+            ViewData["Date"] = @DateTime.Now.ToString("yyyy-MM-dd");
 
             var flights = from selectList in _context.Flights.Include(x => x.Organizer)
                     select selectList;
 
-            if (!String.IsNullOrEmpty(arr) && !String.IsNullOrEmpty(dest))
+            if (arr.HasValue && dest.HasValue)
             {
                 ViewData["Date"] = date.ToString("yyyy-MM-dd");
                 if (string.Equals(arr, dest))
@@ -48,18 +49,49 @@ namespace WebApplication1.Controllers
                     ViewData["Err"] = "Destination and Arrival can't be the same. Please do another search.";
 
                 }
-                //else if(date != null){
-                //    ViewData["Err"] = date.ToString("MM-dd-yyyy");
-
-                //}
                 else {
+                    flights = flights.Where(x => x.Route.ArrivalId == arr && x.Route.DepartureId == dest);
 
-                    flights = flights.Where(selectList => selectList.Name == dest + "-" + arr && selectList.Date.Date.Equals(date.Date));
-                    //flights = flights.Where(selectList => selectList.Destination.Equals(dest) && selectList.Arrival.Equals(arr) && selectList.ETA.Date.Equals(date.Date));
+                    if(date.Ticks > 0)
+                    {
+                        flights = flights.Where(x => x.Date.Date == date.Date);
+                    }
                 }
                 
             }
             return View(flights.ToList());
+        }
+
+        public IActionResult Search()
+        {
+            ViewData["AirportId"] = new SelectList(_context.Airports, "Id", "AirportName");
+            ViewData["Err"] = "";
+            ViewData["Date"] = @DateTime.Now.ToString("yyyy-MM-dd");
+
+            return View();
+        }
+
+        public async Task<IActionResult> SearchResults(int arr, int dest, DateTime date)
+        {
+            var flights = from selectList in _context.Flights.Include(x => x.Organizer)
+                          select selectList;
+
+            if (string.Equals(arr, dest))
+            {
+                ViewData["Err"] = "Destination and Arrival can't be the same. Please do another search.";
+
+            }
+            else
+            {
+                flights = flights.Where(x => x.Route.ArrivalId == arr && x.Route.DepartureId == dest);
+
+                if (date.Ticks > 0)
+                {
+                    flights = flights.Where(x => x.Date.Date == date.Date);
+                }
+            }
+
+            return PartialView(flights);
         }
 
         // GET: Events/Details/5
@@ -109,7 +141,7 @@ namespace WebApplication1.Controllers
         public async Task<IActionResult> Create([Bind("Id,CompanyId,Name,RefundTime,ResCancelTime,RefundPortion,Date,RouteId,FlightNo")] Flight flight)
         {
             var flightMan = _context.Routes.Where(a => a.RouteId == flight.RouteId).ToList();
-            flight.Name = flightMan.ElementAt(0).Departure + "-" + flightMan.ElementAt(0).Arrival;
+            flight.Name = flightMan.ElementAt(0).DepartureAirport + "-" + flightMan.ElementAt(0).ArrivalAirport;
             if (ModelState.IsValid)
             {
                 _context.Add(flight);

@@ -53,7 +53,7 @@ namespace WebApplication1.Controllers
                 //}
                 else {
                     
-                    flights = flights.Where(selectList => selectList.Departure.Equals(dest) && selectList.Arrival.Equals(arr));// && selectList.ETA.Date.Equals(date.Date));
+                    flights = flights.Where(selectList => selectList.DepartureAirport.AirportName.Equals(dest) && selectList.ArrivalAirport.AirportName.Equals(arr));// && selectList.ETA.Date.Equals(date.Date));
                 }
                 
             }
@@ -96,7 +96,7 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FlightNo,Departure,Arrival,ETA")] Route route)
         {
-            if (route.Departure != route.Arrival)
+            if (route.DepartureAirport != route.ArrivalAirport)
             {
                 if (ModelState.IsValid)
                 {
@@ -144,7 +144,7 @@ namespace WebApplication1.Controllers
             
             if (ModelState.IsValid)
             {
-                if (route.Arrival.Equals(route.Departure))
+                if (route.ArrivalAirport.Equals(route.DepartureAirport))
                 {
                     ViewData["Err"] = "Departure and Arrival can't be the same city";
                 }
