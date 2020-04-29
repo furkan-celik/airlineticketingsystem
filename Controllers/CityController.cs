@@ -14,7 +14,7 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
-    [Authorize(Roles = "WebAdmin,CompAdmin")]
+    [Authorize("ReqAdmin")]
     public class CityController : Controller
     {
 

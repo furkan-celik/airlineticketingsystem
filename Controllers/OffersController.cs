@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace WebApplication1.Controllers
 {
+    [Authorize("ReqAdmin")]
     public class OffersController : Controller
     {
         private readonly ApplicationDbContext _context;

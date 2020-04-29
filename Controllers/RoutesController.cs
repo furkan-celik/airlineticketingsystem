@@ -13,7 +13,7 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
-    
+    [Authorize("ReqAdmin")]
     public class RoutesController : Controller
     {
         private readonly ApplicationDbContext _context;

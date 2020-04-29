@@ -39,16 +39,14 @@
     <div class="row">
 
         <div class="col-md-4">
-
-           
             <div class="form-group">
-                <a> @Html.DropDownList("dest", ViewData["AirportId"] as SelectList, "From", new { required = "required" }) </a>
-                <a style="margin:20px"> @Html.DropDownList("arr", ViewData["AirportId"] as SelectList, "To", new { required = "required" }) </a>
+                <a> @Html.DropDownList("dest", ViewData["AirportId"] as SelectList, "From", new { required = "required", @class = "form-control control-label" }) </a>
+                <a style="margin:20px"> @Html.DropDownList("arr", ViewData["AirportId"] as SelectList, "To", new { required = "required", @class = "form-control" }) </a>
             </div>
 
             <div class="form-group">
                 <label for="date"></label>
-                <input type="date" id="date"
+                <input type="date" id="date" class="form-control"
                        name="date" value=@ViewData["Date"]
                        min=@DateTime.Now.ToString("yyyy-MM-dd") max="2100-06-14">
             </div>
@@ -62,10 +60,8 @@
     </div>
 
 }
-@if (User.IsInRole("WebAdmin") || User.IsInRole("CompAdmin"))
-{
-    <table class="table">
-        <thead>
+    <table class="table table-striped">
+        <thead class="thead-dark">
             <tr>
                 <th>
                     @Html.DisplayNameFor(model => model.Name)
@@ -128,55 +124,3 @@
             }
         </tbody>
     </table>
-
-}
-
-@if (!User.IsInRole("WebAdmin") && !User.IsInRole("CompAdmin"))
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Organizer)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Date)
-                </th>
-                <th>
-                    @*@Html.DisplayNameFor(model => model.FlightNo)*@FlightNo
-                </th>
-
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Organizer.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FlightNo)
-                    </td>
-
-                    <td>
-                        <a asp-action="ReservationNow" asp-route-id="@item.Id" asp-controller="Reservation" class="btn btn-warning">Reservation Now</a>
-                        <a asp-action="Buy" asp-route-id="@item.Id" class="btn btn-primary">Buy Ticket</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-
-}

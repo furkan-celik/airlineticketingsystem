@@ -9,8 +9,8 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
+<table class="table table-striped">
+    <thead class="thead-dark">
         <tr>
             <th>
                 @*@Html.DisplayNameFor(model => model.CityName)*@City Name
@@ -19,18 +19,19 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-           
-            <td>
-                @Html.DisplayFor(modelItem => item.CityName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CityId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CityId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CityId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.CityName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CityId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.CityId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CityId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

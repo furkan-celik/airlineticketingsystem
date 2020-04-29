@@ -27,6 +27,7 @@ namespace WebApplication1.Controllers
             _userManager = userManager;
         }
 
+        [Authorize("ReqAdmin")]
         // GET: Events
         public IActionResult Index(int? arr, int? dest, DateTime date)
         {
@@ -128,7 +129,7 @@ namespace WebApplication1.Controllers
             return View(flight);
         }
 
-        [Authorize(Roles = "WebAdmin,CompAdmin")]
+        [Authorize("ReqAdmin")]
         // GET: Events/Create
         public IActionResult Create()
         {
@@ -137,7 +138,7 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        [Authorize(Roles = "WebAdmin,CompAdmin")]
+        [Authorize("ReqAdmin")]
         // POST: Events/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -185,7 +186,7 @@ namespace WebApplication1.Controllers
             return View(flight);
         }
 
-        [Authorize(Roles = "WebAdmin,CompAdmin")]
+        [Authorize("ReqAdmin")]
         // GET: Events/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -203,7 +204,7 @@ namespace WebApplication1.Controllers
             return View(flight);
         }
 
-        [Authorize(Roles = "WebAdmin,CompAdmin")]
+        [Authorize("ReqAdmin")]
         // POST: Events/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -240,7 +241,7 @@ namespace WebApplication1.Controllers
             return View(flight);
         }
 
-        [Authorize(Roles = "WebAdmin,CompAdmin")]
+        [Authorize("ReqAdmin")]
         // GET: Events/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
