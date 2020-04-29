@@ -3,10 +3,11 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Your reservation is confirmed</h1>
+    <h1 class="display-4">Your reservation is confirmed.</h1>
     <hr />
-    <h4>You can check your reservation details from your profile</h4>
-    <a asp-action="Index" asp-controller="Events">Back to List</a>
+    <h4>In order to buy the ticket, please go to profile page.</h4>
+    @*<a asp-action="Index" asp-controller="Events">Back to List</a>*@
+    <a class= "nav-link" asp-area="Identity" asp-page="/Account/Manage/Ticket">Click here to go Profile</a>
 
 
 </div>
