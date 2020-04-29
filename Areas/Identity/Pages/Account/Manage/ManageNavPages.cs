@@ -18,6 +18,8 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
 
         public static string Tickets => "Tickets";
 
+        public static string Reservations => "Reservations";
+
         public static string ExternalLogins => "ExternalLogins";
 
         public static string PersonalData => "PersonalData";
@@ -33,6 +35,8 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
         public static string AddressesNavClass(ViewContext viewContext) => PageNavClass(viewContext, Addresses);
 
         public static string TicketsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Tickets);
+
+        public static string ReservationsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Reservations);
 
         public static string ExternalLoginsNavClass(ViewContext viewContext) => PageNavClass(viewContext, ExternalLogins);
 

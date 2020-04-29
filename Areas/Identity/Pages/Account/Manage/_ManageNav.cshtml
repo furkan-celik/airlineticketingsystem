@@ -8,6 +8,9 @@
         <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a></li>
         <li class="nav-item"><a class="nav-link @ManageNavPages.AddressesNavClass(ViewContext)" id="Addresses" asp-page="./AddressIndex">Address</a></li>
         <li class="nav-item"><a class="nav-link @ManageNavPages.TicketsNavClass(ViewContext)" id="Tickets" asp-page="./Ticket">Tickets</a></li>
+        <li class="nav-item"><a class="nav-link @ManageNavPages.ReservationsNavClass(ViewContext)" id="Reservations" asp-page="./Reservations">Reservations</a></li>
+
+
         @if (hasExternalLogins)
         {
             <li id="external-logins" class="nav-item"><a id="external-login" class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins">External logins</a></li>

@@ -1,0 +1,62 @@
+﻿@page
+@model ReservationsModel
+@{
+    ViewData["Title"] = "Reservations";
+    ViewData["ActivePage"] = ManageNavPages.Reservations;
+}
+
+<h4>@ViewData["Title"]</h4>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.reservations[0].Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.reservations[0].Flight)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.reservations[0].Flight.Date)
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.tickets[0].Event.FlightNo)*@Flight No
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.reservations[0].Seats)
+            </th>
+
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.reservations)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Flight.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Flight.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Flight.RouteId)
+                </td>
+                <td>
+                    @foreach (var item2 in item.Seats)
+                    {
+                        @Html.DisplayFor(modelItem => item2.Col) @Html.DisplayFor(modelItem => item2.Row)
+                    }
+                </td>
+
+
+
+            </tr>
+        }
+    </tbody>
+</table>
