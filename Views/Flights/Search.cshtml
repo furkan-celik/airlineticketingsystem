@@ -224,7 +224,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
+                    <partial name="_LoginPartialUser" />
                 </div>
             </div>
         </nav>
@@ -331,7 +331,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Move Manager</h5>
+                    <h5 class="modal-title">Avaliable Flights</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -342,6 +342,22 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="btnNextDay">Next Day</button>
                     <button type="button" class="btn btn-secondary" id="btnPrevDay">Previous Day</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal loginPop" tabindex="-1" role="dialog" id="loginView">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Login/Register</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
                 </div>
             </div>
         </div>
@@ -397,6 +413,30 @@
                 .fail(function () {
                     $("#modelView .modal-body").text("Error!!");
                     $(".pop").modal("show");
+                })
+        })
+
+        $("#btnLogin").click(function () {
+            var url = "/Flights/LoginModal";
+            $.get(url, function (data) { }).done(function (data) {
+                $("#loginView .modal-body").html(data);
+                $(".loginPop").modal("show");
+            })
+                .fail(function () {
+                    $("#loginView .modal-body").text("Error!!");
+                    $(".loginPop").modal("show");
+                })
+        })
+
+        $("#btnRegister").click(function () {
+            var url = "/Flights/RegisterModal";
+            $.get(url, function (data) { }).done(function (data) {
+                $("#loginView .modal-body").html(data);
+                $(".loginPop").modal("show");
+            })
+                .fail(function () {
+                    $("#loginView .modal-body").text("Error!!");
+                    $(".loginPop").modal("show");
                 })
         })
 

@@ -414,9 +414,18 @@ namespace WebApplication1.Controllers
                 }
 
                 return RedirectToAction(nameof(Successful));
-
             }
+        }
 
+        // GET: Flights/LoginModal
+        public IActionResult LoginModal()
+        {
+            return PartialView();
+        }
+        // GET: Flights/RegisterModal
+        public IActionResult RegisterModal()
+        {
+            return PartialView();
         }
 
         public IActionResult Successful()
