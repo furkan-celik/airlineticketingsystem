@@ -13,6 +13,7 @@ using System.Web;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Diagnostics.CodeAnalysis;
 
 namespace WebApplication1.Controllers
 {
@@ -40,7 +41,7 @@ namespace WebApplication1.Controllers
             ViewData["Date"] = @DateTime.Now.ToString("yyyy-MM-dd");
 
             var flights = from selectList in _context.Flights.Include(x => x.Organizer)
-                    select selectList;
+                          select selectList;
 
             if (arr.HasValue && dest.HasValue)
             {
@@ -50,22 +51,23 @@ namespace WebApplication1.Controllers
                     ViewData["Err"] = "Destination and Arrival can't be the same. Please do another search.";
 
                 }
-                else {
+                else
+                {
                     flights = flights.Where(x => x.Route.ArrivalId == arr && x.Route.DepartureId == dest);
 
-                    if(date.Ticks > 0)
+                    if (date.Ticks > 0)
                     {
                         flights = flights.Where(x => x.Date.Date == date.Date);
                     }
                 }
-                
+
             }
             return View(flights.ToList());
         }
 
         public IActionResult Search()
         {
-            if(User.IsInRole("WebAdmin") || User.IsInRole("CompAdmin"))
+            if (User.IsInRole("WebAdmin") || User.IsInRole("CompAdmin"))
             {
                 return RedirectToAction("Index");
             }
@@ -103,14 +105,14 @@ namespace WebApplication1.Controllers
         // GET: Events/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            
+
             var user = await _userManager.GetUserAsync(User);
             var selectedflight = await _context.Flights.FindAsync(id);
             if (id == null)
             {
                 return NotFound();
             }
-            if(user.ManagingCompanyId== selectedflight.CompanyId)
+            if (user.ManagingCompanyId == selectedflight.CompanyId)
             {
                 ViewData["samecomp"] = true;
             }
@@ -273,7 +275,36 @@ namespace WebApplication1.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "User")]
+        public class SeatInput
+        {
+            public int Id { get; set; }
+            public int Col { get; set; }
+            public string Row { get; set; }
+            public bool Availability { get; set; }
+        }
+
+        public class SeatInputComparer : IEqualityComparer<SeatInput>
+        {
+            public bool Equals([AllowNull] SeatInput x, [AllowNull] SeatInput y)
+            {
+                return (x.Id == y.Id && x.Availability == y.Availability);
+            }
+
+            public int GetHashCode([DisallowNull] SeatInput obj)
+            {
+                return obj.GetHashCode();
+            }
+        }
+
+        public class InputModel
+        {
+            public Flight flightInfo { get; set; }
+            public List<List<SeatInput>> seats { get; set; }
+        }
+
+        [BindProperty]
+        public InputModel inputModel { get; set; }
+
         [HttpGet]
         public async Task<IActionResult> Buy(int? id)
         {
@@ -285,21 +316,34 @@ namespace WebApplication1.Controllers
 
             var flight = await _context.Flights
                 .Include(x => x.Organizer)
+                .Include(x => x.Seats)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            var colGroup = flight.Seats.GroupBy(x => x.Col).ToList();
+            inputModel = new InputModel();
+            inputModel.flightInfo = flight;
+            inputModel.seats = new List<List<SeatInput>>();
+
+            for (int i = 0; i < colGroup.Count; i++)
+            {
+                List<SeatInput> row = new List<SeatInput>();
+                colGroup[i].ToList().ForEach(x => row.Add(new SeatInput { Id = x.Id, Col = x.Col, Row = x.Row, Availability = x.Availability }));
+                inputModel.seats.Add(row);
+            }
 
             if (flight == null)
             {
                 return NotFound();
             }
 
-            return View(flight);
+            return PartialView(inputModel);
         }
 
-        [Authorize(Roles = "User")]
         //POST: Events/
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Buy(int id, int type, int countOfSeats, int countOfChild, int countOfBaby)
+        public async Task<IActionResult> Buy(int id, int type, int countOfSeats, int countOfChild, int countOfBaby, InputModel inputModel)
         {
             //Reservation res = new Reservation();
             //res.EventId = id;
@@ -307,46 +351,41 @@ namespace WebApplication1.Controllers
             //_context.Add(res);
             //await _context.SaveChangesAsync();
 
-            var seatList = _context.Seats.Where(a => a.Availability == true && a.FlightId == id && a.TypeId == type).ToList();
+            var flight = await _context.Flights
+         .Include(x => x.Organizer)
+         .FirstOrDefaultAsync(m => m.Id == inputModel.flightInfo.Id);
+
+            List<Seat> selectedSeats = new List<Seat>();
+            for (int i = 0; i < inputModel.seats.Count; i++)
+            {
+                var colGroup = flight.Seats.Where(x => x.Col == inputModel.seats[i][0].Col).ToList();
+                List<SeatInput> row = new List<SeatInput>();
+                colGroup.ForEach(x => row.Add(new SeatInput { Id = x.Id, Col = x.Col, Row = x.Row, Availability = x.Availability }));
+
+                inputModel.seats[i].Where(x => !x.Availability).Except(row, new SeatInputComparer()).ToList().ForEach(x => selectedSeats.Add(_context.Seats.FirstOrDefault(y => y.Id == x.Id)));
+            }
+
             ViewData["Err"] = "";
 
-            if (seatList == null)
-            {
-                ViewData["Err"] = "There isn't any seat left in choosen class";
-                var flight = await _context.Flights
-             .Include(x => x.Organizer)
-             .FirstOrDefaultAsync(m => m.Id == id);
+            ViewData["Err"] = "There isn't any seat left in choosen class";
 
-                if (flight == null)
-                {
-                    return NotFound();
-                }
+            if (flight == null)
+            {
+                return NotFound();
+            }
+
+            if (selectedSeats == null)
+            {
                 return View(flight);
             }
-            else if (seatList.Count() < countOfSeats + countOfChild)
+            else if (selectedSeats.Count() < countOfSeats + countOfChild)
             {
                 ViewData["Err"] = "There isn't enough seats for you to buy";
-                var flight = await _context.Flights
-              .Include(x => x.Organizer)
-              .FirstOrDefaultAsync(m => m.Id == id);
-
-                if (flight == null)
-                {
-                    return NotFound();
-                }
                 return View(flight);
             }
             else if (countOfBaby > countOfSeats)
             {
                 ViewData["Err"] = "Infants cannot be more than adults";
-                var flight = await _context.Flights
-                .Include(x => x.Organizer)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-                if (flight == null)
-                {
-                    return NotFound();
-                }
                 return View(flight);
             }
             else
@@ -356,12 +395,12 @@ namespace WebApplication1.Controllers
                 {
                     Ticket tic = new Ticket();
                     tic.ProcessTime = DateTime.Now;
-                    tic.EventId = id;
+                    tic.EventId = inputModel.flightInfo.Id;
                     tic.OwnerId = _userManager.GetUserId(HttpContext.User);
                     _context.Add(tic);
                     await _context.SaveChangesAsync();
 
-                    Seat seat = seatList.ElementAt(counter);
+                    Seat seat = selectedSeats.ElementAt(counter);
                     seat.TicketId = (int)tic.Id;
                     seat.Availability = false;
                     _context.Update(seat);
