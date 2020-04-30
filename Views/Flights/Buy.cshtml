@@ -443,15 +443,21 @@
                     },
                     countOfSeats: {
                         required: false,
+                        min: function () {
+                            return $(".plane").find('input[type=checkbox]:enabled').length - $(".plane").find('input[type=checkbox]:checked:enabled').length - $("#countOfChild").val();
+                        },
                         max: function () {
                             return $(".plane").find('input[type=checkbox]:enabled').length - $(".plane").find('input[type=checkbox]:checked:enabled').length - $("#countOfChild").val();
                         }
                     },
                     countOfChild: {
                         required: false,
-                        max: function() {
-                return $(".plane").find('input[type=checkbox]:enabled').length - $(".plane").find('input[type=checkbox]:checked:enabled').length - $("#countOfSeats").val();
-            }
+                        min: function () {
+                            return $(".plane").find('input[type=checkbox]:enabled').length - $(".plane").find('input[type=checkbox]:checked:enabled').length - $("#countOfSeats").val();
+                        },
+                        max: function () {
+                            return $(".plane").find('input[type=checkbox]:enabled').length - $(".plane").find('input[type=checkbox]:checked:enabled').length - $("#countOfSeats").val();
+                        }
                     }
                 },
                 messages: {
@@ -459,10 +465,12 @@
                         max: "You can't take more babies then adults!"
                     },
                     countOfSeats: {
-                        max: "You did not select enough seats for adults!"
+                        max: "You did not select enough seats for adults!",
+                        min: "You selected more seat than you wanted!!!"
                     },
                     countOfChild: {
-                        max: "You did not select enough seats for childs!"
+                        max: "You did not select enough seats for childs!",
+                        min: "You selected more seat than you wanted!!!"
                     }
                 },
                 submitHandler: function (form) {
