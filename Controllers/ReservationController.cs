@@ -14,6 +14,8 @@ using System.Web;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using WebApplication1.Areas.Identity.Pages.Account.Manage;
 
 namespace WebApplication1.Controllers
 {
@@ -28,6 +30,69 @@ namespace WebApplication1.Controllers
             _context = context;
             _userManager = userManager;
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Buy_After_Reservation(int? id)
+        {
+            ViewData["Err"] = "";
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var @event = await _context.Reservations
+                .Include(x => x.Owner)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (@event == null)
+            {
+                return NotFound();
+            }
+
+            return View(@event);
+
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Buy_After_Reservation(int id, int type, int countOfSeats, int countOfChild, int countOfBaby)
+        {
+            var seatList = _context.Seats.Where(a =>a.ReservationId == id).ToList();
+
+            countOfSeats = seatList.Count();
+
+            int counter = 0;
+            while (counter < countOfSeats + countOfChild)
+            {
+
+
+                Ticket tic = new Ticket();
+                tic.EventId = id;
+                tic.ProcessTime = DateTime.Now;
+                tic.OwnerId = _userManager.GetUserId(HttpContext.User);
+                _context.Tickets.Add(tic);
+
+    
+             
+                await _context.SaveChangesAsync();
+
+                Seat seat = seatList.ElementAt(counter);
+                seat.TicketId = (int)tic.Id;
+                seat.Availability = false;
+                seat.ReservationId = null;
+                _context.Update(seat);
+                await _context.SaveChangesAsync();
+
+                counter++;
+
+            }
+
+            return RedirectToAction(nameof(Successful));
+
+            }
+        
+
 
         [HttpGet]
         public async Task<IActionResult> ReservationNow(int? id)
@@ -46,8 +111,6 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
-
-
 
             return View(@event);
         }
@@ -146,5 +209,6 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
+
     }
 }
