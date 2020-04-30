@@ -78,8 +78,6 @@ namespace WebApplication1.Controllers
         {
             if (ModelState.IsValid)
             {
-
-
                 //UploadFile(file, company.Id);
                 var fileName = file.FileName;
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);

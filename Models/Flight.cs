@@ -29,6 +29,8 @@ namespace WebApplication1.Models
         public virtual Company Organizer { get; set; }
         [ForeignKey("RouteId")]
         public virtual Route Route { get; set; }
+        public virtual ICollection<Seat> Seats { get; set; }
+        public virtual ICollection<Offer> Offers { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }
         public virtual ICollection<Reservation> Reservations { get; set; }
     }
