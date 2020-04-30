@@ -1,0 +1,16 @@
+﻿@model WebApplication1.Models.Reservation
+@{
+    ViewData["Title"] = "BuyTicket";
+}
+
+
+<h3>Last step to buy ticket </h3>
+
+
+<form asp-action="Buy_After_Reservation">
+
+
+    <input type="hidden" asp-for="Id" />
+    <input type="submit" value="Confirm" class="btn btn-success" /> |
+    <a asp-action="Index">Cancel your Reservation</a>
+</form>
