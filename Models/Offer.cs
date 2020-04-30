@@ -18,6 +18,7 @@ namespace WebApplication1.Models
         public string Description { get; set; }
         [Required]
         public float Price { get; set; }
+        public int type { get; set; }
 
         public virtual Flight Flight { get; set; }
         public virtual ICollection<OfferTicket> Tickets { get; set; }

@@ -398,7 +398,7 @@
 
                     <div class="form-group">
                         <label id="type" class="control-label"> Class :  </label>
-                        @Html.DropDownList("type", new List<SelectListItem>() { new SelectListItem { Text = "Economy", Value = "2" }, new SelectListItem { Text = "Business", Value = "1" } })
+                        @Html.DropDownList("type", ViewData["Offers"] as SelectList)
                     </div>
                     <div class="form-group">
                         <label for="countOfSeats" class="control-label"> Adult(s): </label>
@@ -413,8 +413,7 @@
                         <input type="number" id="countOfBaby" name="countOfBaby" value="0" min="0" />
                     </div>
                     <input type="hidden" asp-for="flightInfo.Id" />
-                    <input type="submit" value="Confirm" class="btn btn-success" /> |
-                    <a asp-action="Index">Back to List</a>
+                    <input type="submit" value="Confirm" class="btn btn-success" />
                 </div>
             </form>
 
@@ -438,15 +437,21 @@
                 rules: {
                     countOfBaby: {
                         required: false,
-                        max: $("#countOfSeats").val()
+                        max: function () {
+                            return $("#countOfSeats").val();
+                        }
                     },
                     countOfSeats: {
                         required: false,
-                        max: $(".plane").find('input[type=checkbox]:enabled').length - $(".plane").find('input[type=checkbox]:checked:enabled').length - $("#countOfChild").val()
+                        max: function () {
+                            return $(".plane").find('input[type=checkbox]:enabled').length - $(".plane").find('input[type=checkbox]:checked:enabled').length - $("#countOfChild").val();
+                        }
                     },
                     countOfChild: {
                         required: false,
-                        max: $(".plane").find('input[type=checkbox]:enabled').length - $(".plane").find('input[type=checkbox]:checked:enabled').length - $("#countOfSeats").val()
+                        max: function() {
+                return $(".plane").find('input[type=checkbox]:enabled').length - $(".plane").find('input[type=checkbox]:checked:enabled').length - $("#countOfSeats").val();
+            }
                     }
                 },
                 messages: {

@@ -317,7 +317,10 @@ namespace WebApplication1.Controllers
             var flight = await _context.Flights
                 .Include(x => x.Organizer)
                 .Include(x => x.Seats)
+                .Include(x => x.Offers)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            ViewData["Offers"] = new SelectList(flight.Offers, "Id", "Name");
 
             var colGroup = flight.Seats.GroupBy(x => x.Col).ToList();
             inputModel = new InputModel();
