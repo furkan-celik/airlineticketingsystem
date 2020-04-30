@@ -398,7 +398,17 @@
 
                     <div class="form-group">
                         <label id="type" class="control-label"> Class :  </label>
-                        @Html.DropDownList("type", ViewData["Offers"] as SelectList)
+                        <select class="control-label" id="type">
+                            @foreach (var item in Model.flightInfo.Offers.Where(x => x.type == 0).ToList())
+                            {
+                                <option value="@item.Id"
+                                         data-price="@item.Price"
+                                         data-name="@item.Name"
+                                         data-descriptipn="@item.Description">
+                                    @(item.Name + " " + item.Price + "TL")
+                                </option>
+                            }
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="countOfSeats" class="control-label"> Adult(s): </label>
@@ -411,6 +421,9 @@
                     <div class="form-group">
                         <label for="countOfBaby" class="control-label"> Infant(s) (Age 0-2): </label>
                         <input type="number" id="countOfBaby" name="countOfBaby" value="0" min="0" />
+                    </div>
+                    <div class="form-group">
+                        <h3 class="control-label" id="priceLabel">0</h3>TL
                     </div>
                     <input type="hidden" asp-for="flightInfo.Id" />
                     <input type="submit" value="Confirm" class="btn btn-success" />
@@ -430,6 +443,16 @@
             } else {
                 x.style.display = "none";
             }
+        }
+
+        $("#type").change(UpdatePrice);
+
+        $("#countOfSeats").change(UpdatePrice);
+
+        $("#countOfChild").change(UpdatePrice);
+
+        function UpdatePrice() {
+            $("#priceLabel").html(parseInt($("select[id=type] option").filter(":selected").attr("data-price")) * ($(".plane").find('input[type=checkbox]:enabled').length - $(".plane").find('input[type=checkbox]:checked:enabled').length));
         }
 
         $(window).on("load", $(function () {
