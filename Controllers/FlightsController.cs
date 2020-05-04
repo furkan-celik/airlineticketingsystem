@@ -149,7 +149,7 @@ namespace WebApplication1.Controllers
         public async Task<IActionResult> Create([Bind("Id,CompanyId,Name,RefundTime,ResCancelTime,RefundPortion,Date,RouteId,FlightNo")] Flight flight)
         {
             var flightMan = _context.Routes.Where(a => a.RouteId == flight.RouteId).ToList();
-            flight.Name = flightMan.ElementAt(0).DepartureAirport + "-" + flightMan.ElementAt(0).ArrivalAirport;
+            flight.Name = flightMan.ElementAt(0).DepartureAirport.AirportName + "-" + flightMan.ElementAt(0).ArrivalAirport.AirportName;
             if (ModelState.IsValid)
             {
                 _context.Add(flight);
