@@ -55,8 +55,12 @@
             </td>
 
             <td>
-                
-                <a asp-action="Buy_After_Reservation" asp-route-id="@item.Id "asp-controller="Reservation">Buy Now</a>
+
+                <a asp-action="Buy_After_Reservation" asp-route-id="@item.Id " asp-controller="Reservation">Buy Now</a>
+            </td>
+            <td>
+
+                <a asp-action="Cancel_Reservation" asp-route-id="@item.Id " asp-controller="Reservation">Cancel</a>
             </td>
 
 

@@ -16,6 +16,7 @@ using System.IO;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WebApplication1.Areas.Identity.Pages.Account.Manage;
+using Microsoft.Data.SqlClient;
 
 namespace WebApplication1.Controllers
 {
@@ -30,6 +31,40 @@ namespace WebApplication1.Controllers
             _context = context;
             _userManager = userManager;
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Cancel_Reservation(int? id)
+        {
+            ViewData["Err"] = "";
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var @event = await _context.Reservations
+                .Include(x => x.Owner)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (@event == null)
+            {
+                return NotFound();
+            }
+
+            return View(@event);
+
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> Cancel_Reservation(int id, int type, int countOfSeats, int countOfChild, int countOfBaby)
+        {
+            var Res_deleted = _context.Reservations.Find(id);
+            _context.Reservations.Remove(Res_deleted);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Successful));
+        }
+
 
 
         [HttpGet]
@@ -119,8 +154,6 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ReservationNow(int id, int type, int countOfSeats, int countOfChild, int countOfBaby)
         {
-            
-
             var seatList = _context.Seats.Where(a => a.Availability == true && a.FlightId == id && a.TypeId == type).ToList();
             ViewData["Err"] = "";
 
