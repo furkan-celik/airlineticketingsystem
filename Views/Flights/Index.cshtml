@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Flights</h2>
+<h2 style="color:lightgrey">Flights</h2>
 @if ((await AuthorizationService.AuthorizeAsync(User, "ReqAdmin")).Succeeded)
 {
     <p>
@@ -60,8 +60,8 @@
     </div>
 
 }
-    <table class="table table-striped">
-        <thead class="thead-dark">
+    <table class="table">
+        <thead>
             <tr>
                 <th>
                     @Html.DisplayNameFor(model => model.Name)

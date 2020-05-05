@@ -30,19 +30,19 @@ namespace WebApplication1.Controllers
         //    return View(await _context.Flights.ToListAsync());
         //}
         
-        public IActionResult Index(string arr,string dest, DateTime date)
+        public IActionResult Index(string arr,string dep)//, DateTime date)
         {
-            ViewData["CityId"] = new SelectList(_context.Cities, "CityName", "CityName");
+            ViewData["AirportId"] = new SelectList(_context.Airports, "AirportName", "AirportName");
             ViewData["Err"] = "";
-            ViewData["Date"] = @DateTime.Now.ToString("yyyy-MM-dd");
+            //ViewData["Date"] = @DateTime.Now.ToString("yyyy-MM-dd");
 
             var flights = from selectList in _context.Routes
                     select selectList;
 
-            if (!String.IsNullOrEmpty(arr) && !String.IsNullOrEmpty(dest))
+            if (!String.IsNullOrEmpty(dep) && !String.IsNullOrEmpty(arr))
             {
-                ViewData["Date"] = date.ToString("yyyy-MM-dd");
-                if (string.Equals(arr, dest))
+                //ViewData["Date"] = date.ToString("yyyy-MM-dd");
+                if (string.Equals(dep, arr))
                 {
                     ViewData["Err"] = "Departure and Arrival can't be the same. Please do another search.";
 
@@ -53,7 +53,7 @@ namespace WebApplication1.Controllers
                 //}
                 else {
                     
-                    flights = flights.Where(selectList => selectList.DepartureAirport.AirportName.Equals(dest) && selectList.ArrivalAirport.AirportName.Equals(arr));// && selectList.ETA.Date.Equals(date.Date));
+                    flights = flights.Where(selectList => selectList.DepartureAirport.AirportName.Equals(dep) && selectList.ArrivalAirport.AirportName.Equals(arr));// && selectList.ETA.Date.Equals(date.Date));
                 }
                 
             }
@@ -62,21 +62,21 @@ namespace WebApplication1.Controllers
        
 
         // GET: Flights/Details/5
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var routes = await _context.Routes
+            var route = await _context.Routes
                 .FirstOrDefaultAsync(m => m.RouteId == id);
-            if (routes == null)
+            if (route == null)
             {
                 return NotFound();
             }
 
-            return View(routes);
+            return View(route);
         }
 
         // GET: Flights/Create
@@ -84,7 +84,8 @@ namespace WebApplication1.Controllers
         [Authorize(Roles = "WebAdmin,CompAdmin")]
         public IActionResult Create()
         {
-            ViewData["CityId"] = new SelectList(_context.Cities, "CityName", "CityName");
+            //ViewData["CityId"] = new SelectList(_context.Cities, "CityName", "CityName");
+            ViewData["AirportId"] = new SelectList(_context.Airports, "Id", "AirportName");
             return View();
         }
 
@@ -94,9 +95,10 @@ namespace WebApplication1.Controllers
         [Authorize(Roles = "WebAdmin,CompAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FlightNo,Departure,Arrival,ETA")] Route route)
+        public async Task<IActionResult> Create([Bind("RouteId,DepartureId,ArrivalId,ETA")] Route route)
         {
-            if (route.DepartureAirport != route.ArrivalAirport)
+            ViewData["AirportId"] = new SelectList(_context.Airports, "Id", "AirportName");
+            if (route.DepartureId != route.ArrivalId)
             {
                 if (ModelState.IsValid)
                 {
@@ -104,28 +106,28 @@ namespace WebApplication1.Controllers
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
-           
-                ViewData["CityId"] = new SelectList(_context.Cities, "CityName", "CityName");
             }
             return View(route);
         }
 
         // GET: Flights/Edit/5
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(int? id)
         {
             ViewData["Err"] = "";
-            ViewData["CityId"] = new SelectList(_context.Cities, "CityName", "CityName");
+            
             if (id == null)
             {
                 return NotFound();
             }
 
-            var routes = await _context.Routes.FindAsync(id);
-            if (routes == null)
+            var route = await _context.Routes.FindAsync(id);
+
+            if (route == null)
             {
                 return NotFound();
             }
-            return View(routes);
+            ViewData["AirportId"] = new SelectList(_context.Airports, "Id", "AirportName");
+            return View(route);
         }
 
         // POST: Flights/Edit/5
@@ -133,18 +135,18 @@ namespace WebApplication1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RouteId,Departure,Arrival,ETA")] Route route)
+        public async Task<IActionResult> Edit(int id, [Bind("RouteId,DepartureId,ArrivalId,ETA")] Route route)
         {
-            ViewData["Err"] = "";
-            ViewData["CityId"] = new SelectList(_context.Cities, "CityName", "CityName");
+           
             if (id != route.RouteId)
             {
                 return NotFound();
             }
-            
+            ViewData["Err"] = "";
+
             if (ModelState.IsValid)
             {
-                if (route.ArrivalAirport.Equals(route.DepartureAirport))
+                if (route.ArrivalId == route.DepartureId)
                 {
                     ViewData["Err"] = "Departure and Arrival can't be the same city";
                 }
@@ -169,11 +171,12 @@ namespace WebApplication1.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
+            ViewData["AirportId"] = new SelectList(_context.Airports, "Id", "AirportName");
             return View(route);
         }
 
         // GET: Flights/Delete/5
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {

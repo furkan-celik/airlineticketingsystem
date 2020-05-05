@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h2 style="color:lightgrey">Airports</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -25,10 +25,10 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            <td style="color:lightgrey">
                 @Html.DisplayFor(modelItem => item.AirportName)
             </td>
-            <td>
+            <td style="color:lightgrey">
                 @Html.DisplayFor(modelItem => item.City.CityName)
             </td>
             <td>

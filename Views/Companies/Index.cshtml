@@ -4,13 +4,13 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Companies</h2>
+<h2 style="color:lightgrey">Companies</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table table-striped">
-    <thead class="thead-dark">
+<table class="table">
+    <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.LogoLocation)
@@ -18,7 +18,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
-
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
@@ -40,9 +39,6 @@
                     }
 
                     <img src=@path width="80" height="60" />
-      
-
-
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)

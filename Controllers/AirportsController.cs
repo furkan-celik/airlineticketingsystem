@@ -80,6 +80,7 @@ namespace WebApplication1.Controllers
             }
 
             var airport = await _context.Airports.FindAsync(id);
+
             if (airport == null)
             {
                 return NotFound();
