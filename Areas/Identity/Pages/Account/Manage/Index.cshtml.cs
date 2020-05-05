@@ -14,16 +14,20 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly WebApplication1.Data.ApplicationDbContext _context;
 
-        public IndexModel(
+        public IndexModel(WebApplication1.Data.ApplicationDbContext context,
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
         public string Username { get; set; }
+
+        public AppUser usersettings { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -51,7 +55,7 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
 
             [DataType(DataType.DateTime)]
             [Display(Name = "Birthday")]
-            public DateTime Birthday { get; set; }
+            public DateTime? Birthday { get; set; }
                 
             [EnumDataType(typeof(Genders))]
             [Display(Name = "Gender")]
@@ -62,18 +66,28 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var id = await _userManager.GetUserIdAsync(user);
+            usersettings = await _context.Users.FindAsync(id);
 
             Username = userName;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                Name = usersettings.Name,
+                Surname = usersettings.Surname,
+                TC = usersettings.TC,
+                Birthday = usersettings.Birthday,
+                Gender = usersettings.Gender
+
             };
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
+
             var user = await _userManager.GetUserAsync(User);
+
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -85,7 +99,9 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
+
             var user = await _userManager.GetUserAsync(User);
+
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -95,6 +111,14 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
             {
                 await LoadAsync(user);
                 return Page();
+            }
+
+            var id = await _userManager.GetUserIdAsync(user);
+            var userUpdate = await _context.Users.FindAsync(id);
+
+            if (userUpdate == null)
+            {
+                return NotFound();
             }
 
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
@@ -107,6 +131,34 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
                     throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
                 }
             }
+
+            var Userid = _signInManager.Context.User.Claims.FirstOrDefault().Value;
+            userUpdate.Id = Userid;
+
+            if (userUpdate.Name != Input.Name)
+            {
+                userUpdate.Name = Input.Name;
+            }
+            if (userUpdate.Surname != Input.Surname)
+            {
+                userUpdate.Surname = Input.Surname;
+            }
+            if (userUpdate.TC != Input.TC)
+            {
+                userUpdate.TC = Input.TC;
+            }
+            if (userUpdate.Birthday != Input.Birthday)
+            {
+                userUpdate.Birthday = Input.Birthday;
+            }
+            if (userUpdate.Gender != Input.Gender)
+            {
+                userUpdate.Gender = Input.Gender;
+            }
+
+            var entry = _context.Users.Update(userUpdate);
+            entry.CurrentValues.SetValues(userUpdate);
+            await _context.SaveChangesAsync();
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

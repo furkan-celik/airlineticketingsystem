@@ -85,7 +85,6 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync(int id)
         {
-          
 
             var addressToUpdate = await _context.Addresses.FindAsync(id);
 
