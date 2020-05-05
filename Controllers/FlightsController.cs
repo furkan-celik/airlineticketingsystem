@@ -283,6 +283,12 @@ namespace WebApplication1.Controllers
             public bool Availability { get; set; }
         }
 
+        public class OfferInput
+        {
+            public Offer offer { get; set; }
+            public int quantity { get; set; }
+        }
+
         public class SeatInputComparer : IEqualityComparer<SeatInput>
         {
             public bool Equals([AllowNull] SeatInput x, [AllowNull] SeatInput y)
@@ -299,6 +305,7 @@ namespace WebApplication1.Controllers
         public class InputModel
         {
             public Flight flightInfo { get; set; }
+            public List<OfferInput> offers { get; set; }
             public List<List<SeatInput>> seats { get; set; }
         }
 
@@ -326,6 +333,8 @@ namespace WebApplication1.Controllers
             inputModel = new InputModel();
             inputModel.flightInfo = flight;
             inputModel.seats = new List<List<SeatInput>>();
+            inputModel.offers = new List<OfferInput>();
+            flight.Offers.Where(x => x.type != 0).ToList().ForEach(x => inputModel.offers.Add(new OfferInput() { offer = x, quantity = 0 }));
 
             for (int i = 0; i < colGroup.Count; i++)
             {
@@ -383,7 +392,7 @@ namespace WebApplication1.Controllers
             }
             else if (selectedSeats.Count() < countOfSeats + countOfChild)
             {
-                ViewData["Err"] = "There isn't enough seats for you to buy";
+                ViewData["Err"] = "There isn't enough seats for you to buy. Your seat may be taken.";
                 return View(flight);
             }
             else if (countOfBaby > countOfSeats)
