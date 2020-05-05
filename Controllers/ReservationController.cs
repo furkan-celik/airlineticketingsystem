@@ -108,8 +108,6 @@ namespace WebApplication1.Controllers
                 tic.OwnerId = _userManager.GetUserId(HttpContext.User);
                 _context.Tickets.Add(tic);
 
-    
-             
                 await _context.SaveChangesAsync();
 
                 Seat seat = seatList.ElementAt(counter);

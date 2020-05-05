@@ -25,7 +25,6 @@ namespace WebApplication1.Models
         public string FlightNo { get; set; }
         [Required]
         public int RouteId { get; set; }
-
         public virtual Company Organizer { get; set; }
         [ForeignKey("RouteId")]
         public virtual Route Route { get; set; }

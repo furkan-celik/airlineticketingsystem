@@ -30,8 +30,19 @@
         {
             <tr>
                 <td>
-                    @{ var s = @"images\" + item.LogoLocation;}
-                    <img src=@s width="60" height="60" />
+                    @* @{ var s = @item.LogoLocation;}
+        <img src=@s width="60" height="60" />
+        <img src=~/images/thy.png width="60" height="60" />*@
+
+                    @{string path = item.LogoLocation;
+                        int length = path.Length;
+                        path = path.Substring(1, length - 1);
+                    }
+
+                    <img src=@path width="80" height="60" />
+      
+
+
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
