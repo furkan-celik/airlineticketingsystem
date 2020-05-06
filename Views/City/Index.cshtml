@@ -9,8 +9,8 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table table-striped">
-    <thead class="thead-dark">
+<table class="table">
+    <thead>
         <tr>
             <th>
                 @*@Html.DisplayNameFor(model => model.CityName)*@City Name
@@ -23,7 +23,7 @@
         {
             <tr>
 
-                <td>
+                <td style="color:lightgrey">
                     @Html.DisplayFor(modelItem => item.CityName)
                 </td>
                 <td>

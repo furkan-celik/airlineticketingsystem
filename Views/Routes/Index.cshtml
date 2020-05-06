@@ -73,16 +73,16 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
+                <td style="color:lightgrey">
                     @Html.DisplayFor(modelItem => item.RouteId)
                 </td>
-                <td>
+                <td style="color:lightgrey">
                     @Html.DisplayFor(modelItem => item.DepartureAirport.AirportName)
                 </td>
-                <td>
+                <td style="color:lightgrey">
                     @Html.DisplayFor(modelItem => item.ArrivalAirport.AirportName)
                 </td>
-                <td>
+                <td style="color:lightgrey">
                     @Html.DisplayFor(modelItem => item.ETA.TimeOfDay)
                 </td>
 
