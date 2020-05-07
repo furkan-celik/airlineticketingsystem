@@ -80,15 +80,26 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        public IActionResult SearchResults(int arr, int dest, DateTime date)
+        public class SearchResultModel
+        {
+            public Flight Flight { get; set; }
+            public int Price { get; set; }
+        }
+
+        public IActionResult SearchResults(int arr, int dest, DateTime date, int numOfAdult, int numOfChild, string ticketClass)
         {
             var flights = from selectList in _context.Flights.Include(x => x.Organizer)
                           select selectList;
+            List<SearchResultModel> srm = new List<SearchResultModel>();
 
             if (string.Equals(arr, dest))
             {
                 ViewData["Err"] = "Destination and Arrival can't be the same. Please do another search.";
 
+                foreach (var item in flights)
+                {
+                    srm.Add(new SearchResultModel() { Flight = item, Price = 0 });
+                }
             }
             else
             {
@@ -98,15 +109,28 @@ namespace WebApplication1.Controllers
                 {
                     flights = flights.Where(x => x.Date.Date == date.Date);
                 }
+
+                if (!string.IsNullOrEmpty(ticketClass))
+                {
+                    flights = flights.Where(x => x.Offers.Count(y => y.Name == ticketClass) > 0).Include(x => x.Offers.Where(y => y.Name == ticketClass));
+                }
+
+                if (numOfAdult < 0) numOfAdult = 1;
+                if (numOfChild < 0) numOfChild = 0;
+
+                foreach (var item in flights)
+                {
+                    var price = (int)(item.Offers.ToArray()[0].ChildPrice * numOfChild + item.Offers.ToArray()[0].Price * numOfAdult);
+                    srm.Add(new SearchResultModel() { Flight = item, Price = price });
+                }
             }
 
-            return PartialView(flights.Include(x => x.Route).ToList());
+            return PartialView(srm);
         }
 
         // GET: Events/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-
             var user = await _userManager.GetUserAsync(User);
             var selectedflight = await _context.Flights.FindAsync(id);
             if (id == null)
@@ -359,12 +383,6 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Buy(int id, int type, int countOfSeats, int countOfChild, int countOfBaby, InputModel inputModel)
         {
-            //Reservation res = new Reservation();
-            //res.EventId = id;
-            //res.OwnerId = _userManager.GetUserId(HttpContext.User);
-            //_context.Add(res);
-            //await _context.SaveChangesAsync();
-
             var flight = await _context.Flights
          .Include(x => x.Organizer)
          .FirstOrDefaultAsync(m => m.Id == inputModel.flightInfo.Id);
