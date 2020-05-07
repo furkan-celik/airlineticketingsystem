@@ -18,6 +18,8 @@ namespace WebApplication1.Models
         public string Description { get; set; }
         [Required]
         public float Price { get; set; }
+        [Required]
+        public float ChildPrice { get; set; }
         public int type { get; set; }
 
         public virtual Flight Flight { get; set; }
