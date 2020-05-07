@@ -15,6 +15,7 @@
         /* The sidebar menu */
         .sidenav {
             width: 400px;
+            height: 800px;
             position: fixed;
             z-index: 1;
             top: 20px;
@@ -330,8 +331,8 @@
                                                 <input type="checkbox" asp-for="@Model.seats[i][j].Availability" id="@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())" disabled />
                                             }
                                             <label for="@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())">'@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())'</label>
+                                            <input type="hidden" asp-for="@Model.seats[i][j].Id" />
                                         </li>
-                                        <input type="hidden" asp-for="@Model.seats[i][j].Id" />
                                     }
                                 </ol>
                             </li>
@@ -426,19 +427,38 @@
                                                     @Model.offers[i].offer.Price
                                                 </div>
                                                 <div class="col-xs-1">
-                                                    Quantity:
+                                                    Adult Quantity:
                                                 </div>
                                                 <div class="col-xs-5">
                                                     <div class="input-group">
                                                         <span class="input-group-btn">
-                                                            <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus" data-field="">
+                                                            <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus" data-field="quantity-adult-@i" data-price="@Model.offers[i].offer.Price">
                                                                 <span class="glyphicon glyphicon-minus"></span>
                                                             </button>
                                                         </span>
                                                         @Html.HiddenFor(model => model.offers[i].offer.Id)
-                                                        @Html.TextBoxFor(model => model.offers[i].quantity, new { id = "quantity", @class = "form-control input-number", min ="0", max="100"})
+                                                        @Html.TextBoxFor(model => model.offers[i].quantity, new { id = "quantity-adult-" + i, @class = "form-control input-number", min = "0", max = "100" })
                                                         <span class="input-group-btn">
-                                                            <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="">
+                                                            <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="quantity-adult-@i" data-price="@Model.offers[i].offer.Price">
+                                                                <span class="glyphicon glyphicon-plus"></span>
+                                                            </button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-1">
+                                                    Child Quantity:
+                                                </div>
+                                                <div class="col-xs-5">
+                                                    <div class="input-group">
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus" data-field="quantity-child-@i" data-price="@Model.offers[i].offer.ChildPrice">
+                                                                <span class="glyphicon glyphicon-minus"></span>
+                                                            </button>
+                                                        </span>
+                                                        @Html.HiddenFor(model => model.offers[i].offer.Id)
+                                                        @Html.TextBoxFor(model => model.offers[i].quantity, new { id = "quantity-child-" + i, @class = "form-control input-number", min = "0", max = "100" })
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="quantity-child-@i" data-price="@Model.offers[i].offer.ChildPrice">
                                                                 <span class="glyphicon glyphicon-plus"></span>
                                                             </button>
                                                         </span>
@@ -456,7 +476,7 @@
                     <p style="color:crimson"> @ViewData["Err"]</p>
 
                     <div class="form-group">
-                        <label id="type" class="control-label"> Class :  </label>
+                        <label class="control-label"> Class :  </label>
                         <select class="control-label" id="type">
                             @foreach (var item in Model.flightInfo.Offers.Where(x => x.type == 0).ToList())
                             {
@@ -505,14 +525,22 @@
             }
         }
 
-        $("#type").change(UpdatePrice);
+        $("#type").on("change", UpdatePrice);
 
         $("#countOfSeats").change(UpdatePrice);
 
         $("#countOfChild").change(UpdatePrice);
 
         function UpdatePrice() {
-            $("#priceLabel").html(parseInt($("select[id=type] option").filter(":selected").attr("data-price")) * paseInt($("#countOfSeats").val()) + paseInt($("select[id=type] option").filter(":selected").attr("data-price")) * paseInt($("#countOfChild").val()));
+            $("[id^=quantity-child-]").attr({ "max": parseInt($("#countOfChild").val()) });
+            $("[id^=quantity-adult-]").attr({ "max": parseInt($("#countOfSeats").val()) });
+            var sumOfAddons = 0;
+            $("[id^=quantity-]").each(function () { sumOfAddons += parseInt($(this).val()) * parseInt($(this.nextElementSibling).find("button").attr("data-price")) || 0; })
+            $("#priceLabel").html(
+                parseInt($("select[id=type] option").filter(":selected").attr("data-price")) * parseInt($("#countOfSeats").val()) +
+                parseInt($("select[id=type] option").filter(":selected").attr("data-price")) * parseInt($("#countOfChild").val()) +
+                sumOfAddons
+            );
         }
 
         $(window).on("load", $(function () {
@@ -570,34 +598,36 @@
                 $target.slideToggle();
             });
 
-            var quantitiy = 0;
             $('.quantity-right-plus').click(function (e) {
-
+                $input = $(this);
                 // Stop acting like a button
                 e.preventDefault();
                 // Get the field name
-                var quantity = parseInt($('#quantity').val());
+                var quantity = parseInt($("#" + $input.attr("data-field")).val());
 
                 // If is not undefined
-
-                $('#quantity').val(quantity + 1);
-
+                if (quantity + 1 <= $("#" + $input.attr("data-field")).attr("max")) {
+                    $("#" + $input.attr("data-field")).val(quantity + 1);
+                    $("#priceLabel").html(parseInt($("#priceLabel").text()) + parseInt($input.attr("data-price")));
+                }
 
                 // Increment
 
             });
 
             $('.quantity-left-minus').click(function (e) {
+                $input = $(this);
                 // Stop acting like a button
                 e.preventDefault();
                 // Get the field name
-                var quantity = parseInt($('#quantity').val());
+                var quantity = parseInt($("#" + $input.attr("data-field")).val());
 
                 // If is not undefined
 
                 // Increment
                 if (quantity > 0) {
-                    $('#quantity').val(quantity - 1);
+                    $("#" + $input.attr("data-field")).val(quantity - 1);
+                    $("#priceLabel").html(parseInt($("#priceLabel").text()) - parseInt($input.attr("data-price")));
                 }
             });
         });
