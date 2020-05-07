@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200507100733_ChildPriceToOffer")]
+    partial class ChildPriceToOffer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -428,7 +430,7 @@ namespace WebApplication1.Migrations
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("OfferTickets");
+                    b.ToTable("OfferTicket");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Reservation", b =>
@@ -553,9 +555,6 @@ namespace WebApplication1.Migrations
 
                     b.Property<DateTime>("ProcessTime")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("isChild")
-                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("Id");
 
@@ -737,7 +736,7 @@ namespace WebApplication1.Migrations
                         .HasForeignKey("TicketId");
 
                     b.HasOne("WebApplication1.Models.SeatType", "SeatType")
-                        .WithMany("Seats")
+                        .WithMany("Collection")
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

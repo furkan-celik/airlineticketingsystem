@@ -18,6 +18,7 @@ namespace WebApplication1.Data
         public DbSet<Route> Routes { get; set; }
         public DbSet<Offer> Offers { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<OfferTicket> OfferTickets { get; set; }
         public DbSet<Seat> Seats { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Airport> Airports { get; set; }
