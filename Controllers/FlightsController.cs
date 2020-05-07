@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography.X509Certificates;
+using Microsoft.AspNetCore.Identity.UI.V3.Pages.Internal.Account;
 
 namespace WebApplication1.Controllers
 {
@@ -73,13 +75,16 @@ namespace WebApplication1.Controllers
             }
 
             ViewData["AirportId"] = new SelectList(_context.Airports, "Id", "AirportName");
+            List<string> list = _context.Airports.Select(x => x.AirportName).ToList();
+            List<string> list2 = _context.Cities.Select(x => x.CityName).ToList();
+            list2.AddRange(list);
             ViewData["Err"] = "";
             ViewData["Date"] = @DateTime.Now.ToString("yyyy-MM-dd");
 
-            return View();
+            return View(list2);
         }
 
-        public IActionResult SearchResults(int arr, int dest, DateTime date)
+        public IActionResult SearchResults(String arr, String dest, DateTime date)
         {
             var flights = from selectList in _context.Flights.Include(x => x.Organizer)
                           select selectList;
@@ -91,8 +96,48 @@ namespace WebApplication1.Controllers
             }
             else
             {
-                flights = flights.Where(x => x.Route.ArrivalId == arr && x.Route.DepartureId == dest);
+                var d = _context.Airports.Where(x => x.AirportName == dest).ToList();
+                var a = _context.Airports.Where(x => x.AirportName == arr).ToList();
+                if (d.Count == 0 && a.Count == 0)
+                {
+                 
+                    int c_id_dest = _context.Cities.Where(x => x.CityName == dest).Select(x => x.CityId).FirstOrDefault();
+                    List<int> air_id_dest = _context.Airports.Where(x => x.CityId == c_id_dest).Select(x => x.Id).ToList();
+                    List<int> r_id_dest = _context.Routes.Where(x => air_id_dest.Contains(x.DepartureId)).Select(x => x.RouteId).ToList();
 
+                    int c_id_arr = _context.Cities.Where(x => x.CityName == arr).Select(x => x.CityId).FirstOrDefault();
+                    List<int> air_id_arr = _context.Airports.Where(x => x.CityId == c_id_arr).Select(x => x.Id).ToList();
+                    List<int> r_id_arr = _context.Routes.Where(x => air_id_arr.Contains(x.ArrivalId)).Select(x => x.RouteId).ToList();
+
+
+                    flights = flights.Where(x => r_id_arr.Contains(x.RouteId) && r_id_dest.Contains(x.RouteId));
+                    
+
+                }
+                else if (d.Count == 0)
+                {
+                    int c_id = _context.Cities.Where(x => x.CityName == dest).Select(x => x.CityId).FirstOrDefault();
+                    List<int> air_id = _context.Airports.Where(x => x.CityId == c_id).Select(x => x.Id).ToList();
+                    List<int> r_id = _context.Routes.Where(x => air_id.Contains(x.DepartureId)).Select(x => x.RouteId).ToList();
+                    
+
+                    flights = flights.Where(x => x.Route.ArrivalId == a.ElementAt(0).Id && r_id.Contains(x.RouteId));
+
+                }
+                else if (a.Count == 0)
+                {
+                    int c_id = _context.Cities.Where(x => x.CityName == arr).Select(x => x.CityId).FirstOrDefault();
+                    List<int> air_id = _context.Airports.Where(x => x.CityId == c_id).Select(x => x.Id).ToList();
+                    List<int> r_id = _context.Routes.Where(x => air_id.Contains(x.ArrivalId)).Select(x => x.RouteId).ToList();
+
+                    flights = flights.Where(x => r_id.Contains(x.RouteId) && x.Route.DepartureId == d.ElementAt(0).Id);
+
+                }
+                else { 
+
+                    flights = flights.Where(x => x.Route.ArrivalId == a.ElementAt(0).Id && x.Route.DepartureId == d.ElementAt(0).Id);
+
+                 }
                 if (date.Ticks > 0)
                 {
                     flights = flights.Where(x => x.Date.Date == date.Date);
