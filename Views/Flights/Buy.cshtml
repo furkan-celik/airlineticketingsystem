@@ -462,6 +462,7 @@
                             {
                                 <option value="@item.Id"
                                         data-price="@item.Price"
+                                        data-childPrice="@item.ChildPrice"
                                         data-name="@item.Name"
                                         data-descriptipn="@item.Description">
                                     @(item.Name + " " + item.Price + "TL")
@@ -511,7 +512,7 @@
         $("#countOfChild").change(UpdatePrice);
 
         function UpdatePrice() {
-            $("#priceLabel").html(parseInt($("select[id=type] option").filter(":selected").attr("data-price")) * ($(".plane").find('input[type=checkbox]:enabled').length - $(".plane").find('input[type=checkbox]:checked:enabled').length));
+            $("#priceLabel").html(parseInt($("select[id=type] option").filter(":selected").attr("data-price")) * paseInt($("#countOfSeats").val()) + paseInt($("select[id=type] option").filter(":selected").attr("data-price")) * paseInt($("#countOfChild").val()));
         }
 
         $(window).on("load", $(function () {
