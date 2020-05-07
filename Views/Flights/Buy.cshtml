@@ -328,6 +328,7 @@
                                             }
                                             else
                                             {
+                                                Model.seats[i][j].Availability = true;
                                                 <input type="checkbox" asp-for="@Model.seats[i][j].Availability" id="@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())" disabled />
                                             }
                                             <label for="@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())">'@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())'</label>
@@ -456,7 +457,7 @@
                                                             </button>
                                                         </span>
                                                         @Html.HiddenFor(model => model.offers[i].offer.Id)
-                                                        @Html.TextBoxFor(model => model.offers[i].quantity, new { id = "quantity-child-" + i, @class = "form-control input-number", min = "0", max = "100" })
+                                                        @Html.TextBoxFor(model => model.offers[i].childQuantity, new { id = "quantity-child-" + i, @class = "form-control input-number", min = "0", max = "100" })
                                                         <span class="input-group-btn">
                                                             <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="quantity-child-@i" data-price="@Model.offers[i].offer.ChildPrice">
                                                                 <span class="glyphicon glyphicon-plus"></span>

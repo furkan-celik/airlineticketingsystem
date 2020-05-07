@@ -17,6 +17,8 @@ namespace WebApplication1.Models
         public DateTime ProcessTime { get; set; }
         [Required]
         public int EventId { get; set; }
+        [Required]
+        public bool isChild { get; set; }
 
         public virtual AppUser Owner { get; set; }
         [ForeignKey("EventId")]

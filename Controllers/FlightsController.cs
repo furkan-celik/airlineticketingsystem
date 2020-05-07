@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics;
 
 namespace WebApplication1.Controllers
 {
@@ -287,6 +288,7 @@ namespace WebApplication1.Controllers
         {
             public Offer offer { get; set; }
             public int quantity { get; set; }
+            public int childQuantity { get; set; }
         }
 
         public class SeatInputComparer : IEqualityComparer<SeatInput>
@@ -367,15 +369,13 @@ namespace WebApplication1.Controllers
          .Include(x => x.Organizer)
          .FirstOrDefaultAsync(m => m.Id == inputModel.flightInfo.Id);
 
-            List<Seat> selectedSeats = new List<Seat>();
-            for (int i = 0; i < inputModel.seats.Count; i++)
-            {
-                var colGroup = flight.Seats.Where(x => x.Col == inputModel.seats[i][0].Col).ToList();
-                List<SeatInput> row = new List<SeatInput>();
-                colGroup.ForEach(x => row.Add(new SeatInput { Id = x.Id, Col = x.Col, Row = x.Row, Availability = x.Availability }));
+            var seats = _context.Seats
+                .Include(x => x.SeatType)
+                .Where(x => x.FlightId == flight.Id).ToList();
 
-                inputModel.seats[i].Where(x => !x.Availability).Except(row, new SeatInputComparer()).ToList().ForEach(x => selectedSeats.Add(_context.Seats.FirstOrDefault(y => y.Id == x.Id)));
-            }
+            var selectedOffers = _context.Offers.Where(x => x.FlightId == flight.Id).ToList();
+
+            List<Seat> selectedSeats = seats.Where(x => x.Availability && !inputModel.seats[x.Col - 1][x.Row.ToCharArray()[0] - 'a'].Availability).ToList();
 
             ViewData["Err"] = "";
 
@@ -409,14 +409,41 @@ namespace WebApplication1.Controllers
                     tic.ProcessTime = DateTime.Now;
                     tic.EventId = inputModel.flightInfo.Id;
                     tic.OwnerId = _userManager.GetUserId(HttpContext.User);
+                    tic.isChild = counter < countOfSeats ? false : true;
                     _context.Add(tic);
                     await _context.SaveChangesAsync();
+
+                    foreach (var item in inputModel.offers)
+                    {
+                        if(!tic.isChild && item.quantity > 0)
+                        {
+                            OfferTicket tmp = new OfferTicket() { Offer = selectedOffers.Find(x => x.Id == item.offer.Id), Ticket = tic };
+                            _context.OfferTickets.Add(tmp);
+                            if(_context.SaveChanges() > 0)
+                                item.quantity--;
+                        }else if(tic.isChild && item.childQuantity > 0)
+                        {
+                            OfferTicket tmp = new OfferTicket() { Offer = selectedOffers.Find(x => x.Id == item.offer.Id), Ticket = tic };
+                            _context.OfferTickets.Add(tmp);
+                            if (_context.SaveChanges() > 0)
+                                item.childQuantity--;
+                        }
+                    }
 
                     Seat seat = selectedSeats.ElementAt(counter);
                     seat.TicketId = (int)tic.Id;
                     seat.Availability = false;
-                    _context.Update(seat);
-                    await _context.SaveChangesAsync();
+                    seat.TypeId = 1;
+                    var tmp2 = _context.Seats.Update(seat);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                        throw;
+                    }
 
                     counter++;
 
