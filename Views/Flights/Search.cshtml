@@ -301,36 +301,23 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <span class="form-label">Adults (18+)</span>
-                                        <select class="form-control" name="numOfAdult">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                        </select>
+                                        <input class="form-control" name="numOfAdult" id="numOfAdult" type="number" value="1" min="1" required>
                                         <span class="select-arrow"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <span class="form-label">Children (0-17)</span>
-                                        <select class="form-control" name="numOfChild">
-                                            <option value="0">0</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                        </select>
+                                        <input class="form-control" name="numOfChild" id="numOfChild" type="number" value="1" min="1" required>
                                         <span class="select-arrow"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <span class="form-label">Travel class</span>
-                                        <select class="form-control" name="ticketClass">
-                                            <option value="economy">Economy class</option>
-                                            <option value="business">Business class</option>
+                                        <select class="form-control" name="ticketClass" id="ticketClass">
+                                            <option value="Economy">Economy class</option>
+                                            <option value="Business">Business class</option>
                                         </select>
                                         <span class="select-arrow"></span>
                                     </div>
@@ -388,7 +375,10 @@
             var dest = $("#dest").val();
             var arr = $("#arr").val();
             var date = $("#date").val();
-            var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date;
+            var noAdult = $("#numOfAdult").val();
+            var noChild = $("#numOfChild").val();
+            var mClass = $("#ticketClass").val();
+            var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass;
             $.get(url, function (data) { }).done(function (data) {
                 $("#modelView .modal-body").html(data);
                 $(".pop").modal("show");
@@ -403,10 +393,13 @@
             var dest = $("#dest").val();
             var arr = $("#arr").val();
             var date = $("#date").val();
+            var noAdult = $("#numOfAdult").val();
+            var noChild = $("#numOfChild").val();
+            var mClass = $("#ticketClass").val();
             var newDate = new Date(Date.parse(date) + 86400000);
             $("#date").val(newDate.toISOString().substring(0, 10));
             date = $("#date").val();
-            var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date;
+            var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass;
             $.get(url, function (data) { }).done(function (data) {
                 $("#modelView .modal-body").html(data);
                 $(".pop").modal("show");
@@ -421,10 +414,13 @@
             var dest = $("#dest").val();
             var arr = $("#arr").val();
             var date = $("#date").val();
+            var noAdult = $("#numOfAdult").val();
+            var noChild = $("#numOfChild").val();
+            var mClass = $("#ticketClass").val();
             var newDate = new Date(Date.parse(date) - 86400000);
             $("#date").val(newDate.toISOString().substring(0, 10));
             date = $("#date").val();
-            var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date;
+            var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass;
             $.get(url, function (data) { }).done(function (data) {
                 $("#modelView .modal-body").html(data);
                 $(".pop").modal("show");

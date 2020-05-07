@@ -90,7 +90,7 @@ namespace WebApplication1.Controllers
             public int Price { get; set; }
         }
 
-        public IActionResult SearchResults(int arr, int dest, DateTime date, int numOfAdult, int numOfChild, string ticketClass)
+        public IActionResult SearchResults(string arr, string dest, DateTime date, int numOfAdult, int numOfChild, string ticketClass)
         {
             var flights = from selectList in _context.Flights.Include(x => x.Organizer)
                           select selectList;
@@ -111,7 +111,6 @@ namespace WebApplication1.Controllers
                 var a = _context.Airports.Where(x => x.AirportName == arr).ToList();
                 if (d.Count == 0 && a.Count == 0)
                 {
-
                     int c_id_dest = _context.Cities.Where(x => x.CityName == dest).Select(x => x.CityId).FirstOrDefault();
                     List<int> air_id_dest = _context.Airports.Where(x => x.CityId == c_id_dest).Select(x => x.Id).ToList();
                     List<int> r_id_dest = _context.Routes.Where(x => air_id_dest.Contains(x.DepartureId)).Select(x => x.RouteId).ToList();
@@ -120,10 +119,7 @@ namespace WebApplication1.Controllers
                     List<int> air_id_arr = _context.Airports.Where(x => x.CityId == c_id_arr).Select(x => x.Id).ToList();
                     List<int> r_id_arr = _context.Routes.Where(x => air_id_arr.Contains(x.ArrivalId)).Select(x => x.RouteId).ToList();
 
-
                     flights = flights.Where(x => r_id_arr.Contains(x.RouteId) && r_id_dest.Contains(x.RouteId));
-
-
                 }
                 else if (d.Count == 0)
                 {
@@ -131,9 +127,7 @@ namespace WebApplication1.Controllers
                     List<int> air_id = _context.Airports.Where(x => x.CityId == c_id).Select(x => x.Id).ToList();
                     List<int> r_id = _context.Routes.Where(x => air_id.Contains(x.DepartureId)).Select(x => x.RouteId).ToList();
 
-
                     flights = flights.Where(x => x.Route.ArrivalId == a.ElementAt(0).Id && r_id.Contains(x.RouteId));
-
                 }
                 else if (a.Count == 0)
                 {
@@ -142,14 +136,12 @@ namespace WebApplication1.Controllers
                     List<int> r_id = _context.Routes.Where(x => air_id.Contains(x.ArrivalId)).Select(x => x.RouteId).ToList();
 
                     flights = flights.Where(x => r_id.Contains(x.RouteId) && x.Route.DepartureId == d.ElementAt(0).Id);
-
                 }
                 else
                 {
-
                     flights = flights.Where(x => x.Route.ArrivalId == a.ElementAt(0).Id && x.Route.DepartureId == d.ElementAt(0).Id);
-
                 }
+
                 if (date.Ticks > 0)
                 {
                     flights = flights.Where(x => x.Date.Date == date.Date);
@@ -157,15 +149,15 @@ namespace WebApplication1.Controllers
 
                 if (!string.IsNullOrEmpty(ticketClass))
                 {
-                    flights = flights.Where(x => x.Offers.Count(y => y.Name == ticketClass) > 0).Include(x => x.Offers.Where(y => y.Name == ticketClass));
+                    flights = flights.Where(x => x.Offers.Count(y => y.Name == ticketClass) > 0).Include(x => x.Offers);
                 }
 
                 if (numOfAdult < 0) numOfAdult = 1;
                 if (numOfChild < 0) numOfChild = 0;
 
-                foreach (var item in flights)
+                foreach (var item in flights.ToArray())
                 {
-                    var price = (int)(item.Offers.ToArray()[0].ChildPrice * numOfChild + item.Offers.ToArray()[0].Price * numOfAdult);
+                    var price = (int)(item.Offers.FirstOrDefault(x => x.Name == ticketClass).ChildPrice * numOfChild + item.Offers.FirstOrDefault(x => x.Name == ticketClass).Price * numOfAdult);
                     srm.Add(new SearchResultModel() { Flight = item, Price = price });
                 }
             }
@@ -478,13 +470,14 @@ namespace WebApplication1.Controllers
 
                     foreach (var item in inputModel.offers)
                     {
-                        if(!tic.isChild && item.quantity > 0)
+                        if (!tic.isChild && item.quantity > 0)
                         {
                             OfferTicket tmp = new OfferTicket() { Offer = selectedOffers.Find(x => x.Id == item.offer.Id), Ticket = tic };
                             _context.OfferTickets.Add(tmp);
-                            if(_context.SaveChanges() > 0)
+                            if (_context.SaveChanges() > 0)
                                 item.quantity--;
-                        }else if(tic.isChild && item.childQuantity > 0)
+                        }
+                        else if (tic.isChild && item.childQuantity > 0)
                         {
                             OfferTicket tmp = new OfferTicket() { Offer = selectedOffers.Find(x => x.Id == item.offer.Id), Ticket = tic };
                             _context.OfferTickets.Add(tmp);
