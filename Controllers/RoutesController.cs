@@ -60,7 +60,6 @@ namespace WebApplication1.Controllers
             return View(route.ToList());
         }
        
-
         // GET: Routes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -135,10 +134,10 @@ namespace WebApplication1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RouteId,DepartureId,ArrivalId,ETA")] Route route)
+        public async Task<IActionResult> Edit(int RouteId, [Bind("RouteId,DepartureId,ArrivalId,ETA")] Route route)
         {
 
-            if (id != route.RouteId)
+            if (RouteId != route.RouteId)
             {
                 return NotFound();
             }
@@ -197,9 +196,9 @@ namespace WebApplication1.Controllers
         // POST: Routes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int RouteId)
         {
-            var route = await _context.Routes.FindAsync(id);
+            var route = await _context.Routes.FindAsync(RouteId);
             _context.Routes.Remove(route);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

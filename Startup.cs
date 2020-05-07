@@ -32,7 +32,7 @@ namespace WebApplication1
                 options.UseLazyLoadingProxies().UseMySql(
                     Configuration.GetConnectionString("DefaultConnection"),
                     optionsBuilder => optionsBuilder.ServerVersion(new Version(5,7), Pomelo.EntityFrameworkCore.MySql.Infrastructure.ServerType.MySql)));
-            services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedEmail = false)
                 .AddRoles<AppRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI();
