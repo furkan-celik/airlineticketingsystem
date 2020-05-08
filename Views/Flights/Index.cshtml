@@ -113,12 +113,13 @@
                         @Html.DisplayFor(modelItem => item.Organizer.Description)
                     </td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                         @if ((await AuthorizationService.AuthorizeAsync(User, "ReqAdmin")).Succeeded)
                         {
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit </a><label> | </label>
                             <a asp-action="Delete" asp-route-id="@item.Id">Delete </a><label> | </label>
-                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+
                         }
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                     </td>
                 </tr>
             }
