@@ -42,8 +42,7 @@
                     @Html.DisplayFor(modelItem => item.Price)
                 </td>
                 <td>
-                    <a asp-action="ReservationNow" asp-route-id="@item.Flight.Id" asp-controller="Reservation" class="btn btn-warning">Reservation Now</a> |
-                    <a class="btn btn-primary" id="btnBuy" data-target="/Flights/Buy?id=@item.Flight.Id">Buy Ticket</a> |
+                    <a class="btn btn-primary" id="btnBuy" data-target="/Flights/Buy?id=@item.Flight.Id">Buy/Reservation</a> |
                     <a asp-action="Details" asp-route-id="@item.Flight.Id">Details</a>
                 </td>
             </tr>
