@@ -22,5 +22,6 @@ namespace WebApplication1.Models
         public virtual Flight Flight { get; set; }
 
         public virtual ICollection<Seat> Seats { get; set; }
+        public virtual ICollection<ReservationOffer> Offers { get; set; }
     }
 }

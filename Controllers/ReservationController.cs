@@ -232,15 +232,15 @@ namespace WebApplication1.Controllers
                     {
                         if (!res.isChild && item.quantity > 0)
                         {
-                            OfferTicket tmp = new OfferTicket() { Offer = selectedOffers.Find(x => x.Id == item.offer.Id), Ticket = tic };
-                            _context.OfferTickets.Add(tmp);
+                            ReservationOffer tmp = new ReservationOffer() { Offer = selectedOffers.Find(x => x.Id == item.offer.Id), Reservation = res };
+                            _context.ReservationOffers.Add(tmp);
                             if (_context.SaveChanges() > 0)
                                 item.quantity--;
                         }
                         else if (res.isChild && item.childQuantity > 0)
                         {
-                            OfferTicket tmp = new OfferTicket() { Offer = selectedOffers.Find(x => x.Id == item.offer.Id), Ticket = tic };
-                            _context.OfferTickets.Add(tmp);
+                            ReservationOffer tmp = new ReservationOffer() { Offer = selectedOffers.Find(x => x.Id == item.offer.Id), Reservation = res };
+                            _context.ReservationOffers.Add(tmp);
                             if (_context.SaveChanges() > 0)
                                 item.childQuantity--;
                         }

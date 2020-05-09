@@ -19,6 +19,7 @@ namespace WebApplication1.Data
         public DbSet<Offer> Offers { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<OfferTicket> OfferTickets { get; set; }
+        public DbSet<ReservationOffer> ReservationOffers { get; set; }
         public DbSet<Seat> Seats { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Airport> Airports { get; set; }
@@ -38,6 +39,7 @@ namespace WebApplication1.Data
             builder.Entity<AppUser>().Property(p => p.Gender).HasConversion(v => v.ToString(), v => (Genders)Enum.Parse(typeof(Genders), v));
 
             builder.Entity<OfferTicket>().HasKey(o => new { o.OfferId, o.TicketId });
+            builder.Entity<ReservationOffer>().HasKey(o => new { o.OfferId, o.ReservationId });
         }
     }
 }

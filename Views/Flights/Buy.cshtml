@@ -324,7 +324,7 @@
                                             }
                                             @if (Model.seats[i][j].Availability)
                                             {
-                                                <input type="checkbox" asp-for="@Model.seats[i][j].Availability" id="@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())" />
+                                                <input type="checkbox" asp-for="@Model.seats[i][j].Availability" id="@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())" onchange="UpdateSeatNo(this)"/>
                                             }
                                             else
                                             {
@@ -493,15 +493,39 @@
                     </div>
                     <div class="form-group">
                         <label for="countOfSeats" class="control-label"> Adult(s): </label>
-                        <input type="number" id="countOfSeats" name="countOfSeats" value="0" min="0" />
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button type="button" class="count-left-minus btn btn-danger btn-number" data-type="minus" data-field="countOfSeats" data-field-opposite="countOfChild">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </button>
+                            </span>
+                            <input type="number" id="countOfSeats" name="countOfSeats" class="form-control input-number" value="0" min="0" max="100">
+                            <span class="input-group-btn">
+                                <button type="button" class="count-right-plus btn btn-success btn-number" data-type="plus" data-field="countOfSeats" data-field-opposite="countOfChild">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="countOfChild" class="control-label"> Child(ren) (Age 2-12): </label>
-                        <input type="number" id="countOfChild" name="countOfChild" value="0" min="0" />
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button type="button" class="count-left-minus btn btn-danger btn-number" data-type="minus" data-field="countOfChild" data-field-opposite="countOfSeats">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </button>
+                            </span>
+                            <input type="number" id="countOfChild" name="countOfChild" class="form-control input-number" value="0" min="0" max="100">
+                            <span class="input-group-btn">
+                                <button type="button" class="count-right-plus btn btn-success btn-number" data-type="plus" data-field="countOfChild" data-field-opposite="countOfSeats">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="countOfBaby" class="control-label"> Infant(s) (Age 0-2): </label>
-                        <input type="number" id="countOfBaby" name="countOfBaby" value="0" min="0" />
+                        <input type="number" id="countOfBaby" name="countOfBaby" value="0" min="0" class="form-control" />
                     </div>
                     <div class="form-group">
                         <h3 class="control-label" id="priceLabel">0</h3>TL
@@ -523,6 +547,18 @@
                 x.style.display = "block";
             } else {
                 x.style.display = "none";
+            }
+        }
+
+        function UpdateSeatNo(element) {
+            if (!element.checked) {
+                $("#" + "countOfSeats").val(parseInt($("#" + "countOfSeats").val()) + 1);
+            } else {
+                if (parseInt($("#" + "countOfSeats").val() > 0)) {
+                    $("#" + "countOfSeats").val(parseInt($("#" + "countOfSeats").val()) - 1);
+                } else if (parseInt($("#" + "countOfChild").val() > 0)) {
+                    $("#" + "countOfChild").val(parseInt($("#" + "countOfChild").val()) - 1);
+                }
             }
         }
 
@@ -613,7 +649,6 @@
                 }
 
                 // Increment
-
             });
 
             $('.quantity-left-minus').click(function (e) {
@@ -629,6 +664,40 @@
                 if (quantity > 0) {
                     $("#" + $input.attr("data-field")).val(quantity - 1);
                     $("#priceLabel").html(parseInt($("#priceLabel").text()) - parseInt($input.attr("data-price")));
+                }
+            });
+
+            $('.count-right-plus').click(function (e) {
+                $input = $(this);
+                // Stop acting like a button
+                e.preventDefault();
+                // Get the field name
+                var quantity = parseInt($("#" + $input.attr("data-field")).val());
+                var quantityOpposite = parseInt($("#" + $input.attr("data-field-opposite")).val());
+
+                // If is not undefined
+                if (quantity + 1 <= $("#" + $input.attr("data-field")).attr("max") && quantityOpposite - 1 >= $("#" + $input.attr("data-field-opposite")).attr("min")) {
+                    $("#" + $input.attr("data-field")).val(quantity + 1);
+                    $("#" + $input.attr("data-field-opposite")).val(quantityOpposite - 1);
+                }
+
+                // Increment
+            });
+
+            $('.count-left-minus').click(function (e) {
+                $input = $(this);
+                // Stop acting like a button
+                e.preventDefault();
+                // Get the field name
+                var quantity = parseInt($("#" + $input.attr("data-field")).val());
+                var quantityOpposite = parseInt($("#" + $input.attr("data-field-opposite")).val());
+
+                // If is not undefined
+
+                // Increment
+                if (quantity - 1 >= $("#" + $input.attr("data-field")).attr("min") && quantityOpposite + 1 <= $("#" + $input.attr("data-field-opposite")).attr("max")) {
+                    $("#" + $input.attr("data-field")).val(quantity - 1);
+                    $("#" + $input.attr("data-field-opposite")).val(quantityOpposite + 1);
                 }
             });
         });
