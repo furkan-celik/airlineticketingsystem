@@ -1,467 +1,197 @@
 ﻿@model List<string>
 @{
     ViewData["Title"] = "Search";
-    Layout = "";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head class="backimg">
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Flightviewer</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-    <style type="text/css">
-        .section {
-            position: relative;
-            height: 100vh;
-        }
-
-            .section .section-center {
-                position: absolute;
-                top: 50%;
-                left: 0;
-                right: 0;
-                -webkit-transform: translateY(-50%);
-                transform: translateY(-50%);
-            }
-
-        #booking {
-            font-family: 'Lato', sans-serif;
-            background-image: url('../images/background.jpg');
-            background-size: cover;
-            background-position: center;
-            color: #191a1e;
-        }
-
-        .booking-form {
-            position: relative;
-            background: #fff;
-            max-width: 642px;
-            width: 100%;
-            margin: auto;
-            padding: 45px 25px 25px;
-            border-radius: 4px;
-            -webkit-box-shadow: 0px 0px 10px -5px rgba(0, 0, 0, 0.4);
-            box-shadow: 0px 0px 10px -5px rgba(0, 0, 0, 0.4);
-        }
-
-            .booking-form .form-group {
-                position: relative;
-                margin-bottom: 20px;
-            }
-
-            .booking-form .form-control {
-                background-color: #fff;
-                height: 65px;
-                padding: 0px 15px;
-                padding-top: 24px;
-                color: #191a1e;
-                border: 2px solid #dfe5e9;
-                font-size: 16px;
-                font-weight: 700;
-                -webkit-box-shadow: none;
-                box-shadow: none;
-                border-radius: 4px;
-                -webkit-transition: 0.2s all;
-                transition: 0.2s all;
-            }
-
-                .booking-form .form-control::-webkit-input-placeholder {
-                    color: #dfe5e9;
-                }
-
-                .booking-form .form-control:-ms-input-placeholder {
-                    color: #dfe5e9;
-                }
-
-                .booking-form .form-control::placeholder {
-                    color: #dfe5e9;
-                }
-
-                .booking-form .form-control:focus {
-                    background: #f9fafb;
-                }
-
-            .booking-form input[type="date"].form-control:invalid {
-                color: #dfe5e9;
-            }
-
-            .booking-form select.form-control {
-                -webkit-appearance: none;
-                -moz-appearance: none;
-                appearance: none;
-            }
-
-                .booking-form select.form-control + .select-arrow {
-                    position: absolute;
-                    right: 6px;
-                    bottom: 6px;
-                    width: 32px;
-                    line-height: 32px;
-                    height: 32px;
-                    text-align: center;
-                    pointer-events: none;
-                    color: #dfe5e9;
-                    font-size: 14px;
-                }
-
-                    .booking-form select.form-control + .select-arrow:after {
-                        content: '\279C';
-                        display: block;
-                        -webkit-transform: rotate(90deg);
-                        transform: rotate(90deg);
-                    }
-
-            .booking-form .form-label {
-                position: absolute;
-                top: 6px;
-                left: 20px;
-                font-weight: 700;
-                text-transform: uppercase;
-                line-height: 24px;
-                height: 24px;
-                font-size: 12px;
-                color: #98c9ee;
-            }
-
-            .booking-form .form-checkbox input {
-                position: absolute !important;
-                margin-left: -9999px !important;
-                visibility: hidden !important;
-            }
-
-            .booking-form .form-checkbox label {
-                position: relative;
-                padding-top: 4px;
-                padding-left: 30px;
-                font-weight: 700;
-                color: #191a1e;
-            }
-
-                .booking-form .form-checkbox label + label {
-                    margin-left: 15px;
-                }
-
-            .booking-form .form-checkbox input + span {
-                position: absolute;
-                left: 2px;
-                top: 4px;
-                width: 20px;
-                height: 20px;
-                background: #fff;
-                border: 2px solid #dfe5e9;
-                border-radius: 50%;
-            }
-
-                .booking-form .form-checkbox input + span:after {
-                    content: '';
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    width: 0px;
-                    height: 0px;
-                    border-radius: 50%;
-                    background-color: #4fa3e3;
-                    -webkit-transform: translate(-50%, -50%);
-                    transform: translate(-50%, -50%);
-                    -webkit-transition: 0.2s all;
-                    transition: 0.2s all;
-                }
-
-            .booking-form .form-checkbox input:not(:checked) + span:after {
-                opacity: 0;
-            }
-
-            .booking-form .form-checkbox input:checked + span:after {
-                opacity: 1;
-                width: 10px;
-                height: 10px;
-            }
-
-            .booking-form .submit-btn {
-                color: #fff;
-                background-color: #4fa3e3;
-                font-weight: 400;
-                height: 65px;
-                font-size: 18px;
-                border: none;
-                width: 100%;
-                border-radius: 4px;
-                text-transform: uppercase
-            }
-
-        .booking-cta {
-            margin-top: 45px;
-        }
-
-            .booking-cta h1 {
-                font-size: 52px;
-                text-transform: uppercase;
-                color: #4fa3e3;
-                font-weight: 400;
-            }
-
-            .booking-cta p {
-                font-size: 22px;
-                color: #191a1e;
-            }
-    </style>
-</head>
-
-<body>
-    <div id="booking" class="section">
-
-        <nav class="navbar navbar-expand-sm navbar-toggleable-md navbar-light border-bottom box-shadow mb-3" style="background-color:transparent;height:70px">
-            @*bg-white*@
-            <div class="container" style="max-width:1400px">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartialUser" />
+<div class="row">
+    <div class="col-md-4">
+        <div class="booking-cta">
+            <h1>Book your flight today</h1>
+            <p>With years of experience in the field</p>
+        </div>
+    </div>
+    <div class="col-md-7 col-md-offset-1">
+        <div class="booking-form">
+            <div class="form-group">
+                <div class="form-checkbox">
+                    <label for="roundtrip">
+                        <input type="radio" id="roundtrip" name="flight-type">
+                        <span></span>Roundtrip
+                    </label>
+                    <label for="one-way">
+                        <input type="radio" id="one-way" name="flight-type">
+                        <span></span>One way
+                    </label>
                 </div>
             </div>
-        </nav>
-
-        <div class="section-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="booking-cta">
-                            <h1>Book your flight today</h1>
-                            <p>With years of experience in the field</p>
-                        </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <span class="form-label">Flying from</span>
+                        @Html.DropDownList("dest", new SelectList(
+                         Model.Select(x => new { Value = x, Text = x }),//you have to pass data as model. If you use another way you must change this line.
+                         "Value",
+                         "Text"
+                          ), "From",
+                         new { required = "required", placeholder = "City or airport", @class = "form-control basicAutoComplete", autocomplete = "on" }
+                        )
+                        @*@Html.DropDownList("dest", ViewData["AirportId"] as SelectList, "From", new { required = "required", placeholder = "City or airport", @class = "form-control basicAutoComplete", autocomplete = "on" })*@
                     </div>
-                    <div class="col-md-7 col-md-offset-1">
-                        <div class="booking-form">
-                            <div class="form-group">
-                                <div class="form-checkbox">
-                                    <label for="roundtrip">
-                                        <input type="radio" id="roundtrip" name="flight-type">
-                                        <span></span>Roundtrip
-                                    </label>
-                                    <label for="one-way">
-                                        <input type="radio" id="one-way" name="flight-type">
-                                        <span></span>One way
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <span class="form-label">Flying from</span>
-                                        @Html.DropDownList( "dest",new SelectList(
-                                         Model.Select(x => new { Value = x, Text = x }),//you have to pass data as model. If you use another way you must change this line.
-                                         "Value",
-                                         "Text"
-                                          ), "From",
-                                         new { required = "required", placeholder = "City or airport", @class = "form-control basicAutoComplete", autocomplete = "on" }
-                                        )
-                                        @*@Html.DropDownList("dest", ViewData["AirportId"] as SelectList, "From", new { required = "required", placeholder = "City or airport", @class = "form-control basicAutoComplete", autocomplete = "on" })*@
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <span class="form-label">Flyning to</span>
-                                        @Html.DropDownList("arr", new SelectList(
-                                        Model.Select(x => new { Value = x, Text = x }),//you have to pass data as model. If you use another way you must change this line.
-                                        "Value",
-                                        "Text"
-                                         ), "From",
-                                        new { required = "required", placeholder = "City or airport", @class = "form-control basicAutoComplete", autocomplete = "on" }
-                                       )
-                                        @*@Html.DropDownList("arr", ViewData["AirportId"] as SelectList, "To", new { required = "required", placeholder = "City or airport", @class = "form-control basicAutoComplete", autocomplete = "on" })*@
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <span class="form-label">Departing</span>
-                                        <input class="form-control" type="date" id="date"
-                                               name="date" value=@ViewData["Date"]
-                                               min=@DateTime.Now.ToString("yyyy-MM-dd") max="2100-06-14" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <span class="form-label">Returning</span>
-                                        <input class="form-control" type="date" id="arrival" value=@ViewData["Date"] min="@DateTime.Now.ToString("yyyy-MM-dd")" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <span class="form-label">Adults (18+)</span>
-                                        <input class="form-control" name="numOfAdult" id="numOfAdult" type="number" value="1" min="1" required>
-                                        <span class="select-arrow"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <span class="form-label">Children (0-17)</span>
-                                        <input class="form-control" name="numOfChild" id="numOfChild" type="number" value="1" min="1" required>
-                                        <span class="select-arrow"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <span class="form-label">Travel class</span>
-                                        <select class="form-control" name="ticketClass" id="ticketClass">
-                                            <option value="Economy">Economy class</option>
-                                            <option value="Business">Business class</option>
-                                        </select>
-                                        <span class="select-arrow"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-btn">
-                                <button class="submit-btn" id="btnSearch">Show flights</button>
-                            </div>
-                        </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <span class="form-label">Flyning to</span>
+                        @Html.DropDownList("arr", new SelectList(
+                        Model.Select(x => new { Value = x, Text = x }),//you have to pass data as model. If you use another way you must change this line.
+                        "Value",
+                        "Text"
+                         ), "From",
+                        new { required = "required", placeholder = "City or airport", @class = "form-control basicAutoComplete", autocomplete = "on" }
+                       )
+                        @*@Html.DropDownList("arr", ViewData["AirportId"] as SelectList, "To", new { required = "required", placeholder = "City or airport", @class = "form-control basicAutoComplete", autocomplete = "on" })*@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="modal pop" tabindex="-1" role="dialog" id="modelView">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Avaliable Flights</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <span class="form-label">Departing</span>
+                        <input class="form-control" type="date" id="date"
+                               name="date" value=@ViewData["Date"]
+                               min=@DateTime.Now.ToString("yyyy-MM-dd") max="2100-06-14" required>
+                    </div>
                 </div>
-                <div class="modal-body">
-
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <span class="form-label">Returning</span>
+                        <input class="form-control" type="date" id="arrival" value=@ViewData["Date"] min="@DateTime.Now.ToString("yyyy-MM-dd")" required>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="btnNextDay">Next Day</button>
-                    <button type="button" class="btn btn-secondary" id="btnPrevDay">Previous Day</button>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <span class="form-label">Adults (18+)</span>
+                        <input class="form-control" name="numOfAdult" id="numOfAdult" type="number" value="1" min="1" required>
+                        <span class="select-arrow"></span>
+                    </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <span class="form-label">Children (0-17)</span>
+                        <input class="form-control" name="numOfChild" id="numOfChild" type="number" value="1" min="1" required>
+                        <span class="select-arrow"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <span class="form-label">Travel class</span>
+                        <select class="form-control" name="ticketClass" id="ticketClass">
+                            <option value="Economy">Economy class</option>
+                            <option value="Business">Business class</option>
+                        </select>
+                        <span class="select-arrow"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-btn">
+                <button class="submit-btn" id="btnSearch">Show flights</button>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal loginPop" tabindex="-1" role="dialog" id="loginView">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Login/Register</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
+<script type="text/javascript">
 
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script type="text/javascript">
-
-        $("#btnSearch").click(function () {
-            var dest = $("#dest").val();
-            var arr = $("#arr").val();
-            var date = $("#date").val();
-            var noAdult = $("#numOfAdult").val();
-            var noChild = $("#numOfChild").val();
-            var mClass = $("#ticketClass").val();
-            var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass;
-            $.get(url, function (data) { }).done(function (data) {
-                $("#modelView .modal-body").html(data);
+    $("#btnSearch").click(function () {
+        var dest = $("#dest").val();
+        var arr = $("#arr").val();
+        var date = $("#date").val();
+        var noAdult = $("#numOfAdult").val();
+        var noChild = $("#numOfChild").val();
+        var mClass = $("#ticketClass").val();
+        var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass;
+        $.get(url, function (data) { }).done(function (data) {
+            $("#modelView .modal-body").html(data);
+            $(".pop").modal("show");
+        })
+            .fail(function () {
+                $("#modelView .modal-body").text("Error!!");
                 $(".pop").modal("show");
             })
-                .fail(function () {
-                    $("#modelView .modal-body").text("Error!!");
-                    $(".pop").modal("show");
-                })
-        })
+    })
 
-        $("#btnNextDay").click(function () {
-            var dest = $("#dest").val();
-            var arr = $("#arr").val();
-            var date = $("#date").val();
-            var noAdult = $("#numOfAdult").val();
-            var noChild = $("#numOfChild").val();
-            var mClass = $("#ticketClass").val();
-            var newDate = new Date(Date.parse(date) + 86400000);
-            $("#date").val(newDate.toISOString().substring(0, 10));
-            date = $("#date").val();
-            var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass;
-            $.get(url, function (data) { }).done(function (data) {
-                $("#modelView .modal-body").html(data);
+    $("#btnNextDay").click(function () {
+        var dest = $("#dest").val();
+        var arr = $("#arr").val();
+        var date = $("#date").val();
+        var noAdult = $("#numOfAdult").val();
+        var noChild = $("#numOfChild").val();
+        var mClass = $("#ticketClass").val();
+        var newDate = new Date(Date.parse(date) + 86400000);
+        $("#date").val(newDate.toISOString().substring(0, 10));
+        date = $("#date").val();
+        var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass;
+        $.get(url, function (data) { }).done(function (data) {
+            $("#modelView .modal-body").html(data);
+            $(".pop").modal("show");
+        })
+            .fail(function () {
+                $("#modelView .modal-body").text("Error!!");
                 $(".pop").modal("show");
             })
-                .fail(function () {
-                    $("#modelView .modal-body").text("Error!!");
-                    $(".pop").modal("show");
-                })
-        })
+    })
 
-        $("#btnPrevDay").click(function () {
-            var dest = $("#dest").val();
-            var arr = $("#arr").val();
-            var date = $("#date").val();
-            var noAdult = $("#numOfAdult").val();
-            var noChild = $("#numOfChild").val();
-            var mClass = $("#ticketClass").val();
-            var newDate = new Date(Date.parse(date) - 86400000);
-            $("#date").val(newDate.toISOString().substring(0, 10));
-            date = $("#date").val();
-            var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass;
-            $.get(url, function (data) { }).done(function (data) {
-                $("#modelView .modal-body").html(data);
+    $("#btnPrevDay").click(function () {
+        var dest = $("#dest").val();
+        var arr = $("#arr").val();
+        var date = $("#date").val();
+        var noAdult = $("#numOfAdult").val();
+        var noChild = $("#numOfChild").val();
+        var mClass = $("#ticketClass").val();
+        var newDate = new Date(Date.parse(date) - 86400000);
+        $("#date").val(newDate.toISOString().substring(0, 10));
+        date = $("#date").val();
+        var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass;
+        $.get(url, function (data) { }).done(function (data) {
+            $("#modelView .modal-body").html(data);
+            $(".pop").modal("show");
+        })
+            .fail(function () {
+                $("#modelView .modal-body").text("Error!!");
                 $(".pop").modal("show");
             })
-                .fail(function () {
-                    $("#modelView .modal-body").text("Error!!");
-                    $(".pop").modal("show");
-                })
-        })
+    })
 
-        $("#btnLogin").click(function () {
-            var url = "/Flights/LoginModal";
-            $.get(url, function (data) { }).done(function (data) {
-                $("#loginView .modal-body").html(data);
+    $("#btnLogin").click(function () {
+        var url = "/Flights/LoginModal";
+        $.get(url, function (data) { }).done(function (data) {
+            $("#loginView .modal-body").html(data);
+            $(".loginPop").modal("show");
+        })
+            .fail(function () {
+                $("#loginView .modal-body").text("Error!!");
                 $(".loginPop").modal("show");
             })
-                .fail(function () {
-                    $("#loginView .modal-body").text("Error!!");
-                    $(".loginPop").modal("show");
-                })
-        })
+    })
 
-        $("#btnRegister").click(function () {
-            var url = "/Flights/RegisterModal";
-            $.get(url, function (data) { }).done(function (data) {
-                $("#loginView .modal-body").html(data);
+    $("#btnRegister").click(function () {
+        var url = "/Flights/RegisterModal";
+        $.get(url, function (data) { }).done(function (data) {
+            $("#loginView .modal-body").html(data);
+            $(".loginPop").modal("show");
+        })
+            .fail(function () {
+                $("#loginView .modal-body").text("Error!!");
                 $(".loginPop").modal("show");
             })
-                .fail(function () {
-                    $("#loginView .modal-body").text("Error!!");
-                    $(".loginPop").modal("show");
-                })
-        })
+    })
 
-        $(document).ready(function () {
-            //Handles menu drop down
-            $('.dropdown-menu').find('form').click(function (e) {
-                e.stopPropagation();
-            });
+    $(document).ready(function () {
+        //Handles menu drop down
+        $('.dropdown-menu').find('form').click(function (e) {
+            e.stopPropagation();
         });
+    });
 
-    </script>
-</body>
-</html>
+</script>
