@@ -25,6 +25,7 @@ namespace WebApplication1.Data
         public DbSet<Airport> Airports { get; set; }
         public DbSet<SeatType> SeatTypes { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<Purchase> Purchases { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

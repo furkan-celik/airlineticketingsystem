@@ -457,6 +457,10 @@ namespace WebApplication1.Controllers
             }
             else
             {
+                Purchase purchase = new Purchase() { IsProcessed = false, OwnerId = _userManager.GetUserId(HttpContext.User), Price = 0, ProcessTime = DateTime.Now };
+                purchase.Price += _context.Offers.FirstOrDefault(x => x.Id == type).Price * (countOfChild + countOfSeats);
+                purchase.Tickets = new List<Ticket>();
+
                 int counter = 0;
                 while (counter < countOfSeats + countOfChild)
                 {
@@ -475,14 +479,20 @@ namespace WebApplication1.Controllers
                             OfferTicket tmp = new OfferTicket() { Offer = selectedOffers.Find(x => x.Id == item.offer.Id), Ticket = tic };
                             _context.OfferTickets.Add(tmp);
                             if (_context.SaveChanges() > 0)
+                            {
+                                purchase.Price += tmp.Offer.Price;
                                 item.quantity--;
+                            }
                         }
                         else if (tic.isChild && item.childQuantity > 0)
                         {
                             OfferTicket tmp = new OfferTicket() { Offer = selectedOffers.Find(x => x.Id == item.offer.Id), Ticket = tic };
                             _context.OfferTickets.Add(tmp);
                             if (_context.SaveChanges() > 0)
+                            {
+                                purchase.Price += tmp.Offer.ChildPrice;
                                 item.childQuantity--;
+                            }
                         }
                     }
 
@@ -502,10 +512,13 @@ namespace WebApplication1.Controllers
                     }
 
                     counter++;
-
+                    purchase.Tickets.Add(tic);
                 }
 
-                return RedirectToAction(nameof(Successful));
+                _context.Purchases.Add(purchase);
+                _context.SaveChanges();
+
+                return RedirectToAction("Purchase", purchase.Id);
             }
         }
 
@@ -525,6 +538,25 @@ namespace WebApplication1.Controllers
             return View();
         }
 
+        public IActionResult Purchase(int id)
+        {
+            var purchase = _context.Purchases.FirstOrDefault(x => x.Id == pId);
+
+            if(purchase == null)
+            {
+                return NotFound();
+            }
+
+            return View(purchase);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public IActionResult Purchase(int pId, string cardNumber, string cardExpiry, string cardCVC, string couponCode)
+        {
+            return RedirectToAction(nameof(Successful));
+        }
 
         private bool FlightExists(int id)
         {

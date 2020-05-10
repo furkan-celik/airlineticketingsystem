@@ -478,7 +478,7 @@
 
                     <div class="form-group">
                         <label class="control-label"> Class :  </label>
-                        <select class="control-label" id="type">
+                        <select class="control-label" id="type" name="type">
                             @foreach (var item in Model.flightInfo.Offers.Where(x => x.type == 0).ToList())
                             {
                                 <option value="@item.Id"

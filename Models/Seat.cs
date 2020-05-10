@@ -20,6 +20,8 @@ namespace WebApplication1.Models
         [Required]
         public bool Availability { get; set; }
         [Required]
+        public bool IsConfirmed { get; set; }
+        [Required]
         [ForeignKey("SeatType")]
         public int TypeId { get; set; }
         public int? TicketId { get; set; }
