@@ -540,7 +540,7 @@ namespace WebApplication1.Controllers
 
         public IActionResult Purchase(int id)
         {
-            var purchase = _context.Purchases.FirstOrDefault(x => x.Id == pId);
+            var purchase = _context.Purchases.FirstOrDefault(x => x.Id == id);
 
             if(purchase == null)
             {
@@ -555,6 +555,11 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Purchase(int pId, string cardNumber, string cardExpiry, string cardCVC, string couponCode)
         {
+            var purchase = _context.Purchases.FirstOrDefault(x => x.Id == pId);
+            purchase.IsProcessed = true;
+            _context.Purchases.Update(purchase);
+            _context.SaveChanges();
+
             return RedirectToAction(nameof(Successful));
         }
 
