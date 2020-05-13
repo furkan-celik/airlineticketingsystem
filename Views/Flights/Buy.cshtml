@@ -32,7 +32,9 @@
             padding: 8px;
             margin: 10px;
             border-style:solid;
-            border-color:bisque;
+            border-color:azure;
+            border-width:10px;
+            border-radius:15px;
         }
 
             /* The navigation menu links */
@@ -448,14 +450,14 @@
                                                         <div class="input-group">
                                                             <span class="input-group-btn">
                                                                 <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus" data-field="quantity-adult-@i" data-price="@Model.offers[i].offer.Price">
-                                                                    <i class="fas fa-minus"></i>
+                                                                    <i class="fas fa-minus"></i>-
                                                                 </button>
                                                             </span>
                                                             @Html.HiddenFor(model => model.offers[i].offer.Id)
                                                             @Html.TextBoxFor(model => model.offers[i].quantity, new { id = "quantity-adult-" + i, @class = "form-control input-number", min = "0", max = "100" })
                                                             <span class="input-group-btn">
                                                                 <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="quantity-adult-@i" data-price="@Model.offers[i].offer.Price">
-                                                                    <i class="fas fa-plus"></i>
+                                                                    <i class="fas fa-plus"></i>+
                                                                 </button>
                                                             </span>
                                                         </div>
@@ -467,14 +469,14 @@
                                                         <div class="input-group">
                                                             <span class="input-group-btn">
                                                                 <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus" data-field="quantity-child-@i" data-price="@Model.offers[i].offer.ChildPrice">
-                                                                    <i class="fas fa-minus"></i>
+                                                                    <i class="fas fa-minus"></i>-
                                                                 </button>
                                                             </span>
                                                             @Html.HiddenFor(model => model.offers[i].offer.Id)
                                                             @Html.TextBoxFor(model => model.offers[i].childQuantity, new { id = "quantity-child-" + i, @class = "form-control input-number", min = "0", max = "100" })
                                                             <span class="input-group-btn">
                                                                 <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="quantity-child-@i" data-price="@Model.offers[i].offer.ChildPrice">
-                                                                    <i class="fas fa-plus"></i>
+                                                                    <i class="fas fa-plus"></i>+
                                                                 </button>
                                                             </span>
                                                         </div>
@@ -511,13 +513,13 @@
                             <div class="input-group">
                                 <span class="input-group-btn">
                                     <button type="button" class="count-left-minus btn btn-danger btn-number" data-type="minus" data-field="countOfSeats" data-field-opposite="countOfChild">
-                                        <i class="fas fa-minus"></i>
+                                        <i class="fas fa-minus"></i>-
                                     </button>
                                 </span>
                                 <input type="number" id="countOfSeats" name="countOfSeats" class="form-control input-number" value="0" min="0" max="100">
                                 <span class="input-group-btn">
                                     <button type="button" class="count-right-plus btn btn-success btn-number" data-type="plus" data-field="countOfSeats" data-field-opposite="countOfChild">
-                                        <i class="fas fa-plus"></i>
+                                        <i class="fas fa-plus"></i>+
                                     </button>
                                 </span>
                             </div>
@@ -527,13 +529,13 @@
                             <div class="input-group">
                                 <span class="input-group-btn">
                                     <button type="button" class="count-left-minus btn btn-danger btn-number" data-type="minus" data-field="countOfChild" data-field-opposite="countOfSeats">
-                                        <i class="fas fa-minus"></i>
+                                        <i class="fas fa-minus"></i>-
                                     </button>
                                 </span>
                                 <input type="number" id="countOfChild" name="countOfChild" class="form-control input-number" value="0" min="0" max="100">
                                 <span class="input-group-btn">
                                     <button type="button" class="count-right-plus btn btn-success btn-number" data-type="plus" data-field="countOfChild" data-field-opposite="countOfSeats">
-                                        <i class="fas fa-plus"></i>
+                                        <i class="fas fa-plus"></i>+
                                     </button>
                                 </span>
                             </div>
