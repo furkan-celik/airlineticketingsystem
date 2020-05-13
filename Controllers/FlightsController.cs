@@ -533,7 +533,7 @@ namespace WebApplication1.Controllers
                 };
                 using (var client = new SmtpClient())
                 {
-                    client.Connect("smtp.gnail.com", 587, false);
+                    client.Connect("smtp.gmail.com", 587, false);
                     client.Authenticate("flightviewer@gmail.com", "Cs308proje");
 
                     client.Send(message);
