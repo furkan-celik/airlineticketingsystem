@@ -1,0 +1,52 @@
+﻿@page
+@model CreditCardModel
+
+@{
+    ViewData["Title"] = "Credit Cards";
+    ViewData["ActivePage"] = ManageNavPages.CreditCards;
+}
+
+<h3 style="color:lightgrey">@ViewData["Title"]</h3>
+
+
+<p>
+    <a asp-page="./CreditCardCreate">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @*@Html.DisplayNameFor(model => model.CreditCard[0].CardNumber)*@Card Number
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Address[0].AddressLine)*@Expiry Date
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreditCard[0].Owner)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CreditCard)
+        {
+            <tr>
+                <td>
+                    **** **** **** @Html.DisplayFor(modelItem => item.CardNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Month)/@Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Owner.Name) @Html.DisplayFor(modelItem => item.Owner.Surname)
+                </td>
+                <td>
+                    <a asp-page="./CreditCardEdit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./CreditCardDetails" asp-route-id="@item.Id">Details</a> |
+                    <a asp-page="./CreditCardDelete" asp-route-id="@item.Id">Delete</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,38 @@
+﻿@page
+@model CreditcardDetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+    ViewData["ActivePage"] = ManageNavPages.CreditCards;
+}
+
+<h3 style="color:lightgrey">@ViewData["Title"]</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @*@Html.DisplayNameFor(model => model.CreditCard.CardNumber)*@Card Number
+        </dt>
+        <dd class="col-sm-10" style="color:lightgrey">
+            **** **** **** @Html.DisplayFor(model => model.CreditCard.CardNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @*@Html.DisplayNameFor(model => model.CreditCard.Month)*@Expiry Date
+        </dt>
+        <dd class="col-sm-10" style="color:lightgrey">
+            @Html.DisplayFor(model => model.CreditCard.Month)/@Html.DisplayFor(model => model.CreditCard.Year)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CreditCard.Owner)
+        </dt>
+        <dd class="col-sm-10" style="color:lightgrey">
+            @Html.DisplayFor(model => model.CreditCard.Owner.Name) @Html.DisplayFor(model => model.CreditCard.Owner.Surname)
+        </dd>
+    </dl>
+
+    <form method="post">
+        <input type="hidden" asp-for="CreditCard.Id" />
+        <a asp-page="./CreditCardEdit" asp-route-id=@Model.CreditCard.Id class="btn btn-primary">Edit</a> |
+        <a asp-page="./CreditCardIndex">Back to List</a>
+    </form>
+</div>

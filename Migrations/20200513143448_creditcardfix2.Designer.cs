@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200513143448_creditcardfix2")]
+    partial class creditcardfix2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -323,27 +325,22 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.CreditCard", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
                     b.Property<long>("CardNumber")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<string>("HashedCardNumber")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                    b.Property<int>("CardDate")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Month")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("OwnerId")
                         .IsRequired()
                         .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
 
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
+                    b.HasKey("CardNumber");
 
                     b.HasIndex("OwnerId");
 

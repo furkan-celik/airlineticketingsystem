@@ -1,11 +1,11 @@
 ﻿@page
 @model TicketModel
 @{
-    ViewData["Title"] = "Ticket";
+    ViewData["Title"] = "Tickets";
     ViewData["ActivePage"] = ManageNavPages.Tickets;
 }
 
-<h4>@ViewData["Title"]</h4>
+<h3 style="color:lightgrey">@ViewData["Title"]</h3>
 
 
 <table class="table">
@@ -35,19 +35,19 @@
         @foreach (var item in Model.tickets)
         {
         <tr>
-            <td>
+            <td style="color:lightgrey">
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
-            <td>
+            <td style="color:lightgrey">
                 @Html.DisplayFor(modelItem => item.Flight.Name)
             </td>
-            <td>
+            <td style="color:lightgrey">
                 @Html.DisplayFor(modelItem => item.Flight.Date)
             </td>
-            <td>
+            <td style="color:lightgrey">
                 @Html.DisplayFor(modelItem => item.Flight.RouteId)
             </td>
-            <td>
+            <td style="color:lightgrey">
                 @foreach (var item2 in item.Seats)
                 {
                     @Html.DisplayFor(modelItem => item2.Col) @Html.DisplayFor(modelItem => item2.Row)
