@@ -524,7 +524,7 @@ namespace WebApplication1.Controllers
 
                 String mail = _context.Users.Where(a => a.Id == _userManager.GetUserId(HttpContext.User)).Select(a => a.Email).FirstOrDefault().ToString();
                 var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("flightviewer@gmail.com"));
+                message.From.Add(new MailboxAddress("flightviewerticket@gmail.com"));
                 message.To.Add(new MailboxAddress(mail));
                 message.Subject = "test";
                 message.Body = new TextPart("test")
@@ -534,7 +534,7 @@ namespace WebApplication1.Controllers
                 using (var client = new SmtpClient())
                 {
                     client.Connect("smtp.gmail.com", 587, false);
-                    client.Authenticate("flightviewer@gmail.com", "Cs308proje");
+                    client.Authenticate("flightviewerticket@gmail.com", "Cs308proje");
 
                     client.Send(message);
                     client.Disconnect(true);
