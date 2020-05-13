@@ -7,9 +7,9 @@ namespace WebApplication1.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_CreditCards",
-                table: "CreditCards");
+            //migrationBuilder.DropPrimaryKey(
+            //    name: "PK_CreditCards",
+            //    table: "CreditCards");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_CreditCards",

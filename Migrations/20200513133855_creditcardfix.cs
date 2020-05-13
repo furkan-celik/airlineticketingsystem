@@ -26,8 +26,7 @@ namespace WebApplication1.Migrations
             migrationBuilder.AddColumn<int>(
                 name: "Id",
                 table: "CreditCards",
-                nullable: false)
-                .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
+                nullable: false);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_CreditCards_AspNetUsers_OwnerId",
@@ -36,6 +35,10 @@ namespace WebApplication1.Migrations
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.DropPrimaryKey(
+                name: "CardDate",
+                table: "CreditCards");
 
             migrationBuilder.DropColumn(
                 name: "CardDate",

@@ -13,7 +13,7 @@ namespace WebApplication1.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int")
-                .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
+                .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None)
                 .OldAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
 
             migrationBuilder.AddColumn<string>(
@@ -35,7 +35,7 @@ namespace WebApplication1.Migrations
                 nullable: false,
                 oldClrType: typeof(long))
                 .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
-                .OldAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
+                .OldAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
         }
     }
 }
