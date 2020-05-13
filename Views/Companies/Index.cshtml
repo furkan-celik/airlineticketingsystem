@@ -30,9 +30,7 @@
         {
             <tr>
                 <td>
-                    @* @{ var s = @item.LogoLocation;}
-        <img src=@s width="60" height="60" />
-        <img src=~/images/thy.png width="60" height="60" />*@
+    
 
                     @{string path = item.LogoLocation;
                         int length = path.Length;
@@ -40,7 +38,6 @@
                     }
 
                     <img src=@path width="80" height="60" />
-      
 
 
                 </td>
