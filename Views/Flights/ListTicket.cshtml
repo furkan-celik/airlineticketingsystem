@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewData["Title"] = "ListTicket";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var destUrl = "./Ticket?id=" + @Context.Request.Query["id"].ToString();
+}
+
+<div style="margin: 0 auto;">
+<h1>Ticket(s)</h1>
+
+    <iframe src=@destUrl style="border:none;height:400px;width:800px;margin: 0 auto;"></iframe>
+</div>

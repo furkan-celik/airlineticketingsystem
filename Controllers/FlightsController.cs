@@ -585,6 +585,16 @@ namespace WebApplication1.Controllers
             return RedirectToAction(nameof(Successful));
         }
 
+        public IActionResult Ticket(int id)
+        {
+            return View(_context.Tickets.FirstOrDefault(x => x.Id == id));
+        }
+
+        public IActionResult ListTicket(int id)
+        {
+            return View();
+        }
+
         private bool FlightExists(int id)
         {
             return _context.Flights.Any(e => e.Id == id);
