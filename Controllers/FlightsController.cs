@@ -15,6 +15,10 @@ using System.IO;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics;
+using MimeKit;
+using MailKit.Net.Smtp;
+
+using System.Reflection.Metadata.Ecma335;
 
 namespace WebApplication1.Controllers
 {
@@ -517,6 +521,24 @@ namespace WebApplication1.Controllers
 
                 _context.Purchases.Add(purchase);
                 _context.SaveChanges();
+
+                String mail = _context.Users.Where(a => a.Id == _userManager.GetUserId(HttpContext.User)).Select(a => a.Email).FirstOrDefault().ToString();
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("flightviewer@gmail.com"));
+                message.To.Add(new MailboxAddress(mail));
+                message.Subject = "test";
+                message.Body = new TextPart("test")
+                {
+                    Text = "test"
+                };
+                using (var client = new SmtpClient())
+                {
+                    client.Connect("smtp.gnail.com", 587, false);
+                    client.Authenticate("flightviewer@gmail.com", "Cs308proje");
+
+                    client.Send(message);
+                    client.Disconnect(true);
+                }
 
                 return RedirectToAction("Purchase", purchase.Id);
             }
