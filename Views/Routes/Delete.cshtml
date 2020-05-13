@@ -4,32 +4,32 @@
 }
 
 
-<h3>Are you sure you want to delete this route?</h3>
+<h3 style="color:lightgrey">Are you sure you want to delete this route?</h3>
 <div>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
             @*@Html.DisplayNameFor(model => model.FlightNo)*@Route Id
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-10" style="color:lightgrey">
             @Html.DisplayFor(model => model.RouteId)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DepartureId)
+            @*@Html.DisplayNameFor(model => model.DepartureId)*@Departure
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DepartureId)
+        <dd class="col-sm-10" style="color:lightgrey">
+            @Html.DisplayFor(model => model.DepartureAirport.AirportName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ArrivalId)
+            @*@Html.DisplayNameFor(model => model.ArrivalId)*@Arrival
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ArrivalId)
+        <dd class="col-sm-10" style="color:lightgrey">
+            @Html.DisplayFor(model => model.ArrivalAirport.AirportName)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ETA)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-10" style="color:lightgrey">
             @Html.DisplayFor(model => model.ETA.TimeOfDay)
         </dd>
     </dl>

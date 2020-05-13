@@ -150,12 +150,22 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ReservationNow(int id, int type, int countOfSeats, int countOfChild, int countOfBaby)
+        public async Task<IActionResult> ReservationNow(int id, int type, int countOfSeats, int countOfChild, int countOfBaby, FlightsController.InputModel inputModel)
         {
-            var seatList = _context.Seats.Where(a => a.Availability == true && a.FlightId == id && a.TypeId == type).ToList();
+            var flight = await _context.Flights
+         .Include(x => x.Organizer)
+         .FirstOrDefaultAsync(m => m.Id == inputModel.flightInfo.Id);
+
+            var seats = _context.Seats
+                .Include(x => x.SeatType)
+                .Where(x => x.FlightId == flight.Id).ToList();
+
+            var selectedOffers = _context.Offers.Where(x => x.FlightId == flight.Id).ToList();
+
+            List<Seat> selectedSeats = seats.Where(x => x.Availability && !inputModel.seats[x.Col - 1][x.Row.ToCharArray()[0] - 'a'].Availability).ToList();
             ViewData["Err"] = "";
 
-            if (seatList == null)
+            if (seats == null)
             {
                 ViewData["Err"] = "There isn't any seat left in choosen class";
                 var @event = await _context.Flights
@@ -181,7 +191,7 @@ namespace WebApplication1.Controllers
                 }
                 return View(@event);
             }
-            else if (seatList.Count < countOfSeats + countOfChild)
+            else if (seats.Count < countOfSeats + countOfChild)
             {
                 ViewData["Err"] = "There isn't enough seats for you to buy";
                 var @event = await _context.Flights
@@ -218,16 +228,40 @@ namespace WebApplication1.Controllers
                     _context.Add(res);
                     await _context.SaveChangesAsync();
 
-                    Seat seat = seatList.ElementAt(counter);
+                    foreach (var item in inputModel.offers)
+                    {
+                        if (!res.isChild && item.quantity > 0)
+                        {
+                            ReservationOffer tmp = new ReservationOffer() { Offer = selectedOffers.Find(x => x.Id == item.offer.Id), Reservation = res };
+                            _context.ReservationOffers.Add(tmp);
+                            if (_context.SaveChanges() > 0)
+                                item.quantity--;
+                        }
+                        else if (res.isChild && item.childQuantity > 0)
+                        {
+                            ReservationOffer tmp = new ReservationOffer() { Offer = selectedOffers.Find(x => x.Id == item.offer.Id), Reservation = res };
+                            _context.ReservationOffers.Add(tmp);
+                            if (_context.SaveChanges() > 0)
+                                item.childQuantity--;
+                        }
+                    }
+
+                    Seat seat = selectedSeats.ElementAt(counter);
                     seat.ReservationId = res.Id;
                     seat.Availability = false;
-                    _context.Update(seat);
-                    await _context.SaveChangesAsync();
+                    var tmp2 = _context.Seats.Update(seat);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                        throw;
+                    }
 
                     counter++;
-
                 }
-
 
                 return RedirectToAction(nameof(Successful));
 

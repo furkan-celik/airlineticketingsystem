@@ -1,20 +1,23 @@
-﻿@model IEnumerable<WebApplication1.Models.Flight>
+﻿@model IEnumerable<WebApplication1.Controllers.FlightsController.SearchResultModel>
 
 <div id="data">
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Date)
+                    @Html.DisplayNameFor(model => model.Flight.Date)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FlightNo)
+                    @Html.DisplayNameFor(model => model.Flight.FlightNo)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Organizer)
+                    @Html.DisplayNameFor(model => model.Flight.Organizer)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Route)
+                    @Html.DisplayNameFor(model => model.Flight.Route)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
                 </th>
                 <th></th>
             </tr>
@@ -22,25 +25,27 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FlightNo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Organizer.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Route.RouteId)
-                    </td>
-                    <td>
-                        <a asp-action="ReservationNow" asp-route-id="@item.Id" asp-controller="Reservation" class="btn btn-warning">Reservation Now</a> |
-                        <a class="btn btn-primary" id="btnBuy"  data-target="/Flights/Buy?id=@item.Id">Buy Ticket</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Flight.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Flight.FlightNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Flight.Organizer.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Flight.Route.RouteId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    <a class="btn btn-primary" id="btnBuy" data-target="/Flights/Buy?id=@item.Flight.Id">Buy/Reservation</a> |
+                    <a asp-action="Details" asp-route-id="@item.Flight.Id">Details</a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>

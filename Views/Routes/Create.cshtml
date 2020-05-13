@@ -5,7 +5,7 @@
 }
 
 
-<h3>Create Route</h3>
+<h3 style="color:lightgrey">Create Route</h3>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -17,16 +17,16 @@
                 <span asp-validation-for="RouteId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DepartureId" class="control-label"></label>
-                <select asp-for="DepartureId" class="form-control" asp-items="ViewBag.CityId"></select>
+                <label asp-for="DepartureId" class="control-label">Departure</label>
+                <select asp-for="DepartureId" class="form-control" asp-items="ViewBag.AirportId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="ArrivalId" class="control-label"></label>
-                <select asp-for="ArrivalId" class="form-control" asp-items="ViewBag.CityId"></select>
+                <label asp-for="ArrivalId" class="control-label">Arrival</label>
+                <select asp-for="ArrivalId" class="form-control" asp-items="ViewBag.AirportId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="ETA.TimeOfDay" class="control-label"></label>
-                <input asp-for="ETA.TimeOfDay" class="form-control" />
+                <label asp-for="ETA" class="control-label">ETA</label>
+                <input asp-for="ETA" class="form-control" />
                 <span asp-validation-for="ETA.TimeOfDay" class="text-danger"></span>
             </div>
             <div class="form-group">

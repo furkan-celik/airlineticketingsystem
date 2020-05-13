@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200507130155_IsChildInTicket")]
+    partial class IsChildInTicket
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -431,32 +433,6 @@ namespace WebApplication1.Migrations
                     b.ToTable("OfferTickets");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Purchase", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsProcessed")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("OwnerId")
-                        .IsRequired()
-                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
-
-                    b.Property<float>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime>("ProcessTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("Purchases");
-                });
-
             modelBuilder.Entity("WebApplication1.Models.Reservation", b =>
                 {
                     b.Property<int>("Id")
@@ -466,35 +442,22 @@ namespace WebApplication1.Migrations
                     b.Property<int>("FlightId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("OfferId")
+                        .HasColumnType("int");
+
                     b.Property<string>("OwnerId")
                         .IsRequired()
                         .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
-
-                    b.Property<bool>("isChild")
-                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FlightId");
 
+                    b.HasIndex("OfferId");
+
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Reservations");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.ReservationOffer", b =>
-                {
-                    b.Property<int>("OfferId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReservationId")
-                        .HasColumnType("int");
-
-                    b.HasKey("OfferId", "ReservationId");
-
-                    b.HasIndex("ReservationId");
-
-                    b.ToTable("ReservationOffers");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Route", b =>
@@ -535,9 +498,6 @@ namespace WebApplication1.Migrations
 
                     b.Property<int>("FlightId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsConfirmed")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<int?>("ReservationId")
                         .HasColumnType("int");
@@ -596,9 +556,6 @@ namespace WebApplication1.Migrations
                     b.Property<DateTime>("ProcessTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("PurchaseId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("isChild")
                         .HasColumnType("tinyint(1)");
 
@@ -607,8 +564,6 @@ namespace WebApplication1.Migrations
                     b.HasIndex("EventId");
 
                     b.HasIndex("OwnerId");
-
-                    b.HasIndex("PurchaseId");
 
                     b.ToTable("Tickets");
                 });
@@ -733,15 +688,6 @@ namespace WebApplication1.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Purchase", b =>
-                {
-                    b.HasOne("WebApplication1.Models.AppUser", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("WebApplication1.Models.Reservation", b =>
                 {
                     b.HasOne("WebApplication1.Models.Flight", "Flight")
@@ -750,24 +696,13 @@ namespace WebApplication1.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("WebApplication1.Models.Offer", null)
+                        .WithMany("Reservations")
+                        .HasForeignKey("OfferId");
+
                     b.HasOne("WebApplication1.Models.AppUser", "Owner")
                         .WithMany()
                         .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.ReservationOffer", b =>
-                {
-                    b.HasOne("WebApplication1.Models.Offer", "Offer")
-                        .WithMany("Reservations")
-                        .HasForeignKey("OfferId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebApplication1.Models.Reservation", "Reservation")
-                        .WithMany("Offers")
-                        .HasForeignKey("ReservationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -804,7 +739,7 @@ namespace WebApplication1.Migrations
                         .HasForeignKey("TicketId");
 
                     b.HasOne("WebApplication1.Models.SeatType", "SeatType")
-                        .WithMany("Seats")
+                        .WithMany("Collection")
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -823,10 +758,6 @@ namespace WebApplication1.Migrations
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("WebApplication1.Models.Purchase", null)
-                        .WithMany("Tickets")
-                        .HasForeignKey("PurchaseId");
                 });
 #pragma warning restore 612, 618
         }

@@ -15,10 +15,13 @@ namespace WebApplication1.Models
         [Required]
         [ForeignKey("Flight")]
         public int FlightId { get; set; }
+        [Required]
+        public bool isChild { get; set; }
 
         public virtual AppUser Owner { get; set; }
         public virtual Flight Flight { get; set; }
 
         public virtual ICollection<Seat> Seats { get; set; }
+        public virtual ICollection<ReservationOffer> Offers { get; set; }
     }
 }

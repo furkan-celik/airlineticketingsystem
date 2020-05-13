@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Flights</h2>
+<h2 style="color:lightgrey">Flights</h2>
 @if ((await AuthorizationService.AuthorizeAsync(User, "ReqAdmin")).Succeeded)
 {
     <p>
@@ -60,8 +60,8 @@
     </div>
 
 }
-    <table class="table table-striped">
-        <thead class="thead-dark">
+    <table class="table">
+        <thead>
             <tr>
                 <th>
                     @Html.DisplayNameFor(model => model.Name)
@@ -91,34 +91,35 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
+                    <td style="color:lightgrey">
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
-                    <td>
+                    <td style="color:lightgrey">
                         @Html.DisplayFor(modelItem => item.RefundTime)
                     </td>
-                    <td>
+                    <td style="color:lightgrey">
                         @Html.DisplayFor(modelItem => item.ResCancelTime)
                     </td>
-                    <td>
+                    <td style="color:lightgrey">
                         @Html.DisplayFor(modelItem => item.RefundPortion)
                     </td>
-                    <td>
+                    <td style="color:lightgrey">
                         @Html.DisplayFor(modelItem => item.Date)
                     </td>
-                    <td>
+                    <td style="color:lightgrey">
                         @Html.DisplayFor(modelItem => item.FlightNo)
                     </td>
-                    <td>
+                    <td style="color:lightgrey">
                         @Html.DisplayFor(modelItem => item.Organizer.Description)
                     </td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                         @if ((await AuthorizationService.AuthorizeAsync(User, "ReqAdmin")).Succeeded)
                         {
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit </a><label> | </label>
                             <a asp-action="Delete" asp-route-id="@item.Id">Delete </a><label> | </label>
-                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+
                         }
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                     </td>
                 </tr>
             }

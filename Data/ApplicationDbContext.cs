@@ -18,11 +18,14 @@ namespace WebApplication1.Data
         public DbSet<Route> Routes { get; set; }
         public DbSet<Offer> Offers { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<OfferTicket> OfferTickets { get; set; }
+        public DbSet<ReservationOffer> ReservationOffers { get; set; }
         public DbSet<Seat> Seats { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Airport> Airports { get; set; }
         public DbSet<SeatType> SeatTypes { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<Purchase> Purchases { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -37,6 +40,7 @@ namespace WebApplication1.Data
             builder.Entity<AppUser>().Property(p => p.Gender).HasConversion(v => v.ToString(), v => (Genders)Enum.Parse(typeof(Genders), v));
 
             builder.Entity<OfferTicket>().HasKey(o => new { o.OfferId, o.TicketId });
+            builder.Entity<ReservationOffer>().HasKey(o => new { o.OfferId, o.ReservationId });
         }
     }
 }

@@ -71,9 +71,9 @@ namespace WebApplication1.Controllers
         // POST: Flights/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int CityId)
         {
-            var city = await _context.Cities.FindAsync(id);
+            var city = await _context.Cities.FindAsync(CityId);
             _context.Cities.Remove(city);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -118,11 +118,11 @@ namespace WebApplication1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CityId,CityName")] City city)
+        public async Task<IActionResult> Edit(int CityId, [Bind("CityId,CityName")] City city)
         {
             ViewData["Err"] = "";
             ViewData["CityId"] = new SelectList(_context.Cities, "CityName", "CityName");
-            if (id != city.CityId)
+            if (CityId != city.CityId)
             {
                 return NotFound();
             }

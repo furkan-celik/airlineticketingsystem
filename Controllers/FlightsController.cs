@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics;
 
 namespace WebApplication1.Controllers
 {
@@ -72,40 +73,101 @@ namespace WebApplication1.Controllers
                 return RedirectToAction("Index");
             }
 
+            List<string> list = _context.Airports.Select(x => x.AirportName).ToList();
+            List<string> list2 = _context.Cities.Select(x => x.CityName).ToList();
+            list2.AddRange(list);
+
             ViewData["AirportId"] = new SelectList(_context.Airports, "Id", "AirportName");
             ViewData["Err"] = "";
             ViewData["Date"] = @DateTime.Now.ToString("yyyy-MM-dd");
 
-            return View();
+            return View(list2);
         }
 
-        public IActionResult SearchResults(int arr, int dest, DateTime date)
+        public class SearchResultModel
+        {
+            public Flight Flight { get; set; }
+            public int Price { get; set; }
+        }
+
+        public IActionResult SearchResults(string arr, string dest, DateTime date, int numOfAdult, int numOfChild, string ticketClass)
         {
             var flights = from selectList in _context.Flights.Include(x => x.Organizer)
                           select selectList;
+            List<SearchResultModel> srm = new List<SearchResultModel>();
 
             if (string.Equals(arr, dest))
             {
                 ViewData["Err"] = "Destination and Arrival can't be the same. Please do another search.";
 
+                foreach (var item in flights)
+                {
+                    srm.Add(new SearchResultModel() { Flight = item, Price = 0 });
+                }
             }
             else
             {
-                flights = flights.Where(x => x.Route.ArrivalId == arr && x.Route.DepartureId == dest);
+                var d = _context.Airports.Where(x => x.AirportName == dest).ToList();
+                var a = _context.Airports.Where(x => x.AirportName == arr).ToList();
+                if (d.Count == 0 && a.Count == 0)
+                {
+                    int c_id_dest = _context.Cities.Where(x => x.CityName == dest).Select(x => x.CityId).FirstOrDefault();
+                    List<int> air_id_dest = _context.Airports.Where(x => x.CityId == c_id_dest).Select(x => x.Id).ToList();
+                    List<int> r_id_dest = _context.Routes.Where(x => air_id_dest.Contains(x.DepartureId)).Select(x => x.RouteId).ToList();
+
+                    int c_id_arr = _context.Cities.Where(x => x.CityName == arr).Select(x => x.CityId).FirstOrDefault();
+                    List<int> air_id_arr = _context.Airports.Where(x => x.CityId == c_id_arr).Select(x => x.Id).ToList();
+                    List<int> r_id_arr = _context.Routes.Where(x => air_id_arr.Contains(x.ArrivalId)).Select(x => x.RouteId).ToList();
+
+                    flights = flights.Where(x => r_id_arr.Contains(x.RouteId) && r_id_dest.Contains(x.RouteId));
+                }
+                else if (d.Count == 0)
+                {
+                    int c_id = _context.Cities.Where(x => x.CityName == dest).Select(x => x.CityId).FirstOrDefault();
+                    List<int> air_id = _context.Airports.Where(x => x.CityId == c_id).Select(x => x.Id).ToList();
+                    List<int> r_id = _context.Routes.Where(x => air_id.Contains(x.DepartureId)).Select(x => x.RouteId).ToList();
+
+                    flights = flights.Where(x => x.Route.ArrivalId == a.ElementAt(0).Id && r_id.Contains(x.RouteId));
+                }
+                else if (a.Count == 0)
+                {
+                    int c_id = _context.Cities.Where(x => x.CityName == arr).Select(x => x.CityId).FirstOrDefault();
+                    List<int> air_id = _context.Airports.Where(x => x.CityId == c_id).Select(x => x.Id).ToList();
+                    List<int> r_id = _context.Routes.Where(x => air_id.Contains(x.ArrivalId)).Select(x => x.RouteId).ToList();
+
+                    flights = flights.Where(x => r_id.Contains(x.RouteId) && x.Route.DepartureId == d.ElementAt(0).Id);
+                }
+                else
+                {
+                    flights = flights.Where(x => x.Route.ArrivalId == a.ElementAt(0).Id && x.Route.DepartureId == d.ElementAt(0).Id);
+                }
 
                 if (date.Ticks > 0)
                 {
                     flights = flights.Where(x => x.Date.Date == date.Date);
                 }
+
+                if (!string.IsNullOrEmpty(ticketClass))
+                {
+                    flights = flights.Where(x => x.Offers.Count(y => y.Name == ticketClass) > 0).Include(x => x.Offers);
+                }
+
+                if (numOfAdult < 0) numOfAdult = 1;
+                if (numOfChild < 0) numOfChild = 0;
+
+                foreach (var item in flights.ToArray())
+                {
+                    var price = (int)(item.Offers.FirstOrDefault(x => x.Name == ticketClass).ChildPrice * numOfChild + item.Offers.FirstOrDefault(x => x.Name == ticketClass).Price * numOfAdult);
+                    srm.Add(new SearchResultModel() { Flight = item, Price = price });
+                }
             }
 
-            return PartialView(flights.Include(x => x.Route).ToList());
+            return PartialView(srm);
         }
 
         // GET: Events/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-
             var user = await _userManager.GetUserAsync(User);
             var selectedflight = await _context.Flights.FindAsync(id);
             if (id == null)
@@ -283,6 +345,13 @@ namespace WebApplication1.Controllers
             public bool Availability { get; set; }
         }
 
+        public class OfferInput
+        {
+            public Offer offer { get; set; }
+            public int quantity { get; set; }
+            public int childQuantity { get; set; }
+        }
+
         public class SeatInputComparer : IEqualityComparer<SeatInput>
         {
             public bool Equals([AllowNull] SeatInput x, [AllowNull] SeatInput y)
@@ -299,6 +368,7 @@ namespace WebApplication1.Controllers
         public class InputModel
         {
             public Flight flightInfo { get; set; }
+            public List<OfferInput> offers { get; set; }
             public List<List<SeatInput>> seats { get; set; }
         }
 
@@ -326,6 +396,8 @@ namespace WebApplication1.Controllers
             inputModel = new InputModel();
             inputModel.flightInfo = flight;
             inputModel.seats = new List<List<SeatInput>>();
+            inputModel.offers = new List<OfferInput>();
+            flight.Offers.Where(x => x.type != 0).ToList().ForEach(x => inputModel.offers.Add(new OfferInput() { offer = x, quantity = 0 }));
 
             for (int i = 0; i < colGroup.Count; i++)
             {
@@ -348,25 +420,17 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Buy(int id, int type, int countOfSeats, int countOfChild, int countOfBaby, InputModel inputModel)
         {
-            //Reservation res = new Reservation();
-            //res.EventId = id;
-            //res.OwnerId = _userManager.GetUserId(HttpContext.User);
-            //_context.Add(res);
-            //await _context.SaveChangesAsync();
-
             var flight = await _context.Flights
          .Include(x => x.Organizer)
          .FirstOrDefaultAsync(m => m.Id == inputModel.flightInfo.Id);
 
-            List<Seat> selectedSeats = new List<Seat>();
-            for (int i = 0; i < inputModel.seats.Count; i++)
-            {
-                var colGroup = flight.Seats.Where(x => x.Col == inputModel.seats[i][0].Col).ToList();
-                List<SeatInput> row = new List<SeatInput>();
-                colGroup.ForEach(x => row.Add(new SeatInput { Id = x.Id, Col = x.Col, Row = x.Row, Availability = x.Availability }));
+            var seats = _context.Seats
+                .Include(x => x.SeatType)
+                .Where(x => x.FlightId == flight.Id).ToList();
 
-                inputModel.seats[i].Where(x => !x.Availability).Except(row, new SeatInputComparer()).ToList().ForEach(x => selectedSeats.Add(_context.Seats.FirstOrDefault(y => y.Id == x.Id)));
-            }
+            var selectedOffers = _context.Offers.Where(x => x.FlightId == flight.Id).ToList();
+
+            List<Seat> selectedSeats = seats.Where(x => x.Availability && !inputModel.seats[x.Col - 1][x.Row.ToCharArray()[0] - 'a'].Availability).ToList();
 
             ViewData["Err"] = "";
 
@@ -383,7 +447,7 @@ namespace WebApplication1.Controllers
             }
             else if (selectedSeats.Count() < countOfSeats + countOfChild)
             {
-                ViewData["Err"] = "There isn't enough seats for you to buy";
+                ViewData["Err"] = "There isn't enough seats for you to buy. Your seat may be taken.";
                 return View(flight);
             }
             else if (countOfBaby > countOfSeats)
@@ -393,6 +457,10 @@ namespace WebApplication1.Controllers
             }
             else
             {
+                Purchase purchase = new Purchase() { IsProcessed = false, OwnerId = _userManager.GetUserId(HttpContext.User), Price = 0, ProcessTime = DateTime.Now };
+                purchase.Price += _context.Offers.FirstOrDefault(x => x.Id == type).Price * (countOfChild + countOfSeats);
+                purchase.Tickets = new List<Ticket>();
+
                 int counter = 0;
                 while (counter < countOfSeats + countOfChild)
                 {
@@ -400,20 +468,57 @@ namespace WebApplication1.Controllers
                     tic.ProcessTime = DateTime.Now;
                     tic.EventId = inputModel.flightInfo.Id;
                     tic.OwnerId = _userManager.GetUserId(HttpContext.User);
+                    tic.isChild = counter < countOfSeats ? false : true;
                     _context.Add(tic);
                     await _context.SaveChangesAsync();
+
+                    foreach (var item in inputModel.offers)
+                    {
+                        if (!tic.isChild && item.quantity > 0)
+                        {
+                            OfferTicket tmp = new OfferTicket() { Offer = selectedOffers.Find(x => x.Id == item.offer.Id), Ticket = tic };
+                            _context.OfferTickets.Add(tmp);
+                            if (_context.SaveChanges() > 0)
+                            {
+                                purchase.Price += tmp.Offer.Price;
+                                item.quantity--;
+                            }
+                        }
+                        else if (tic.isChild && item.childQuantity > 0)
+                        {
+                            OfferTicket tmp = new OfferTicket() { Offer = selectedOffers.Find(x => x.Id == item.offer.Id), Ticket = tic };
+                            _context.OfferTickets.Add(tmp);
+                            if (_context.SaveChanges() > 0)
+                            {
+                                purchase.Price += tmp.Offer.ChildPrice;
+                                item.childQuantity--;
+                            }
+                        }
+                    }
 
                     Seat seat = selectedSeats.ElementAt(counter);
                     seat.TicketId = (int)tic.Id;
                     seat.Availability = false;
-                    _context.Update(seat);
-                    await _context.SaveChangesAsync();
+                    seat.TypeId = 1;
+                    var tmp2 = _context.Seats.Update(seat);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                        throw;
+                    }
 
                     counter++;
-
+                    purchase.Tickets.Add(tic);
                 }
 
-                return RedirectToAction(nameof(Successful));
+                _context.Purchases.Add(purchase);
+                _context.SaveChanges();
+
+                return RedirectToAction("Purchase", purchase.Id);
             }
         }
 
@@ -433,6 +538,30 @@ namespace WebApplication1.Controllers
             return View();
         }
 
+        public IActionResult Purchase(int id)
+        {
+            var purchase = _context.Purchases.FirstOrDefault(x => x.Id == id);
+
+            if(purchase == null)
+            {
+                return NotFound();
+            }
+
+            return View(purchase);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public IActionResult Purchase(int pId, string cardNumber, string cardExpiry, string cardCVC, string couponCode)
+        {
+            var purchase = _context.Purchases.FirstOrDefault(x => x.Id == pId);
+            purchase.IsProcessed = true;
+            _context.Purchases.Update(purchase);
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Successful));
+        }
 
         private bool FlightExists(int id)
         {

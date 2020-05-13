@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Castle.Components.DictionaryAdapter;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,23 +8,20 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.Models
 {
-    public class Ticket
+    public class Purchase
     {
         public int Id { get; set; }
+        [Required]
+        public DateTime ProcessTime { get; set; }
         [Required]
         [ForeignKey("AppUser")]
         public string OwnerId { get; set; }
         [Required]
-        public DateTime ProcessTime { get; set; }
+        public bool IsProcessed { get; set; }
         [Required]
-        public int EventId { get; set; }
-        [Required]
-        public bool isChild { get; set; }
+        public float Price { get; set; }
 
         public virtual AppUser Owner { get; set; }
-        [ForeignKey("EventId")]
-        public virtual Flight Flight { get; set; }
-        public virtual ICollection<OfferTicket> Offers { get; set; }
-        public virtual ICollection<Seat> Seats { get; set; }
+        public virtual ICollection<Ticket> Tickets { get; set; }
     }
 }
