@@ -522,25 +522,7 @@ namespace WebApplication1.Controllers
                 _context.Purchases.Add(purchase);
                 _context.SaveChanges();
 
-                String mail = _context.Users.Where(a => a.Id == _userManager.GetUserId(HttpContext.User)).Select(a => a.Email).FirstOrDefault().ToString();
-                var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("flightviewerticket@gmail.com"));
-                message.To.Add(new MailboxAddress(mail));
-                message.Subject = "test";
-                message.Body = new TextPart("test")
-                {
-                    Text = "test"
-                };
-                using (var client = new SmtpClient())
-                {
-                    client.Connect("smtp.gmail.com", 587, false);
-                    client.Authenticate("flightviewerticket@gmail.com", "Cs308proje");
-
-                    client.Send(message);
-                    client.Disconnect(true);
-                }
-
-                return RedirectToAction("Purchase", purchase.Id);
+                return RedirectToAction("Purchase", new { id = purchase.Id });
             }
         }
 
@@ -581,6 +563,24 @@ namespace WebApplication1.Controllers
             purchase.IsProcessed = true;
             _context.Purchases.Update(purchase);
             _context.SaveChanges();
+
+            String mail = _context.Users.Where(a => a.Id == _userManager.GetUserId(HttpContext.User)).Select(a => a.Email).FirstOrDefault().ToString();
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("flightviewerticket@gmail.com"));
+            message.To.Add(new MailboxAddress(mail));
+            message.Subject = "test";
+            message.Body = new TextPart("test")
+            {
+                Text = "test"
+            };
+            using (var client = new SmtpClient())
+            {
+                client.Connect("smtp.gmail.com", 587, false);
+                client.Authenticate("flightviewerticket@gmail.com", "Cs308proje");
+
+                client.Send(message);
+                client.Disconnect(true);
+            }
 
             return RedirectToAction(nameof(Successful));
         }
