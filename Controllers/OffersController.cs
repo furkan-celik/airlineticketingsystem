@@ -155,7 +155,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "WebAdmin,CompAdmin")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FlightId,Name,Description,Price")] Offer offer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FlightId,Name,Description,Price,type")] Offer offer)
         {
             if (id != offer.Id)
             {
