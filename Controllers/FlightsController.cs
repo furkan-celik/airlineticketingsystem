@@ -550,6 +550,13 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
+            
+            string OwnerId = _userManager.GetUserId(HttpContext.User);
+            var usercard = _context.CreditCards.Where(x => x.OwnerId == OwnerId).ToList();
+            var cardlist = new SelectList(usercard, "Id", "CardNumber");
+            ViewData["CardId"] = cardlist;
+            ViewData["Creditcards"] = "Select a card.";
+
 
             return View(purchase);
         }
@@ -559,10 +566,18 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Purchase(int pId, string cardNumber, string cardExpiry, string cardCVC, string couponCode)
         {
+            string OwnerId = _userManager.GetUserId(HttpContext.User);
+            var usercard = _context.CreditCards.Where(x => x.OwnerId == OwnerId).ToList();
+            var cardlist = new SelectList(usercard, "Id", "CardNumber");
+            ViewData["CardId"] = cardlist;
+            ViewData["Creditcards"] = "Select a card.";
+
+
             var purchase = _context.Purchases.FirstOrDefault(x => x.Id == pId);
             purchase.IsProcessed = true;
             _context.Purchases.Update(purchase);
             _context.SaveChanges();
+
 
             String mail = _context.Users.Where(a => a.Id == _userManager.GetUserId(HttpContext.User)).Select(a => a.Email).FirstOrDefault().ToString();
             var message = new MimeMessage();
