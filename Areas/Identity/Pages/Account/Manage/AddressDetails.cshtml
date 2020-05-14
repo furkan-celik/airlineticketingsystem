@@ -6,26 +6,43 @@
     ViewData["ActivePage"] = ManageNavPages.Addresses;
 }
 
-<h3 style="color:lightgrey">@ViewData["Title"]</h3>
+@if (User.IsInRole("WebAdmin") || User.IsInRole("CompAdmin"))
+{
+    <style>
+        .textcolor {
+            color: lightgrey;
+        }
+    </style>
+}
+else
+{
+    <style>
+        .textcolor {
+            color: black;
+        }
+    </style>
+}
+
+<h3 class="textcolor">@ViewData["Title"]</h3>
 <div>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Address.Name)
         </dt>
-        <dd class="col-sm-10" style="color:lightgrey">
+        <dd class="col-sm-10 textcolor">
             @Html.DisplayFor(model => model.Address.Name)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Address.AddressLine)
         </dt>
-        <dd class="col-sm-10" style="color:lightgrey">
+        <dd class="col-sm-10 textcolor">
             @Html.DisplayFor(model => model.Address.AddressLine)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Address.Owner)
         </dt>
-        <dd class="col-sm-10" style="color:lightgrey">
+        <dd class="col-sm-10 textcolor">
             @Html.DisplayFor(model => model.Address.Owner.Name) @Html.DisplayFor(model => model.Address.Owner.Surname)
         </dd>
     </dl>

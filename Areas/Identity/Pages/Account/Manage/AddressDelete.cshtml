@@ -6,27 +6,44 @@
     ViewData["ActivePage"] = ManageNavPages.Addresses;
 }
 
+@if (User.IsInRole("WebAdmin") || User.IsInRole("CompAdmin"))
+{
+    <style>
+        .textcolor {
+            color: lightgrey;
+        }
+    </style>
+}
+else
+{
+    <style>
+        .textcolor {
+            color: black;
+        }
+    </style>
+}
+
 <p class="text-danger">@Model.ErrorMessage</p>
-<h3 style="color:lightgrey">Are you sure you want to delete this address?</h3>
+<h3 class="textcolor">Are you sure you want to delete this address?</h3>
 <div>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Address.Name)
         </dt>
-        <dd class="col-sm-10" style="color:lightgrey">
+        <dd class="col-sm-10 textcolor">
             @Html.DisplayFor(model => model.Address.Name)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Address.AddressLine)
         </dt>
-        <dd class="col-sm-10" style="color:lightgrey">
+        <dd class="col-sm-10 textcolor">
             @Html.DisplayFor(model => model.Address.AddressLine)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Address.Owner)
         </dt>
-        <dd class="col-sm-10" style="color:lightgrey">
+        <dd class="col-sm-10 textcolor">
             @Html.DisplayFor(model => model.Address.Owner.Name) @Html.DisplayFor(model => model.Address.Owner.Surname)
         </dd>
     </dl>

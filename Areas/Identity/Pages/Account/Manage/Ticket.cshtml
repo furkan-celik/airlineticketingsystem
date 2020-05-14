@@ -5,7 +5,24 @@
     ViewData["ActivePage"] = ManageNavPages.Tickets;
 }
 
-<h3 style="color:lightgrey">@ViewData["Title"]</h3>
+@if (User.IsInRole("WebAdmin") || User.IsInRole("CompAdmin"))
+{
+    <style>
+        .textcolor {
+            color: lightgrey;
+        }
+    </style>
+}
+else
+{
+    <style>
+        .textcolor {
+            color: black;
+        }
+    </style>
+}
+
+<h3 class="textcolor">@ViewData["Title"]</h3>
 
 
 <table class="table">
@@ -34,29 +51,29 @@
     <tbody>
         @foreach (var item in Model.tickets)
         {
-        <tr>
-            <td style="color:lightgrey">
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td style="color:lightgrey">
-                @Html.DisplayFor(modelItem => item.Flight.Name)
-            </td>
-            <td style="color:lightgrey">
-                @Html.DisplayFor(modelItem => item.Flight.Date)
-            </td>
-            <td style="color:lightgrey">
-                @Html.DisplayFor(modelItem => item.Flight.RouteId)
-            </td>
-            <td style="color:lightgrey">
-                @foreach (var item2 in item.Seats)
-                {
-                    @Html.DisplayFor(modelItem => item2.Col) @Html.DisplayFor(modelItem => item2.Row)
-                }
-            </td>
-           
+            <tr>
+                <td style="color:lightgrey">
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td style="color:lightgrey">
+                    @Html.DisplayFor(modelItem => item.Flight.Name)
+                </td>
+                <td style="color:lightgrey">
+                    @Html.DisplayFor(modelItem => item.Flight.Date)
+                </td>
+                <td style="color:lightgrey">
+                    @Html.DisplayFor(modelItem => item.Flight.RouteId)
+                </td>
+                <td style="color:lightgrey">
+                    @foreach (var item2 in item.Seats)
+                    {
+                        @Html.DisplayFor(modelItem => item2.Col) @Html.DisplayFor(modelItem => item2.Row)
+                    }
+                </td>
 
 
-        </tr>
+
+            </tr>
         }
     </tbody>
 </table>

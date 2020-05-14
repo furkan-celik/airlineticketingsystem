@@ -6,26 +6,43 @@
     ViewData["ActivePage"] = ManageNavPages.CreditCards;
 }
 
-<h3 style="color:lightgrey">@ViewData["Title"]</h3>
+@if (User.IsInRole("WebAdmin") || User.IsInRole("CompAdmin"))
+{
+    <style>
+        .textcolor {
+            color: lightgrey;
+        }
+    </style>
+}
+else
+{
+    <style>
+        .textcolor {
+            color: black;
+        }
+    </style>
+}
+
+<h3 class="textcolor">@ViewData["Title"]</h3>
 <div>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
             @*@Html.DisplayNameFor(model => model.CreditCard.CardNumber)*@Card Number
         </dt>
-        <dd class="col-sm-10" style="color:lightgrey">
+        <dd class="col-sm-10 textcolor">
             **** **** **** @Html.DisplayFor(model => model.CreditCard.CardNumber)
         </dd>
         <dt class="col-sm-2">
             @*@Html.DisplayNameFor(model => model.CreditCard.Month)*@Expiry Date
         </dt>
-        <dd class="col-sm-10" style="color:lightgrey">
+        <dd class="col-sm-10 textcolor">
             @Html.DisplayFor(model => model.CreditCard.Month)/@Html.DisplayFor(model => model.CreditCard.Year)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CreditCard.Owner)
         </dt>
-        <dd class="col-sm-10" style="color:lightgrey">
+        <dd class="col-sm-10 textcolor">
             @Html.DisplayFor(model => model.CreditCard.Owner.Name) @Html.DisplayFor(model => model.CreditCard.Owner.Surname)
         </dd>
     </dl>

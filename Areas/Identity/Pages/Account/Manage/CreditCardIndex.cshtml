@@ -6,7 +6,22 @@
     ViewData["ActivePage"] = ManageNavPages.CreditCards;
 }
 
-<h3 style="color:lightgrey">@ViewData["Title"]</h3>
+@if (User.IsInRole("WebAdmin") || User.IsInRole("CompAdmin")) {
+    <style>
+        .textcolor {
+            color: lightgrey;
+        }
+    </style>
+}
+else {
+    <style>
+        .textcolor {
+            color: black;
+        }
+    </style>
+}
+
+<h3 class="textcolor">@ViewData["Title"]</h3>
 
 
 <p>
