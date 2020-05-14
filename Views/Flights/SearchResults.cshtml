@@ -52,6 +52,10 @@
 
     <script type="text/javascript">
 
+        $(document).ready(function () {
+            $("#modelView .modal-dialog").removeClass("modal-sm").addClass("modal-lg");
+        })
+
         $("#btnBuy").click(function () {
             var url = $(this).data("target");
             $.get(url, function (data) { }).done(function (data) {

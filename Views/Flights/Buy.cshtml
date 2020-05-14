@@ -26,7 +26,7 @@
             width: 400px;
             position: fixed;
             z-index: 1;
-            top: 20px;
+            top: 40px;
             left: 10px;
             background: #eee;
             padding: 8px;
@@ -149,6 +149,7 @@
 
         .seats {
             display: flex;
+            margin-left:23px;
             flex-direction: row;
             flex-wrap: nowrap;
             justify-content: flex-start;
@@ -653,6 +654,8 @@
         }));
 
         $(document).ready(function () {
+            $("#modelView .modal-dialog").removeClass("modal-lg").addClass("modal-sm");
+
             $('[id^=detail-]').hide();
             $('.toggle').click(function () {
                 $input = $(this);
