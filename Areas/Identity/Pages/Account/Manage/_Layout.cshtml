@@ -3,7 +3,26 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1 style="color:lightgrey">Manage your account</h1>
+@if (User.IsInRole("WebAdmin") || User.IsInRole("CompAdmin"))
+{
+    <style>
+
+        .textcolor {
+            color: lightgrey;
+        }
+    </style>
+}
+else
+{
+    <style>
+
+        .textcolor {
+            color: black;
+        }
+    </style>
+}
+
+<h1 class="textcolor">Manage your account</h1>
 
 <div>
     <h4>Change your account settings</h4>
@@ -12,7 +31,7 @@
         <div class="col-md-3">
             <partial name="_ManageNav" />
         </div>
-        <div class="col-md-9">
+        <div class="col-md-9" style="height:518px;overflow:auto">
             @RenderBody()
         </div>
     </div>

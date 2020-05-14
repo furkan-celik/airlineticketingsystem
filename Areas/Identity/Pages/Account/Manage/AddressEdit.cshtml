@@ -6,7 +6,26 @@
     ViewData["ActivePage"] = ManageNavPages.Addresses;
 }
 
-<h3 style="color:lightgrey">@ViewData["Title"]</h3>
+@if (User.IsInRole("WebAdmin") || User.IsInRole("CompAdmin"))
+{
+    <style>
+
+        .textcolor {
+            color: lightgrey;
+        }
+    </style>
+}
+else
+{
+    <style>
+
+        .textcolor {
+            color: black;
+        }
+    </style>
+}
+
+<h3 class="textcolor">@ViewData["Title"]</h3>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -24,7 +43,7 @@
                 <span asp-validation-for="Input.AddressLine" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" /> | 
+                <input type="submit" value="Save" class="btn btn-primary" /> |
                 <a asp-page="./AddressIndex">Back to List</a>
             </div>
         </form>

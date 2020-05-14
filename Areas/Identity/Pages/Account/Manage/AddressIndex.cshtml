@@ -6,11 +6,30 @@
     ViewData["ActivePage"] = ManageNavPages.Addresses;
 }
 
-    <h3 style="color:lightgrey">@ViewData["Title"]</h3>
+@if (User.IsInRole("WebAdmin") || User.IsInRole("CompAdmin"))
+{
+    <style>
+        .textcolor {
+            color: lightgrey;
+        }
+    </style>
+}
+else
+{
+    <style>
+        .textcolor {
+            color: black;
+        }
+    </style>
+}
+
+
+<h3 class="textcolor">@ViewData["Title"]</h3>
 
 <p>
     <a asp-page="./AddressCreate">Create New</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
@@ -27,24 +46,25 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Address) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AddressLine)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Owner.Name) @Html.DisplayFor(modelItem => item.Owner.Surname)
-            </td>
-            <td>
-                <a asp-page="./AddressEdit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./AddressDetails" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./AddressDelete" asp-route-id="@item.Id">Delete</a>
+        @foreach (var item in Model.Address)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddressLine)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Owner.Name) @Html.DisplayFor(modelItem => item.Owner.Surname)
+                </td>
+                <td>
+                    <a asp-page="./AddressEdit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./AddressDetails" asp-route-id="@item.Id">Details</a> |
+                    <a asp-page="./AddressDelete" asp-route-id="@item.Id">Delete</a>
 
-            </td>
-        </tr>
-}
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
