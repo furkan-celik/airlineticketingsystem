@@ -130,7 +130,7 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
                     cardToUpdate.Year = Input.Year;
                 }
 
-                string hashCardNumber = Input.CardNumber.ToString().Substring(0, 12);
+                string hashCardNumber = Input.CardNumber.ToString();
 
                 using (SHA256 sha256Hash = SHA256.Create())
                 {
@@ -148,7 +148,7 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
 
                 }
 
-                hashedCreditCard += Input.CardNumber.ToString().Substring(12, 4);
+                //hashedCreditCard += Input.CardNumber.ToString().Substring(12, 4);
 
                 if (cardToUpdate.CardNumber != Int64.Parse(Input.CardNumber.ToString().Substring(12, 4)))
                 {

@@ -98,7 +98,7 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
             }
             else
             {
-                string hashCardNumber = Input.CardNumber.ToString().Substring(0, 12);
+                string hashCardNumber = Input.CardNumber.ToString();
                 CreditCardVM.Month = Input.Month;
                 CreditCardVM.Year = Input.Year;
 
@@ -118,7 +118,7 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
 
                 }
 
-                hashedCreditCard += Input.CardNumber.ToString().Substring(12,4);
+                //hashedCreditCard += Input.CardNumber.ToString().Substring(12,4);
                 CreditCardVM.CardNumber = Int64.Parse(Input.CardNumber.ToString().Substring(12, 4));
                 CreditCardVM.HashedCardNumber = hashedCreditCard;
 
