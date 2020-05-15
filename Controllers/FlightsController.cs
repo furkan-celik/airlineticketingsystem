@@ -184,6 +184,10 @@ namespace WebApplication1.Controllers
                 {
                     ViewData["samecomp"] = true;
                 }
+                else
+                {
+                    ViewData["samecomp"] = false;
+                }
             }
             else
             {
