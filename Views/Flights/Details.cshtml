@@ -248,7 +248,7 @@ else
 
 <h3 class="textcolor">Flight Details</h3>
 
-<div>
+<div class="row">
     <hr />
     <table class="table">
 
@@ -311,17 +311,17 @@ else
                             <ol class="seats" type="A">
                                 @for (int j = 0; j < seatList[i].Count; j++)
                                 {
-                                <li class="seat">
-                                    @if (@seatList[i][j].Availability)
-                                    {
-                                        <input type="checkbox" value="@seatList[i][j].Availability" id="@(seatList[i][j].Col + seatList[i][j].Row.ToUpper())" checked disabled />
-                                    }
-                                    else
-                                    {
-                                        <input type="checkbox" value="@seatList[i][j].Availability" id="@(seatList[i][j].Col + seatList[i][j].Row.ToUpper())" disabled />
-                                    }
-                                    <label for="@(seatList[i][j].Col + seatList[i][j].Row.ToUpper())" style="color:midnightblue;">'@(seatList[i][j].Col + seatList[i][j].Row.ToUpper())'</label>
-                                </li>
+                                    <li class="seat">
+                                        @if (@seatList[i][j].Availability)
+                                        {
+                                            <input type="checkbox" value="@seatList[i][j].Availability" id="@(seatList[i][j].Col + seatList[i][j].Row.ToUpper())" checked disabled />
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" value="@seatList[i][j].Availability" id="@(seatList[i][j].Col + seatList[i][j].Row.ToUpper())" disabled />
+                                        }
+                                        <label for="@(seatList[i][j].Col + seatList[i][j].Row.ToUpper())" style="color:midnightblue;">'@(seatList[i][j].Col + seatList[i][j].Row.ToUpper())'</label>
+                                    </li>
                                 }
                             </ol>
                         </li>
@@ -332,10 +332,10 @@ else
                 </div>
             </td>
         </tr>
-
     </table>
 </div>
-<div>
+
+<div class="row">
     @if ((await AuthorizationService.AuthorizeAsync(User, "ReqAdmin")).Succeeded)
     {
         <a asp-action="Edit" asp-route-id="@Model.Id">Edit </a><label> | </label>
@@ -345,9 +345,77 @@ else
         {
             @Html.ActionLink("Add Offer", "CreateForEvent", "Offers", new { EventId = Model.Id, Flightno = Model.RouteId }, null)
         }
-
-
-
     }
     <label> | </label><a asp-action="Index"> Back to List</a>
+</div>
+
+<div class="row" id="accordion">
+    <div class="card">
+        <div class="card-header" id="headingRes">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseRes" aria-expanded="true" aria-controls="collapseRes">
+                    Reservations
+                </button>
+            </h5>
+        </div>
+        <div class="collapse" id="collapseRes" aria-labelledby="headingRes" data-parent="#accordion">
+            <div class="card-body">
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Seat</th>
+                            <th scope="col">Name Surname</th>
+                            <th scope="col">IsChild</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Reservations.ToList())
+                        {
+                            <tr>
+                                <th scope="row">@item.Seats.ToArray()[0].Col@item.Seats.ToArray()[0].Row.ToUpper()</th>
+                                <td>@item.Owner.Name @item.Owner.Surname</td>
+                                <td>@item.isChild</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header" id="headingTic">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTic" aria-expanded="true" aria-controls="collapseTic">
+                    Tickets
+                </button>
+            </h5>
+        </div>
+        <div class="collapse" id="collapseTic" aria-labelledby="headingTic" data-parent="#accordion">
+            <div class="card-body">
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Seat</th>
+                            <th scope="col">Name Surname</th>
+                            <th scope="col">IsChild</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Tickets.ToList())
+                        {
+                            if (item.Seats.Count > 0)
+                            {
+                                <tr>
+                                    <th scope="row">@item.Seats.ToArray()[0].Col@item.Seats.ToArray()[0].Row.ToUpper()</th>
+                                    <td>@item.Owner.Name @item.Owner.Surname</td>
+                                    <td>@item.isChild</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
