@@ -13,7 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.LogoLocation)
+                @*@Html.DisplayNameFor(model => model.LogoLocation)*@Logo
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
@@ -29,24 +29,17 @@
         {
             <tr>
                 <td>
-    
-
                     @{string path = item.LogoLocation;
                         int length = path.Length;
                         path = path.Substring(1, length - 1);
                     }
 
                     <img src=@path width="80" height="60" />
-@*<<<<<<< HEAD
-
-
-=======
->>>>>>> f38e11c8d66fa005ebaa6085ac07e14145d05643*@
                 </td>
-                <td>
+                <td style="color:lightgrey">
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
-                <td>
+                <td style="color:lightgrey">
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
