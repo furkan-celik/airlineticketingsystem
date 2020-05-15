@@ -20,9 +20,11 @@ namespace WebApplication1.Models
         public float Price { get; set; }
         [Required]
         public float ChildPrice { get; set; }
-        public int type { get; set; }
+        [ForeignKey("OfferType")]
+        public int Type { get; set; }
 
         public virtual Flight Flight { get; set; }
+        public virtual OfferType OfferType { get; set; }
         public virtual ICollection<OfferTicket> Tickets { get; set; }
         public virtual ICollection<ReservationOffer> Reservations { get; set; }
     }

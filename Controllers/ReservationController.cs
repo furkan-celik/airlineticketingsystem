@@ -93,7 +93,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<IActionResult> Buy_After_Reservation(int id, int type, int countOfSeats, int countOfChild, int countOfBaby)
         {
-            var seatList = _context.Seats.Where(a =>a.ReservationId == id).ToList();
+            var seatList = _context.Seats.Where(a => a.ReservationId == id).ToList();
 
             countOfSeats = seatList.Count();
 
@@ -123,8 +123,8 @@ namespace WebApplication1.Controllers
 
             return RedirectToAction(nameof(Successful));
 
-            }
-        
+        }
+
 
 
         [HttpGet]
@@ -150,7 +150,7 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ReservationNow(int id, int type, int countOfSeats, int countOfChild, int countOfBaby, FlightsController.InputModel inputModel)
+        public async Task<IActionResult> ReservationNow(int id, int countOfBaby, FlightsController.InputModel inputModel)
         {
             var flight = await _context.Flights
          .Include(x => x.Organizer)
@@ -178,7 +178,7 @@ namespace WebApplication1.Controllers
                 }
                 return View(@event);
             }
-            else if (countOfChild + countOfSeats > 4)
+            else if (inputModel.numOfChild + inputModel.numOfAdult > 4)
             {
                 ViewData["Err"] = "You can reserve at most 4 seats";
                 var @event = await _context.Flights
@@ -191,7 +191,7 @@ namespace WebApplication1.Controllers
                 }
                 return View(@event);
             }
-            else if (seats.Count < countOfSeats + countOfChild)
+            else if (seats.Count < inputModel.numOfAdult + inputModel.numOfChild)
             {
                 ViewData["Err"] = "There isn't enough seats for you to buy";
                 var @event = await _context.Flights
@@ -204,7 +204,7 @@ namespace WebApplication1.Controllers
                 }
                 return View(@event);
             }
-            else if (countOfBaby > countOfSeats)
+            else if (countOfBaby > inputModel.numOfAdult)
             {
                 ViewData["Err"] = "Infants cannot be more than adults";
                 var @event = await _context.Flights
@@ -220,7 +220,7 @@ namespace WebApplication1.Controllers
             else
             {
                 int counter = 0;
-                while (counter < countOfSeats + countOfChild)
+                while (counter < inputModel.numOfAdult + inputModel.numOfChild)
                 {
                     Reservation res = new Reservation();
                     res.FlightId = id;

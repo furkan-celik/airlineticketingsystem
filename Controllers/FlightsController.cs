@@ -81,6 +81,7 @@ namespace WebApplication1.Controllers
             List<string> list2 = _context.Cities.Select(x => x.CityName).ToList();
             list2.AddRange(list);
 
+            ViewData["classes"] = new SelectList(_context.OfferTypes.Where(x => x.Id < 4), "Id", "Name");
             ViewData["AirportId"] = new SelectList(_context.Airports, "Id", "AirportName");
             ViewData["Err"] = "";
             ViewData["Date"] = @DateTime.Now.ToString("yyyy-MM-dd");
@@ -94,7 +95,7 @@ namespace WebApplication1.Controllers
             public int Price { get; set; }
         }
 
-        public IActionResult SearchResults(string arr, string dest, DateTime date, int numOfAdult, int numOfChild, string ticketClass)
+        public IActionResult SearchResults(string arr, string dest, DateTime date, int numOfAdult, int numOfChild, int ticketClass)
         {
             var flights = from selectList in _context.Flights.Include(x => x.Organizer)
                           select selectList;
@@ -151,9 +152,9 @@ namespace WebApplication1.Controllers
                     flights = flights.Where(x => x.Date.Date == date.Date);
                 }
 
-                if (!string.IsNullOrEmpty(ticketClass))
+                if (ticketClass > 0 && ticketClass < 4)
                 {
-                    //flights = flights.Where(x => x.Offers.Count(y => y.Name == ticketClass) > 0).Include(x => x.Offers);
+                    flights = flights.Where(x => x.Offers.Count(y => y.Type == ticketClass) > 0).Include(x => x.Offers);
                 }
 
                 if (numOfAdult < 0) numOfAdult = 1;
@@ -161,8 +162,8 @@ namespace WebApplication1.Controllers
 
                 foreach (var item in flights.ToArray())
                 {
-                    //var price = (int)(item.Offers.FirstOrDefault(x => x.Name == ticketClass).ChildPrice * numOfChild + item.Offers.FirstOrDefault(x => x.Name == ticketClass).Price * numOfAdult);
-                    srm.Add(new SearchResultModel() { Flight = item, Price = 100 });
+                    var price = (int)(item.Offers.FirstOrDefault(x => x.Type == ticketClass).ChildPrice * numOfChild + item.Offers.FirstOrDefault(x => x.Type == ticketClass).Price * numOfAdult);
+                    srm.Add(new SearchResultModel() { Flight = item, Price = price });
                 }
             }
 
@@ -386,13 +387,17 @@ namespace WebApplication1.Controllers
             public Flight flightInfo { get; set; }
             public List<OfferInput> offers { get; set; }
             public List<List<SeatInput>> seats { get; set; }
+            public int numOfAdult { get; set; }
+            public int numOfChild { get; set; }
+            public int ticketClass { get; set; }
+            public int basePrice { get; set; }
         }
 
         [BindProperty]
         public InputModel inputModel { get; set; }
 
         [HttpGet]
-        public async Task<IActionResult> Buy(int? id, int numOfAdult, int numOfChild, string ticketClass)
+        public async Task<IActionResult> Buy(int? id, int numOfAdult, int numOfChild, int ticketClass)
         {
             ViewData["Err"] = "";
             if (id == null)
@@ -413,7 +418,11 @@ namespace WebApplication1.Controllers
             inputModel.flightInfo = flight;
             inputModel.seats = new List<List<SeatInput>>();
             inputModel.offers = new List<OfferInput>();
-            flight.Offers.Where(x => x.type != 0).ToList().ForEach(x => inputModel.offers.Add(new OfferInput() { offer = x, quantity = 0 }));
+            inputModel.numOfAdult = numOfAdult;
+            inputModel.numOfChild = numOfChild;
+            inputModel.ticketClass = ticketClass;
+            inputModel.basePrice = (int)(flight.Offers.FirstOrDefault(x => x.Type == ticketClass).ChildPrice * numOfChild + flight.Offers.FirstOrDefault(x => x.Type == ticketClass).Price * numOfAdult);
+            flight.Offers.Where(x => x.Type == 4).ToList().ForEach(x => inputModel.offers.Add(new OfferInput() { offer = x, quantity = 0 }));
 
             for (int i = 0; i < colGroup.Count; i++)
             {
@@ -434,7 +443,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Buy(int id, int type, int countOfSeats, int countOfChild, int countOfBaby, InputModel inputModel)
+        public async Task<IActionResult> Buy(int id, int countOfBaby, InputModel inputModel)
         {
             var flight = await _context.Flights
          .Include(x => x.Organizer)
@@ -461,12 +470,12 @@ namespace WebApplication1.Controllers
             {
                 return View(flight);
             }
-            else if (selectedSeats.Count() < countOfSeats + countOfChild)
+            else if (selectedSeats.Count() < inputModel.numOfAdult + inputModel.numOfChild)
             {
                 ViewData["Err"] = "There isn't enough seats for you to buy. Your seat may be taken.";
                 return View(flight);
             }
-            else if (countOfBaby > countOfSeats)
+            else if (countOfBaby > inputModel.numOfAdult)
             {
                 ViewData["Err"] = "Infants cannot be more than adults";
                 return View(flight);
@@ -474,17 +483,17 @@ namespace WebApplication1.Controllers
             else
             {
                 Purchase purchase = new Purchase() { IsProcessed = false, OwnerId = _userManager.GetUserId(HttpContext.User), Price = 0, ProcessTime = DateTime.Now };
-                purchase.Price += _context.Offers.FirstOrDefault(x => x.Id == type).Price * (countOfChild + countOfSeats);
+                purchase.Price += _context.Offers.FirstOrDefault(x => x.Id == inputModel.ticketClass).Price * (inputModel.numOfChild + inputModel.numOfAdult);
                 purchase.Tickets = new List<Ticket>();
 
                 int counter = 0;
-                while (counter < countOfSeats + countOfChild)
+                while (counter < inputModel.numOfAdult + inputModel.numOfChild)
                 {
                     Ticket tic = new Ticket();
                     tic.ProcessTime = DateTime.Now;
                     tic.EventId = inputModel.flightInfo.Id;
                     tic.OwnerId = _userManager.GetUserId(HttpContext.User);
-                    tic.isChild = counter < countOfSeats ? false : true;
+                    tic.isChild = counter < inputModel.numOfAdult ? false : true;
                     _context.Add(tic);
                     await _context.SaveChangesAsync();
 

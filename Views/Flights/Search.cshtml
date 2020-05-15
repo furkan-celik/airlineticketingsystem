@@ -79,16 +79,19 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <span class="form-label">Children (0-17)</span>
-                        <input class="form-control" name="numOfChild" id="numOfChild" type="number" value="1" min="1" required>
+                        <input class="form-control" name="numOfChild" id="numOfChild" type="number" value="0" min="0" required>
                         <span class="select-arrow"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <span class="form-label">Travel class</span>
-                        <select class="form-control" name="ticketClass" id="ticketClass">
-                            <option value="Economy">Economy class</option>
-                            <option value="Business">Business class</option>
+                        <select class="form-control" name="ticketClass" id="ticketClass" required>
+                            <option value="0" selected>Select a Class</option>
+                            @foreach (var item in ViewData["classes"] as SelectList)
+                            {
+                                <option value="@item.Value">@item.Text Class</option>
+                            }
                         </select>
                         <span class="select-arrow"></span>
                     </div>

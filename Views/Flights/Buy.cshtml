@@ -31,10 +31,10 @@
             background: #eee;
             padding: 8px;
             margin: 10px;
-            border-style:solid;
-            border-color:azure;
-            border-width:8px;
-            border-radius:15px;
+            border-style: solid;
+            border-color: azure;
+            border-width: 8px;
+            border-radius: 15px;
         }
 
             /* The navigation menu links */
@@ -149,7 +149,7 @@
 
         .seats {
             display: flex;
-            margin-left:23px;
+            margin-left: 23px;
             flex-direction: row;
             flex-wrap: nowrap;
             justify-content: flex-start;
@@ -339,7 +339,7 @@
                                                 }
                                                 @if (Model.seats[i][j].Availability)
                                                 {
-                                                    <input type="checkbox" asp-for="@Model.seats[i][j].Availability" id="@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())" onchange="UpdateSeatNo(this)" />
+                                                    <input type="checkbox" asp-for="@Model.seats[i][j].Availability" id="@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())" />
                                                 }
                                                 else
                                                 {
@@ -450,14 +450,14 @@
                                                     <div class="col-xs-5">
                                                         <div class="input-group">
                                                             <span class="input-group-btn">
-                                                                <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus" data-field="quantity-adult-@i" data-price="@Model.offers[i].offer.Price">
+                                                                <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus" data-field="quantity-adult-@i" data-price="@Model.offers[i].offer.Price" data-cap="countOfSeats">
                                                                     <i class="fa fa-minus"></i>
                                                                 </button>
                                                             </span>
                                                             @Html.HiddenFor(model => model.offers[i].offer.Id)
                                                             @Html.TextBoxFor(model => model.offers[i].quantity, new { id = "quantity-adult-" + i, @class = "form-control input-number", min = "0", max = "100" })
                                                             <span class="input-group-btn">
-                                                                <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="quantity-adult-@i" data-price="@Model.offers[i].offer.Price">
+                                                                <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="quantity-adult-@i" data-price="@Model.offers[i].offer.Price" data-cap="countOfSeats">
                                                                     <i class="fa fa-plus"></i>
                                                                 </button>
                                                             </span>
@@ -469,14 +469,14 @@
                                                     <div class="col-xs-5">
                                                         <div class="input-group">
                                                             <span class="input-group-btn">
-                                                                <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus" data-field="quantity-child-@i" data-price="@Model.offers[i].offer.ChildPrice">
+                                                                <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus" data-field="quantity-child-@i" data-price="@Model.offers[i].offer.ChildPrice" data-cap="countOfChild">
                                                                     <i class="fa fa-minus"></i>
                                                                 </button>
                                                             </span>
                                                             @Html.HiddenFor(model => model.offers[i].offer.Id)
                                                             @Html.TextBoxFor(model => model.offers[i].childQuantity, new { id = "quantity-child-" + i, @class = "form-control input-number", min = "0", max = "100" })
                                                             <span class="input-group-btn">
-                                                                <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="quantity-child-@i" data-price="@Model.offers[i].offer.ChildPrice">
+                                                                <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="quantity-child-@i" data-price="@Model.offers[i].offer.ChildPrice" data-cap="countOfChild">
                                                                     <i class="fa fa-plus"></i>
                                                                 </button>
                                                             </span>
@@ -493,55 +493,11 @@
                         <hr />
                         <p style="color:crimson"> @ViewData["Err"]</p>
 
-                        <div class="form-row col-md-12">
-                            <label class="control-label col-md-3"> Class :  </label>
-                            <select class="form-control col-md-9" id="type" name="type">
-                                <option value="0">Not Selected</option>
-                                @foreach (var item in Model.flightInfo.Offers.Where(x => x.type == 0).ToList())
-                                {
-                                    <option value="@item.Id"
-                                            data-price="@item.Price"
-                                            data-childPrice="@item.ChildPrice"
-                                            data-name="@item.Name"
-                                            data-descriptipn="@item.Description">
-                                        @(item.Name + " " + item.Price + "TL")
-                                    </option>
-                                }
-                            </select>
-                        </div>
                         <div class="form-group">
-                            <label for="countOfSeats" class="control-label"> Adult(s): </label>
-                            <div class="input-group">
-                                <span class="input-group-btn">
-                                    <button type="button" class="count-left-minus btn btn-danger btn-number" data-type="minus" data-field="countOfSeats" data-field-opposite="countOfChild">
-                                        <i class="fa fa-minus"></i>
-                                    </button>
-                                </span>
-                                <input type="number" id="countOfSeats" name="countOfSeats" class="form-control input-number" value="0" min="0" max="100">
-                                <span class="input-group-btn">
-                                    <button type="button" class="count-right-plus btn btn-success btn-number" data-type="plus" data-field="countOfSeats" data-field-opposite="countOfChild">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="countOfChild" class="control-label"> Child(ren) (Age 2-12): </label>
-                            <div class="input-group">
-                                <span class="input-group-btn">
-                                    <button type="button" class="count-left-minus btn btn-danger btn-number" data-type="minus" data-field="countOfChild" data-field-opposite="countOfSeats">
-                                        <i class="fa fa-minus"></i>
-                                    </button>
-                                </span>
-                                <input type="number" id="countOfChild" name="countOfChild" class="form-control input-number" value="0" min="0" max="100">
-                                <span class="input-group-btn">
-                                    <button type="button" class="count-right-plus btn btn-success btn-number" data-type="plus" data-field="countOfChild" data-field-opposite="countOfSeats">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="form-group">
+                            <input type="hidden" asp-for="@Model.ticketClass" id="type" name="type"/>
+                            <input type="hidden" asp-for="@Model.basePrice" id="basePrice"/>
+                            <input type="hidden" id="countOfSeats" name="countOfSeats" class="form-control input-number" asp-for="@Model.numOfAdult">
+                            <input type="hidden" id="countOfChild" name="countOfChild" class="form-control input-number" asp-for="@Model.numOfChild">
                             <label for="countOfBaby" class="control-label"> Infant(s) (Age 0-2): </label>
                             <input type="number" id="countOfBaby" name="countOfBaby" value="0" min="0" class="form-control" />
                         </div>
@@ -550,7 +506,7 @@
                     <hr />
                     <div class="form-row">
                         <div class="form-group">
-                            <h3><span class="control-label" id="priceLabel">0</span>TL</h3>
+                            <h3><span class="control-label" id="priceLabel">@Model.basePrice</span>TL</h3>
                         </div>
                         <div style="border-left:1px solid #000;height:40px; margin-left:10px; margin-right:10px;"></div>
                         <div class="form-group">
@@ -576,38 +532,19 @@
             }
         }
 
-        function UpdateSeatNo(element) {
-            if (!element.checked) {
-                $("#" + "countOfSeats").val(parseInt($("#" + "countOfSeats").val()) + 1);
-            } else {
-                if (parseInt($("#" + "countOfSeats").val() > 0)) {
-                    $("#" + "countOfSeats").val(parseInt($("#" + "countOfSeats").val()) - 1);
-                } else if (parseInt($("#" + "countOfChild").val() > 0)) {
-                    $("#" + "countOfChild").val(parseInt($("#" + "countOfChild").val()) - 1);
-                }
-            }
-        }
-
-        $("#type").on("change", UpdatePrice);
-
-        $("#countOfSeats").change(UpdatePrice);
-
-        $("#countOfChild").change(UpdatePrice);
-
         function UpdatePrice() {
             $("[id^=quantity-child-]").attr({ "max": parseInt($("#countOfChild").val()) });
             $("[id^=quantity-adult-]").attr({ "max": parseInt($("#countOfSeats").val()) });
             var sumOfAddons = 0;
             $("[id^=quantity-]").each(function () { sumOfAddons += parseInt($(this).val()) * parseInt($(this.nextElementSibling).find("button").attr("data-price")) || 0; })
             $("#priceLabel").html(
-                parseInt($("select[id=type] option").filter(":selected").attr("data-price")) * parseInt($("#countOfSeats").val()) +
-                parseInt($("select[id=type] option").filter(":selected").attr("data-price")) * parseInt($("#countOfChild").val()) +
-                sumOfAddons
+                parseInt($("#basePrice").val()) + sumOfAddons
             );
         }
 
         $(window).on("load", $(function () {
             $("#Buy").validate({
+                ignore: "",
                 rules: {
                     countOfBaby: {
                         required: false,
@@ -621,7 +558,7 @@
                             return $(".plane").find('input[type=checkbox]:enabled').length - $(".plane").find('input[type=checkbox]:checked:enabled').length - $("#countOfChild").val();
                         },
                         max: function () {
-                            return $(".plane").find('input[type=checkbox]:enabled').length - $(".plane").find('input[type=checkbox]:checked:enabled').length - $("#countOfChild").val();
+                            return Math.min(parseInt($("#countOfSeats").val()), $(".plane").find('input[type=checkbox]:enabled').length - $(".plane").find('input[type=checkbox]:checked:enabled').length - $("#countOfChild").val());
                         }
                     },
                     countOfChild: {
@@ -630,7 +567,7 @@
                             return $(".plane").find('input[type=checkbox]:enabled').length - $(".plane").find('input[type=checkbox]:checked:enabled').length - $("#countOfSeats").val();
                         },
                         max: function () {
-                            return $(".plane").find('input[type=checkbox]:enabled').length - $(".plane").find('input[type=checkbox]:checked:enabled').length - $("#countOfSeats").val();
+                            return Math.min(parseInt($("#countOfChild").val()), $(".plane").find('input[type=checkbox]:enabled').length - $(".plane").find('input[type=checkbox]:checked:enabled').length - $("#countOfSeats").val());
                         }
                     }
                 },
@@ -671,7 +608,7 @@
                 var quantity = parseInt($("#" + $input.attr("data-field")).val());
 
                 // If is not undefined
-                if (quantity + 1 <= $("#" + $input.attr("data-field")).attr("max")) {
+                if (quantity + 1 <= parseInt($("#" + $input.attr("data-cap")).val())) {
                     $("#" + $input.attr("data-field")).val(quantity + 1);
                     $("#priceLabel").html(parseInt($("#priceLabel").text()) + parseInt($input.attr("data-price")));
                 }
@@ -692,40 +629,6 @@
                 if (quantity > 0) {
                     $("#" + $input.attr("data-field")).val(quantity - 1);
                     $("#priceLabel").html(parseInt($("#priceLabel").text()) - parseInt($input.attr("data-price")));
-                }
-            });
-
-            $('.count-right-plus').click(function (e) {
-                $input = $(this);
-                // Stop acting like a button
-                e.preventDefault();
-                // Get the field name
-                var quantity = parseInt($("#" + $input.attr("data-field")).val());
-                var quantityOpposite = parseInt($("#" + $input.attr("data-field-opposite")).val());
-
-                // If is not undefined
-                if (quantity + 1 <= $("#" + $input.attr("data-field")).attr("max") && quantityOpposite - 1 >= $("#" + $input.attr("data-field-opposite")).attr("min")) {
-                    $("#" + $input.attr("data-field")).val(quantity + 1);
-                    $("#" + $input.attr("data-field-opposite")).val(quantityOpposite - 1);
-                }
-
-                // Increment
-            });
-
-            $('.count-left-minus').click(function (e) {
-                $input = $(this);
-                // Stop acting like a button
-                e.preventDefault();
-                // Get the field name
-                var quantity = parseInt($("#" + $input.attr("data-field")).val());
-                var quantityOpposite = parseInt($("#" + $input.attr("data-field-opposite")).val());
-
-                // If is not undefined
-
-                // Increment
-                if (quantity - 1 >= $("#" + $input.attr("data-field")).attr("min") && quantityOpposite + 1 <= $("#" + $input.attr("data-field-opposite")).attr("max")) {
-                    $("#" + $input.attr("data-field")).val(quantity - 1);
-                    $("#" + $input.attr("data-field-opposite")).val(quantityOpposite + 1);
                 }
             });
         });
