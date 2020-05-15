@@ -178,10 +178,16 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
-
-            if (user.ManagingCompanyId == selectedflight.CompanyId)
+            if(user != null)
             {
-                ViewData["samecomp"] = true;
+                if (user.ManagingCompanyId == selectedflight.CompanyId)
+                {
+                    ViewData["samecomp"] = true;
+                }
+                else
+                {
+                    ViewData["samecomp"] = false;
+                }
             }
             else
             {
