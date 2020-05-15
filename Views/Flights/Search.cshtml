@@ -103,7 +103,14 @@
 
 <script type="text/javascript">
 
+    var firstTime = true;
     $("#btnSearch").click(function () {
+        if (firstTime) {
+            firstTime = false;
+            $("#btnNextDay").click(nextDayClick);
+            $("#btnPrevDay").click(prevDayClick);
+        }
+
         var dest = $("#dest").val();
         var arr = $("#arr").val();
         var date = $("#date").val();
@@ -111,7 +118,7 @@
         var noChild = $("#numOfChild").val();
         var mClass = $("#ticketClass").val();
         var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass;
-        $.get(url, function (data) { }).done(function (data) {
+        $.get(url, function () { }).done(function (data) {
             $("#modelView .modal-body").html(data);
             $(".pop").modal("show");
         })
@@ -121,7 +128,7 @@
             })
     })
 
-    $("#btnNextDay").click(function () {
+    function nextDayClick() {
         var dest = $("#dest").val();
         var arr = $("#arr").val();
         var date = $("#date").val();
@@ -132,7 +139,7 @@
         $("#date").val(newDate.toISOString().substring(0, 10));
         date = $("#date").val();
         var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass;
-        $.get(url, function (data) { }).done(function (data) {
+        $.get(url, function () { }).done(function (data) {
             $("#modelView .modal-body").html(data);
             $(".pop").modal("show");
         })
@@ -140,9 +147,9 @@
                 $("#modelView .modal-body").text("Error!!");
                 $(".pop").modal("show");
             })
-    })
+    }
 
-    $("#btnPrevDay").click(function () {
+    function prevDayClick() {
         var dest = $("#dest").val();
         var arr = $("#arr").val();
         var date = $("#date").val();
@@ -153,7 +160,7 @@
         $("#date").val(newDate.toISOString().substring(0, 10));
         date = $("#date").val();
         var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass;
-        $.get(url, function (data) { }).done(function (data) {
+        $.get(url, function () { }).done(function (data) {
             $("#modelView .modal-body").html(data);
             $(".pop").modal("show");
         })
@@ -161,7 +168,7 @@
                 $("#modelView .modal-body").text("Error!!");
                 $(".pop").modal("show");
             })
-    })
+    }
 
     $("#btnLogin").click(function () {
         var url = "/Flights/LoginModal";

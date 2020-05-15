@@ -153,7 +153,7 @@ namespace WebApplication1.Controllers
 
                 if (!string.IsNullOrEmpty(ticketClass))
                 {
-                    flights = flights.Where(x => x.Offers.Count(y => y.Name == ticketClass) > 0).Include(x => x.Offers);
+                    //flights = flights.Where(x => x.Offers.Count(y => y.Name == ticketClass) > 0).Include(x => x.Offers);
                 }
 
                 if (numOfAdult < 0) numOfAdult = 1;
@@ -161,8 +161,8 @@ namespace WebApplication1.Controllers
 
                 foreach (var item in flights.ToArray())
                 {
-                    var price = (int)(item.Offers.FirstOrDefault(x => x.Name == ticketClass).ChildPrice * numOfChild + item.Offers.FirstOrDefault(x => x.Name == ticketClass).Price * numOfAdult);
-                    srm.Add(new SearchResultModel() { Flight = item, Price = price });
+                    //var price = (int)(item.Offers.FirstOrDefault(x => x.Name == ticketClass).ChildPrice * numOfChild + item.Offers.FirstOrDefault(x => x.Name == ticketClass).Price * numOfAdult);
+                    srm.Add(new SearchResultModel() { Flight = item, Price = 100 });
                 }
             }
 
@@ -392,7 +392,7 @@ namespace WebApplication1.Controllers
         public InputModel inputModel { get; set; }
 
         [HttpGet]
-        public async Task<IActionResult> Buy(int? id)
+        public async Task<IActionResult> Buy(int? id, int numOfAdult, int numOfChild, string ticketClass)
         {
             ViewData["Err"] = "";
             if (id == null)
