@@ -40,12 +40,12 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <span class="form-label">Flyning to</span>
+                        <span class="form-label">Flying to</span>
                         @Html.DropDownList("arr", new SelectList(
                         Model.Select(x => new { Value = x, Text = x }),//you have to pass data as model. If you use another way you must change this line.
                         "Value",
                         "Text"
-                         ), "From",
+                         ), "To",
                         new { required = "required", placeholder = "City or airport", @class = "form-control basicAutoComplete", autocomplete = "on" }
                        )
                         @*@Html.DropDownList("arr", ViewData["AirportId"] as SelectList, "To", new { required = "required", placeholder = "City or airport", @class = "form-control basicAutoComplete", autocomplete = "on" })*@

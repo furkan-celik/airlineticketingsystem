@@ -567,7 +567,18 @@ namespace WebApplication1.Controllers
             var usercard = _context.CreditCards.Where(x => x.OwnerId == OwnerId).ToList();
             var cardlist = new SelectList(usercard, "Id", "CardNumber");
             ViewData["CardId"] = cardlist;
-            ViewData["Creditcards"] = "Select a card.";
+
+            var useradd = _context.Addresses.Where(x => x.OwnerId == OwnerId).ToList();
+            var addlist = new SelectList(useradd, "Id", "Name");
+            ViewData["Addresses"] = addlist;
+
+
+
+            String name = _context.Users.Where(a => a.Id == _userManager.GetUserId(HttpContext.User)).Select(a => a.Name).FirstOrDefault().ToString() + " " +
+                _context.Users.Where(a => a.Id == _userManager.GetUserId(HttpContext.User)).Select(a => a.Surname).FirstOrDefault().ToString();
+            ViewData["Name"] = name;
+            String email = _context.Users.Where(a => a.Id == _userManager.GetUserId(HttpContext.User)).Select(a => a.Email).FirstOrDefault().ToString();
+            ViewData["Email"] = email;
 
 
             return View(purchase);
