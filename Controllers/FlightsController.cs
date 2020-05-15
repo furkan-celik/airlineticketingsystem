@@ -178,6 +178,7 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
+
             if (user.ManagingCompanyId == selectedflight.CompanyId)
             {
                 ViewData["samecomp"] = true;
@@ -186,9 +187,12 @@ namespace WebApplication1.Controllers
             {
                 ViewData["samecomp"] = false;
             }
+
             var flight = await _context.Flights
                 .Include(x => x.Organizer)
+                .Include(x => x.Seats)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (flight == null)
             {
                 return NotFound();
