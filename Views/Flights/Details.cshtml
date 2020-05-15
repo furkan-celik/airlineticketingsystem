@@ -75,14 +75,11 @@ else
     {
         <a asp-action="Edit" asp-route-id="@Model.Id">Edit </a><label> | </label>
         @if (User.IsInRole("WebAdmin"))
-            @Html.ActionLink("Add Offer", "CreateForEvent", "Offers", new { EventId = Model.Id, Flightno = Model.RouteId }, null)
+            @Html.ActionLink("Add Offer", "CreateForEvent", "Offers", new { EventId = Model.Id, Flightno = Model.RouteId }, null)<label> | </label>
         @if ((bool)ViewData["samecomp"] == true)
         {
-            @Html.ActionLink("Add Offer", "CreateForEvent", "Offers", new { EventId = Model.Id, Flightno = Model.RouteId }, null)
+            @Html.ActionLink("Add Offer", "CreateForEvent", "Offers", new { EventId = Model.Id, Flightno = Model.RouteId }, null)<label> | </label>
         }
-
-
-
     }
-    <label> | </label><a asp-action="Index"> Back to List</a>
+    <a asp-controller="Flights" asp-action="Search"> Back to List</a>
 </div>

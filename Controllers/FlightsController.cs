@@ -178,14 +178,18 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
-            if (user.ManagingCompanyId == selectedflight.CompanyId)
+            if(user != null)
             {
-                ViewData["samecomp"] = true;
+                if (user.ManagingCompanyId == selectedflight.CompanyId)
+                {
+                    ViewData["samecomp"] = true;
+                }
             }
             else
             {
                 ViewData["samecomp"] = false;
             }
+
             var flight = await _context.Flights
                 .Include(x => x.Organizer)
                 .FirstOrDefaultAsync(m => m.Id == id);

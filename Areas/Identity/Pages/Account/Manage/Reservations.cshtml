@@ -52,30 +52,30 @@ else
         @foreach (var item in Model.reservations)
         {
             <tr>
-                <td style="color:lightgrey">
+                <td class="textcolor">
                     @Html.DisplayFor(modelItem => item.Id)
                 </td>
-                <td style="color:lightgrey">
+                <td class="textcolor">
                     @Html.DisplayFor(modelItem => item.Flight.Name)
                 </td>
-                <td style="color:lightgrey">
+                <td class="textcolor">
                     @Html.DisplayFor(modelItem => item.Flight.Date)
                 </td>
-                <td style="color:lightgrey">
+                <td class="textcolor">
                     @Html.DisplayFor(modelItem => item.Flight.RouteId)
                 </td>
-                <td style="color:lightgrey">
+                <td class="textcolor">
                     @foreach (var item2 in item.Seats)
                     {
                         @Html.DisplayFor(modelItem => item2.Col) @Html.DisplayFor(modelItem => item2.Row)
                     }
                 </td>
 
-                <td style="color:lightgrey">
+                <td class="textcolor">
 
                     <a asp-action="Buy_After_Reservation" asp-route-id="@item.Id " asp-controller="Reservation">Buy Now</a>
                 </td>
-                <td style="color:lightgrey">
+                <td class="textcolor">
 
                     <a asp-action="Cancel_Reservation" asp-route-id="@item.Id " asp-controller="Reservation">Cancel</a>
                 </td>
