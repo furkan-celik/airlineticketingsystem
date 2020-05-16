@@ -23,7 +23,13 @@
                 @Html.DisplayNameFor(model => model.Price)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.ChildPrice)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Flight)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfferType)
             </th>
             <th></th>
         </tr>
@@ -31,25 +37,31 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td style="color:lightgrey">
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td style="color:lightgrey">
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td style="color:lightgrey">
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td style="color:lightgrey">
-                    @Html.DisplayFor(modelItem => item.Flight.FlightNo)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+        <tr>
+            <td style="color:lightgrey">
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td style="color:lightgrey">
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td style="color:lightgrey">
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td style="color:lightgrey">
+                @Html.DisplayFor(modelItem => item.ChildPrice)
+            </td>
+            <td style="color:lightgrey">
+                @Html.DisplayFor(modelItem => item.Flight.FlightNo)
+            </td>
+            <td style="color:lightgrey">
+                @Html.DisplayFor(modelItem => item.OfferType.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

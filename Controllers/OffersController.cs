@@ -85,7 +85,7 @@ namespace WebApplication1.Controllers
         [Authorize(Roles = "WebAdmin,CompAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FlightId,Name,Description,Price,Type")] Offer offer)
+        public async Task<IActionResult> Create([Bind("Id,FlightId,Name,Description,Price,ChildPrice,Type")] Offer offer)
         {
             if (ModelState.IsValid)
             {
@@ -110,7 +110,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "WebAdmin,CompAdmin")]
-        public async Task<ActionResult> CreateForEvent([Bind("Id,FlightId,Name,Description,Price,Type")] Offer offer)
+        public async Task<ActionResult> CreateForEvent([Bind("Id,FlightId,Name,Description,Price,ChildPrice,Type")] Offer offer)
         {
             var eventid = offer.FlightId;
             var user = await _userManager.GetUserAsync(User);
@@ -157,7 +157,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "WebAdmin,CompAdmin")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FlightId,Name,Description,Price,Type")] Offer offer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FlightId,Name,Description,Price,ChildPrice,Type")] Offer offer)
         {
             if (id != offer.Id)
             {
