@@ -9,8 +9,8 @@ using WebApplication1.Data;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200516123116_OfferTypeToSeat")]
-    partial class OfferTypeToSeat
+    [Migration("20200516132408_FKFix")]
+    partial class FKFix
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -583,26 +583,11 @@ namespace WebApplication1.Migrations
 
                     b.HasIndex("ReservationId");
 
-                    b.HasIndex("TypeId");
-
                     b.HasIndex("TicketId");
 
+                    b.HasIndex("TypeId");
+
                     b.ToTable("Seats");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.SeatType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SeatTypes");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Ticket", b =>
@@ -832,13 +817,15 @@ namespace WebApplication1.Migrations
                         .WithMany("Seats")
                         .HasForeignKey("ReservationId");
 
-                    b.HasOne("WebApplication1.Models.OfferType", "SeatType")
-                        .WithMany()
-                        .HasForeignKey("TypeId");
-
                     b.HasOne("WebApplication1.Models.Ticket", "Ticket")
                         .WithMany("Seats")
                         .HasForeignKey("TicketId");
+
+                    b.HasOne("WebApplication1.Models.OfferType", "OfferType")
+                        .WithMany()
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Ticket", b =>

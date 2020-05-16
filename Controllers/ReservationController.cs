@@ -157,7 +157,7 @@ namespace WebApplication1.Controllers
          .FirstOrDefaultAsync(m => m.Id == inputModel.flightInfo.Id);
 
             var seats = _context.Seats
-                .Include(x => x.SeatType)
+                .Include(x => x.OfferType)
                 .Where(x => x.FlightId == flight.Id).ToList();
 
             var selectedOffers = _context.Offers.Where(x => x.FlightId == flight.Id).ToList();

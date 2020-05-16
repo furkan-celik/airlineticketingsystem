@@ -12,6 +12,12 @@
     <Compile Remove="Migrations\20200422114428_eventrefundtimeV2.Designer.cs" />
     <Compile Remove="Migrations\20200427121104_dbfixbug.cs" />
     <Compile Remove="Migrations\20200427121104_dbfixbug.Designer.cs" />
+    <Compile Remove="Migrations\20200516131949_FKFix.cs" />
+    <Compile Remove="Migrations\20200516131949_FKFix.Designer.cs" />
+    <Compile Remove="Migrations\20200516132135_FKFix.cs" />
+    <Compile Remove="Migrations\20200516132135_FKFix.Designer.cs" />
+    <Compile Remove="Migrations\20200516132246_FKFix.cs" />
+    <Compile Remove="Migrations\20200516132246_FKFix.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -23,13 +23,13 @@ namespace WebApplication1.Models
         public bool IsConfirmed { get; set; }
         [Required]
         [Range(0, 4)]
-        [ForeignKey("OfferType")]
         public int TypeId { get; set; }
         public int? TicketId { get; set; }
         public int? ReservationId { get; set; }
 
         public virtual Flight Flight { get; set; }
-        public virtual OfferType SeatType { get; set; }
+        [ForeignKey("TypeId")]
+        public virtual OfferType OfferType { get; set; }
         [ForeignKey("ReservationId")]
         public virtual Reservation Reservation { get; set; }
         [ForeignKey("TicketId")]

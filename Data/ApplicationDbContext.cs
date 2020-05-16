@@ -25,7 +25,6 @@ namespace WebApplication1.Data
         public DbSet<Seat> Seats { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Airport> Airports { get; set; }
-        public DbSet<SeatType> SeatTypes { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Purchase> Purchases { get; set; }
 

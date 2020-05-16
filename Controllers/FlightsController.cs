@@ -233,7 +233,6 @@ namespace WebApplication1.Controllers
             {
                 _context.Add(flight);
 
-                _context.SeatTypes.Add(new SeatType() { Name = "Standard" });
                 await _context.SaveChangesAsync();
 
                 //Create seats for event
@@ -251,7 +250,7 @@ namespace WebApplication1.Controllers
                     seat.Col = c;
                     seat.FlightId = flight.Id;
                     seat.Availability = true;
-                    seat.TypeId = t;
+                    seat.TypeId = 1;
                     seat.ReservationId = null;
                     seat.TicketId = null;
                     _context.Add(seat);
@@ -451,7 +450,7 @@ namespace WebApplication1.Controllers
          .FirstOrDefaultAsync(m => m.Id == inputModel.flightInfo.Id);
 
             var seats = _context.Seats
-                .Include(x => x.SeatType)
+                .Include(x => x.OfferType)
                 .Where(x => x.FlightId == flight.Id).ToList();
 
             var selectedOffers = _context.Offers.Where(x => x.FlightId == flight.Id).ToList();
