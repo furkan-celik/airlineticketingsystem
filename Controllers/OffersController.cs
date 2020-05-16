@@ -75,6 +75,7 @@ namespace WebApplication1.Controllers
         public IActionResult Create()
         {
             ViewData["FlightId"] = new SelectList(_context.Flights, "Id", "FlightNo");
+            ViewData["TypeId"] = new SelectList(_context.OfferTypes, "Id", "Name");
             return View();
         }
 
@@ -84,7 +85,7 @@ namespace WebApplication1.Controllers
         [Authorize(Roles = "WebAdmin,CompAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FlightId,Name,Description,Price,type")] Offer offer)
+        public async Task<IActionResult> Create([Bind("Id,FlightId,Name,Description,Price,Type")] Offer offer)
         {
             if (ModelState.IsValid)
             {
@@ -93,6 +94,7 @@ namespace WebApplication1.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["FlightId"] = new SelectList(_context.Flights, "Id", "FlightNo", offer.FlightId);
+            ViewData["TypeId"] = new SelectList(_context.OfferTypes, "Id", "Name", offer.Type);
             return View(offer);
         }
 
@@ -108,26 +110,23 @@ namespace WebApplication1.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "WebAdmin,CompAdmin")]
-        public async Task<ActionResult> CreateForEvent([Bind("Id,FlightId,Name,Description,Price,type")] Offer offer)
+        public async Task<ActionResult> CreateForEvent([Bind("Id,FlightId,Name,Description,Price,Type")] Offer offer)
         {
             var eventid = offer.FlightId;
             var user = await _userManager.GetUserAsync(User);
             var selectedevent = await _context.Flights.FindAsync(eventid);
             
-
             // TODO: The usual POST stuff like validating and saving the entity.
             if (ModelState.IsValid)
             {
-               
-                
                  _context.Offers.Add(offer);
                  await _context.SaveChangesAsync();
                  return RedirectToAction(nameof(Index));
-               
-
-               
             }
+
             ViewData["FlightId"] = new SelectList(_context.Flights, "Id", "FlightNo", offer.FlightId);
+            ViewData["TypeId"] = new SelectList(_context.OfferTypes, "Id", "Name", offer.Type);
+
             return View(offer);
         }
 
@@ -145,7 +144,10 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
+
             ViewData["FlightId"] = new SelectList(_context.Flights, "Id", "FlightNo", offer.FlightId);
+            ViewData["TypeId"] = new SelectList(_context.OfferTypes, "Id", "Name", offer.Type);
+
             return View(offer);
         }
 
@@ -155,7 +157,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "WebAdmin,CompAdmin")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FlightId,Name,Description,Price,type")] Offer offer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FlightId,Name,Description,Price,Type")] Offer offer)
         {
             if (id != offer.Id)
             {
@@ -182,7 +184,10 @@ namespace WebApplication1.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["FlightId"] = new SelectList(_context.Flights, "Id", "FlightNo", offer.FlightId);
+            ViewData["TypeId"] = new SelectList(_context.OfferTypes, "Id", "Name", offer.Type);
+            
             return View(offer);
         }
 
