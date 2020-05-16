@@ -360,6 +360,7 @@ namespace WebApplication1.Controllers
             public int Col { get; set; }
             public string Row { get; set; }
             public bool Availability { get; set; }
+            public int Type { get; set; }
         }
 
         public class OfferInput
@@ -427,7 +428,7 @@ namespace WebApplication1.Controllers
             for (int i = 0; i < colGroup.Count; i++)
             {
                 List<SeatInput> row = new List<SeatInput>();
-                colGroup[i].ToList().ForEach(x => row.Add(new SeatInput { Id = x.Id, Col = x.Col, Row = x.Row, Availability = x.Availability }));
+                colGroup[i].ToList().ForEach(x => row.Add(new SeatInput { Id = x.Id, Col = x.Col, Row = x.Row, Availability = x.Availability, Type = x.TypeId }));
                 inputModel.seats.Add(row);
             }
 

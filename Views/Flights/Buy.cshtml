@@ -337,7 +337,7 @@
                                                 @{
                                                     object enabled = Model.seats[i][j].Availability == true ? null : new { disabled = "disabled" };
                                                 }
-                                                @if (Model.seats[i][j].Availability)
+                                                @if (Model.seats[i][j].Availability && Model.seats[i][j].Type == Model.ticketClass)
                                                 {
                                                     <input type="checkbox" asp-for="@Model.seats[i][j].Availability" id="@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())" />
                                                 }

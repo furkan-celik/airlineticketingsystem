@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200516123116_OfferTypeToSeat")]
+    partial class OfferTypeToSeat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -569,6 +571,12 @@ namespace WebApplication1.Migrations
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<int?>("SeatTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SeatTypeId1")
+                        .HasColumnType("int");
+
                     b.Property<int?>("TicketId")
                         .HasColumnType("int");
 
@@ -581,7 +589,9 @@ namespace WebApplication1.Migrations
 
                     b.HasIndex("ReservationId");
 
-                    b.HasIndex("TypeId");
+                    b.HasIndex("SeatTypeId");
+
+                    b.HasIndex("SeatTypeId1");
 
                     b.HasIndex("TicketId");
 
@@ -832,7 +842,11 @@ namespace WebApplication1.Migrations
 
                     b.HasOne("WebApplication1.Models.OfferType", "SeatType")
                         .WithMany()
-                        .HasForeignKey("TypeId");
+                        .HasForeignKey("SeatTypeId");
+
+                    b.HasOne("WebApplication1.Models.SeatType", null)
+                        .WithMany("Seats")
+                        .HasForeignKey("SeatTypeId1");
 
                     b.HasOne("WebApplication1.Models.Ticket", "Ticket")
                         .WithMany("Seats")
