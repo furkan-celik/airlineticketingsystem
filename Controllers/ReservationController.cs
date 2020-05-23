@@ -223,9 +223,9 @@ namespace WebApplication1.Controllers
                 while (counter < inputModel.numOfAdult + inputModel.numOfChild)
                 {
                     Reservation res = new Reservation();
-                    res.FlightId = id;
+                    res.FlightId = flight.Id;
                     res.OwnerId = _userManager.GetUserId(HttpContext.User);
-                    _context.Add(res);
+                    _context.Reservations.Add(res);
                     await _context.SaveChangesAsync();
 
                     foreach (var item in inputModel.offers)
