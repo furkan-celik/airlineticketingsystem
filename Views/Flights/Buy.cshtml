@@ -494,7 +494,7 @@
                         <p style="color:crimson"> @ViewData["Err"]</p>
 
                         <div class="form-group">
-                            <input type="number" asp-for="@Model.ticketClass" id="type" name="type" class="form-control input-number" disabled/>
+                            @Html.HiddenFor(model => model.ticketClass)
                             <input type="hidden" asp-for="@Model.basePrice" id="basePrice" />
                             <input type="hidden" id="countOfSeats" name="countOfSeats" class="form-control input-number" asp-for="@Model.numOfAdult">
                             <input type="hidden" id="countOfChild" name="countOfChild" class="form-control input-number" asp-for="@Model.numOfChild">

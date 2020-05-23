@@ -106,6 +106,16 @@
 
 <script type="text/javascript">
 
+    function GiveError(name, value) {
+        console.log(name);
+        console.log(value);
+        if (value == null || value == "" || value == 0) {
+            alert(name + " cannot left blank, please select " + name + " to proceed");
+            return false;
+        }
+        return true;
+    }
+
     var firstTime = true;
     $("#btnSearch").click(function () {
         if (firstTime) {
@@ -120,15 +130,18 @@
         var noAdult = $("#numOfAdult").val();
         var noChild = $("#numOfChild").val();
         var mClass = $("#ticketClass").val();
-        var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass;
-        $.get(url, function () { }).done(function (data) {
-            $("#modelView .modal-body").html(data);
-            $(".pop").modal("show");
-        })
-            .fail(function () {
-                $("#modelView .modal-body").text("Error!!");
+
+        if (GiveError("Departure", dest) && GiveError("Arrival", arr) && GiveError("Departure Date", date) && GiveError("Adult Number", noAdult) && GiveError("Ticket Class", mClass)) {
+            var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass;
+            $.get(url, function () { }).done(function (data) {
+                $("#modelView .modal-body").html(data);
                 $(".pop").modal("show");
             })
+                .fail(function () {
+                    $("#modelView .modal-body").text("Error!!");
+                    $(".pop").modal("show");
+                })
+        }
     })
 
     function nextDayClick() {
