@@ -595,6 +595,9 @@
         $(document).ready(function () {
             $("#modelView .modal-dialog").removeClass("modal-lg").addClass("modal-sm");
 
+            $("#btnNextDay").hide();
+            $("#btnPrevDay").hide();
+
             $('[id^=detail-]').hide();
             $('.toggle').click(function () {
                 $input = $(this);
