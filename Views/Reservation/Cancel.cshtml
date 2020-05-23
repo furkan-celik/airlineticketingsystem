@@ -1,0 +1,13 @@
+﻿@model WebApplication1.Models.Reservation
+@{
+    ViewData["Title"] = "Cancel";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Your reservation is cancelled.</h1>
+    <hr />
+    <div>
+        <a asp-action="Index" asp-controller="Flights">Search new flight</a>&nbsp;&nbsp;&nbsp;<label>|</label>&nbsp;&nbsp;
+        <a asp-area="Identity" asp-page="/Account/Manage/Reservations">Click here to go profile</a>
+    </div>
+</div>

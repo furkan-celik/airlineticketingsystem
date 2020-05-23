@@ -62,7 +62,7 @@ namespace WebApplication1.Controllers
             var Res_deleted = _context.Reservations.Find(id);
             _context.Reservations.Remove(Res_deleted);
             _context.SaveChanges();
-            return RedirectToAction(nameof(Successful));
+            return RedirectToAction(nameof(Cancel));
         }
 
 
@@ -271,6 +271,12 @@ namespace WebApplication1.Controllers
 
         //Successful
         public IActionResult Successful()
+        {
+            return View();
+        }
+
+        //Cancel
+        public IActionResult Cancel()
         {
             return View();
         }
