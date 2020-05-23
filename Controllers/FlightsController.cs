@@ -474,12 +474,12 @@ namespace WebApplication1.Controllers
             {
                 ViewData["Err"] = "There isn't enough seats for you to buy. Your seat may be taken.";
                 return View(flight);
-            }
+            }/*
             else if (countOfBaby > inputModel.numOfAdult)
             {
                 ViewData["Err"] = "Infants cannot be more than adults";
                 return View(flight);
-            }
+            }*/
             else
             {
                 Purchase purchase = new Purchase() { IsProcessed = false, OwnerId = _userManager.GetUserId(HttpContext.User), Price = 0, ProcessTime = DateTime.Now };
