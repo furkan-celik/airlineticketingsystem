@@ -100,8 +100,9 @@ namespace WebApplication1.Controllers
 
         // GET: Bills/CreateForCustomer
         [Authorize(Roles = "WebAdmin,CompAdmin")]
-        public ActionResult CreateForEvent(int EventId, string Flightno)
+        public ActionResult CreateForEvent(int EventId) //, string Flightno
         {
+            string Flightno = _context.Flights.Where(a => a.Id == EventId).Select(a => a.FlightNo).FirstOrDefault().ToString();
             ViewData["flightno"] = Flightno;
             // TODO: Verify that customer_id is valid and return HttpNotFound() if not.
             return View(new Offer { FlightId = EventId });
