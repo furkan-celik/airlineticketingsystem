@@ -75,6 +75,15 @@ namespace WebApplication1.Controllers
         public IActionResult Create()
         {
             ViewData["TypeId"] = new SelectList(_context.OfferTypes, "Id", "Name");
+            if (User.IsInRole("WebAdmin"))
+            {
+                ViewData["Company"] = new SelectList(_context.Companies, "Id", "Name");
+            }
+            else if (User.IsInRole("CompAdmin"))
+            {
+                var comp = _userManager.GetUserAsync(User).Result.ManagingCompany.Id;
+                ViewData["Company"] = new SelectList(_context.Companies.Where(x => x.Id == comp), "Id", "Name");
+            }
             return View();
         }
 
@@ -84,7 +93,7 @@ namespace WebApplication1.Controllers
         [Authorize(Roles = "WebAdmin,CompAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FlightId,Name,Description,Price,ChildPrice,Type")] Offer offer)
+        public async Task<IActionResult> Create([Bind("Id,FlightId,Name,Description,Price,ChildPrice,Type,CompanyId")] Offer offer)
         {
             if (ModelState.IsValid)
             {
@@ -94,6 +103,16 @@ namespace WebApplication1.Controllers
             }
 
             ViewData["TypeId"] = new SelectList(_context.OfferTypes, "Id", "Name", offer.Type);
+
+            if (User.IsInRole("WebAdmin"))
+            {
+                ViewData["Company"] = new SelectList(_context.Companies, "Id", "Name");
+            }
+            else if (User.IsInRole("CompAdmin"))
+            {
+                var comp = _userManager.GetUserAsync(User).Result.ManagingCompany.Id;
+                ViewData["Company"] = new SelectList(_context.Companies.Where(x => x.Id == comp), "Id", "Name");
+            }
             return View(offer);
         }
 
@@ -160,6 +179,16 @@ namespace WebApplication1.Controllers
             ViewData["FlightId"] = new SelectList(_context.Flights, "Id", "FlightNo", offer.Flights);
             ViewData["TypeId"] = new SelectList(_context.OfferTypes, "Id", "Name", offer.Type);
 
+            if (User.IsInRole("WebAdmin"))
+            {
+                ViewData["Company"] = new SelectList(_context.Companies, "Id", "Name");
+            }
+            else if (User.IsInRole("CompAdmin"))
+            {
+                var comp = _userManager.GetUserAsync(User).Result.ManagingCompany.Id;
+                ViewData["Company"] = new SelectList(_context.Companies.Where(x => x.Id == comp), "Id", "Name");
+            }
+
             return View(offer);
         }
 
@@ -169,7 +198,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "WebAdmin,CompAdmin")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FlightId,Name,Description,Price,ChildPrice,Type")] Offer offer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FlightId,Name,Description,Price,ChildPrice,Type,CompanyId")] Offer offer)
         {
             if (id != offer.Id)
             {
@@ -195,6 +224,16 @@ namespace WebApplication1.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
+            }
+
+            if (User.IsInRole("WebAdmin"))
+            {
+                ViewData["Company"] = new SelectList(_context.Companies, "Id", "Name");
+            }
+            else if (User.IsInRole("CompAdmin"))
+            {
+                var comp = _userManager.GetUserAsync(User).Result.ManagingCompany.Id;
+                ViewData["Company"] = new SelectList(_context.Companies.Where(x => x.Id == comp), "Id", "Name");
             }
 
             ViewData["FlightId"] = new SelectList(_context.Flights, "Id", "FlightNo", offer.Flights);

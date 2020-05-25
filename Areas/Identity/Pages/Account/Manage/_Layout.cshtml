@@ -6,7 +6,9 @@
 @if (User.IsInRole("WebAdmin") || User.IsInRole("CompAdmin"))
 {
     <style>
-
+        .infocolor {
+            color: lightslategrey;
+        }
         .textcolor {
             color: lightgrey;
         }
@@ -15,7 +17,9 @@
 else
 {
     <style>
-
+        .infocolor {
+            color: black;
+        }
         .textcolor {
             color: black;
         }
@@ -25,13 +29,13 @@ else
 <h1 class="textcolor">Manage your account</h1>
 
 <div>
-    <h4>Change your account settings</h4>
+    <h4 class="infocolor">Change your account settings</h4>
     <hr />
     <div class="row">
         <div class="col-md-3">
             <partial name="_ManageNav" />
         </div>
-        <div class="col-md-9" style="height:518px;overflow:auto">
+        <div class="col-md-9" style="height: 518px; overflow: auto">
             @RenderBody()
         </div>
     </div>
