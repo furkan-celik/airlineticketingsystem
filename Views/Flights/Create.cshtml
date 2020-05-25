@@ -4,6 +4,16 @@
     ViewData["Title"] = "Create";
 }
 
+    <style type="text/css">
+        .btn span.glyphicon {
+            opacity: 0;
+        }
+
+        .btn.active span.glyphicon {
+            opacity: 1;
+        }
+    </style>
+
 <h3 style="color:lightgrey">Create Flight</h3>
 <hr />
 <div class="row">
@@ -18,10 +28,10 @@
                 </div>
             }
             @*<div class="form-group">
-            <label asp-for="Name" class="control-label"></label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
-        </div>*@
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>*@
             <div class="form-group">
                 <label asp-for="Flight.FlightNo" class="control-label">Flight No</label>
                 <input asp-for="Flight.FlightNo" class="form-control" />
@@ -80,7 +90,12 @@
                                             <td style="color:lightgray">@Model.Offers[i].offer.Description</td>
                                             <td style="color:lightgray">@Model.Offers[i].offer.Price</td>
                                             <td style="color:lightgray">@Model.Offers[i].offer.ChildPrice</td>
-                                            <td style="color:lightgray">@Html.CheckBoxFor(model => model.Offers[i].selected)</td>
+                                            <td style="color:lightgray">
+                                                <label class="btn btn-primary">
+                                                    @Html.CheckBoxFor(model => model.Offers[i].selected)
+                                                    <i class="fas fa-check"></i>
+                                                </label>
+                                            </td>
                                             @Html.HiddenFor(model => model.Offers[i].offer.Id)
                                         </tr>
                                     }
