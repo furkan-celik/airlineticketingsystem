@@ -282,7 +282,7 @@ namespace WebApplication1.Controllers
             }
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Description", flight.CompanyId);
             ViewData["RouteId"] = new SelectList(_context.Routes, "RouteId", "RouteId");
-            return View(flight);
+            return View(createInputModel);
         }
 
         [Authorize("ReqAdmin")]
