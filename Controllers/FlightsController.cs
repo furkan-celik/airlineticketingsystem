@@ -180,7 +180,7 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
-            if(user != null)
+            if (user != null)
             {
                 if (user.ManagingCompanyId == selectedflight.CompanyId)
                 {
@@ -224,7 +224,6 @@ namespace WebApplication1.Controllers
         // GET: Events/Create
         public IActionResult Create()
         {
-            var user = _userManager.GetUserAsync(User).Result;
             createInputModel = new CreateInputModel();
             createInputModel.Flight = new Flight();
             createInputModel.Offers = new List<OfferInput>();
@@ -243,46 +242,49 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateInputModel CreateInput)
         {
+            if (User.IsInRole("CompAdmin"))
+            {
+                var user = _userManager.GetUserAsync(User).Result;
+                CreateInput.Flight.CompanyId = user.ManagingCompanyId.Value;
+            }
             var flight = CreateInput.Flight;
             var flightMan = _context.Routes.Where(a => a.RouteId == flight.RouteId).ToList();
             flight.Name = flightMan.ElementAt(0).DepartureAirport.AirportName + "-" + flightMan.ElementAt(0).ArrivalAirport.AirportName;
-            if (ModelState.IsValid)
+            _context.Flights.Add(flight);
+            await _context.SaveChangesAsync();
+
+            CreateInput.Offers.Where(x => x.selected).ToList().ForEach(x => _context.OfferFlights.Add(new OfferFlight() { Flight = flight, OfferId = x.offer.Id }));
+            await _context.SaveChangesAsync();
+
+            //Create seats for event
+            string seatLet = "abcdef";
+            int i = 0;
+            int c = 1;
+            int r = 0;
+            int t = 1;
+            while (i < 30)
             {
-                _context.Flights.Add(flight);
+                if (c > 2) { t = 2; }
+                Seat seat = new Seat();
+                seat.Id = 0;
+                seat.Row = seatLet.ElementAt(r).ToString();
+                seat.Col = c;
+                seat.FlightId = flight.Id;
+                seat.Availability = true;
+                seat.TypeId = 1;
+                seat.ReservationId = null;
+                seat.TicketId = null;
+                _context.Add(seat);
                 await _context.SaveChangesAsync();
-
-                CreateInput.Offers.Where(x => x.selected).ToList().ForEach(x => _context.OfferFlights.Add(new OfferFlight() { Flight = flight, OfferId = x.offer.Id }));
-                await _context.SaveChangesAsync();
-
-                //Create seats for event
-                string seatLet = "abcdef";
-                int i = 0;
-                int c = 1;
-                int r = 0;
-                int t = 1;
-                while (i < 30)
-                {
-                    if (c > 2) { t = 2; }
-                    Seat seat = new Seat();
-                    seat.Id = 0;
-                    seat.Row = seatLet.ElementAt(r).ToString();
-                    seat.Col = c;
-                    seat.FlightId = flight.Id;
-                    seat.Availability = true;
-                    seat.TypeId = 1;
-                    seat.ReservationId = null;
-                    seat.TicketId = null;
-                    _context.Add(seat);
-                    await _context.SaveChangesAsync();
-                    r++;
-                    i++;
-                    if (r > 5) { r = 0; c++; }
-                }
-                return RedirectToAction(nameof(Index));
+                r++;
+                i++;
+                if (r > 5) { r = 0; c++; }
             }
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Description", flight.CompanyId);
+            return RedirectToAction(nameof(Index));
+
+            /*ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Description", flight.CompanyId);
             ViewData["RouteId"] = new SelectList(_context.Routes, "RouteId", "RouteId");
-            return View(createInputModel);
+            return View(createInputModel);*/
         }
 
         [Authorize("ReqAdmin")]
@@ -587,11 +589,11 @@ namespace WebApplication1.Controllers
         {
             var purchase = _context.Purchases.FirstOrDefault(x => x.Id == id);
 
-            if(purchase == null)
+            if (purchase == null)
             {
                 return NotFound();
             }
-            
+
             string OwnerId = _userManager.GetUserId(HttpContext.User);
             var usercard = _context.CreditCards.Where(x => x.OwnerId == OwnerId).ToList();
             var cardlist = new SelectList(usercard, "Id", "CardNumber");
