@@ -19,6 +19,7 @@ using MimeKit;
 using MailKit.Net.Smtp;
 
 using System.Reflection.Metadata.Ecma335;
+using SQLitePCL;
 
 namespace WebApplication1.Controllers
 {
@@ -154,7 +155,7 @@ namespace WebApplication1.Controllers
 
                 if (ticketClass > 0 && ticketClass < 4)
                 {
-                    flights = flights.Where(x => x.Offers.Count(y => y.Type == ticketClass) > 0).Include(x => x.Offers);
+                    flights = flights.Where(x => x.Offers.Count(y => y.Offer.Type == ticketClass) > 0).Include(x => x.Offers);
                 }
 
                 if (numOfAdult < 0) numOfAdult = 1;
@@ -162,7 +163,7 @@ namespace WebApplication1.Controllers
 
                 foreach (var item in flights.ToArray())
                 {
-                    var price = (int)(item.Offers.FirstOrDefault(x => x.Type == ticketClass).ChildPrice * numOfChild + item.Offers.FirstOrDefault(x => x.Type == ticketClass).Price * numOfAdult);
+                    var price = (int)(item.Offers.FirstOrDefault(x => x.Offer.Type == ticketClass).Offer.ChildPrice * numOfChild + item.Offers.FirstOrDefault(x => x.Offer.Type == ticketClass).Offer.Price * numOfAdult);
                     srm.Add(new SearchResultModel() { Flight = item, Price = price });
                 }
             }
@@ -210,29 +211,47 @@ namespace WebApplication1.Controllers
             return View(flight);
         }
 
-        [Authorize("ReqAdmin")]
+        public class CreateInputModel
+        {
+            public Flight Flight { get; set; }
+            public List<OfferInput> Offers { get; set; }
+        }
+
+        [BindProperty]
+        public CreateInputModel createInputModel { get; set; }
+
+        [Authorize("ReqCompAdmin")]
         // GET: Events/Create
         public IActionResult Create()
         {
+            var user = _userManager.GetUserAsync(User).Result;
+            createInputModel = new CreateInputModel();
+            createInputModel.Flight = new Flight();
+            createInputModel.Offers = new List<OfferInput>();
+            //_context.Offers.Where(x => x.Flight.CompanyId == user.ManagingCompanyId).ToList().ForEach(x => createInputModel.Offers.Add(new OfferInput() { offer = x, selected = false }));
+            _context.Offers.ToList().ForEach(x => createInputModel.Offers.Add(new OfferInput() { offer = x, selected = false }));
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Description");
             ViewData["RouteId"] = new SelectList(_context.Routes, "RouteId", "RouteId");
-            return View();
+            return View(createInputModel);
         }
 
-        [Authorize("ReqAdmin")]
+        [Authorize("ReqCompAdmin")]
         // POST: Events/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CompanyId,Name,RefundTime,ResCancelTime,RefundPortion,Date,RouteId,FlightNo")] Flight flight)
+        public async Task<IActionResult> Create(CreateInputModel CreateInput)
         {
+            var flight = CreateInput.Flight;
             var flightMan = _context.Routes.Where(a => a.RouteId == flight.RouteId).ToList();
             flight.Name = flightMan.ElementAt(0).DepartureAirport.AirportName + "-" + flightMan.ElementAt(0).ArrivalAirport.AirportName;
             if (ModelState.IsValid)
             {
-                _context.Add(flight);
+                _context.Flights.Add(flight);
+                await _context.SaveChangesAsync();
 
+                CreateInput.Offers.Where(x => x.selected).ToList().ForEach(x => _context.OfferFlights.Add(new OfferFlight() { Flight = flight, OfferId = x.offer.Id }));
                 await _context.SaveChangesAsync();
 
                 //Create seats for event
@@ -367,6 +386,7 @@ namespace WebApplication1.Controllers
             public Offer offer { get; set; }
             public int quantity { get; set; }
             public int childQuantity { get; set; }
+            public bool selected { get; set; }
         }
 
         public class SeatInputComparer : IEqualityComparer<SeatInput>
@@ -421,8 +441,8 @@ namespace WebApplication1.Controllers
             inputModel.numOfAdult = numOfAdult;
             inputModel.numOfChild = numOfChild;
             inputModel.ticketClass = ticketClass;
-            inputModel.basePrice = (int)(flight.Offers.FirstOrDefault(x => x.Type == ticketClass).ChildPrice * numOfChild + flight.Offers.FirstOrDefault(x => x.Type == ticketClass).Price * numOfAdult);
-            flight.Offers.Where(x => x.Type == 4).ToList().ForEach(x => inputModel.offers.Add(new OfferInput() { offer = x, quantity = 0 }));
+            inputModel.basePrice = (int)(flight.Offers.FirstOrDefault(x => x.Offer.Type == ticketClass).Offer.ChildPrice * numOfChild + flight.Offers.FirstOrDefault(x => x.Offer.Type == ticketClass).Offer.Price * numOfAdult);
+            flight.Offers.Where(x => x.Offer.Type == 4).ToList().ForEach(x => inputModel.offers.Add(new OfferInput() { offer = x.Offer, quantity = 0 }));
 
             for (int i = 0; i < colGroup.Count; i++)
             {
@@ -453,7 +473,7 @@ namespace WebApplication1.Controllers
                 .Include(x => x.OfferType)
                 .Where(x => x.FlightId == flight.Id).ToList();
 
-            var selectedOffers = _context.Offers.Where(x => x.FlightId == flight.Id).ToList();
+            var selectedOffers = flight.Offers.Select(x => x.Offer).ToList();
 
             List<Seat> selectedSeats = seats.Where(x => x.Availability && !inputModel.seats[x.Col - 1][x.Row.ToCharArray()[0] - 'a'].Availability).ToList();
 

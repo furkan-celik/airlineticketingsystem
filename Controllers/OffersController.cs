@@ -38,14 +38,14 @@ namespace WebApplication1.Controllers
             var mancompid = user.ManagingCompanyId;
             if (mancompid == null)
             {
-                var applicationDbContext = _context.Offers.Include(o => o.Flight);
+                var applicationDbContext = _context.Offers.Include(o => o.Flights);
                 return View(await applicationDbContext.ToListAsync());
             }
             else
             {
                 var applicationDbContext = _context.Offers
-                    .Where(o => o.Flight.CompanyId == mancompid)
-                    .Include(o => o.Flight);
+                    .Where(o => o.CompanyId == mancompid.Value)
+                    .Include(o => o.Flights);
                 return View(await applicationDbContext.ToListAsync());
             }
 
@@ -60,7 +60,7 @@ namespace WebApplication1.Controllers
             }
 
             var offer = await _context.Offers
-                .Include(o => o.Flight)
+                .Include(o => o.Flights)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (offer == null)
             {
@@ -74,7 +74,6 @@ namespace WebApplication1.Controllers
         // GET: Offers/Create
         public IActionResult Create()
         {
-            ViewData["FlightId"] = new SelectList(_context.Flights, "Id", "FlightNo");
             ViewData["TypeId"] = new SelectList(_context.OfferTypes, "Id", "Name");
             return View();
         }
@@ -93,42 +92,54 @@ namespace WebApplication1.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FlightId"] = new SelectList(_context.Flights, "Id", "FlightNo", offer.FlightId);
+
             ViewData["TypeId"] = new SelectList(_context.OfferTypes, "Id", "Name", offer.Type);
             return View(offer);
         }
+
+        public class OfferInput
+        {
+            public Offer offer { get; set; }
+            public bool selected { get; set; }
+        }
+
+        public class InputModel
+        {
+            public Flight flightInfo { get; set; }
+            public List<OfferInput> offers { get; set; }
+        }
+
+        [BindProperty]
+        public InputModel inputModel { get; set; }
 
         // GET: Bills/CreateForCustomer
         [Authorize(Roles = "WebAdmin,CompAdmin")]
         public ActionResult CreateForEvent(int EventId) //, string Flightno
         {
-            string Flightno = _context.Flights.Where(a => a.Id == EventId).Select(a => a.FlightNo).FirstOrDefault().ToString();
-            ViewData["flightno"] = Flightno;
+            inputModel = new InputModel();
+            inputModel.flightInfo = _context.Flights.FirstOrDefault(a => a.Id == EventId);
+            inputModel.offers = new List<OfferInput>();
+            _context.Offers.Where(x => x.CompanyId == inputModel.flightInfo.CompanyId).ToList().ForEach(x => inputModel.offers.Add(new OfferInput() { offer = x, selected = false }));
             // TODO: Verify that customer_id is valid and return HttpNotFound() if not.
-            return View(new Offer { FlightId = EventId });
+            return View(inputModel);
         }
+
         // POST Bills/CreateForCustomer
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "WebAdmin,CompAdmin")]
-        public async Task<ActionResult> CreateForEvent([Bind("Id,FlightId,Name,Description,Price,ChildPrice,Type")] Offer offer)
+        public async Task<ActionResult> CreateForEvent(InputModel InputModel)
         {
-            var eventid = offer.FlightId;
+            //var eventid = offer.FlightId;
+            //var selectedevent = await _context.Flights.FindAsync(EventId);
             var user = await _userManager.GetUserAsync(User);
-            var selectedevent = await _context.Flights.FindAsync(eventid);
-            
+
             // TODO: The usual POST stuff like validating and saving the entity.
-            if (ModelState.IsValid)
-            {
-                 _context.Offers.Add(offer);
-                 await _context.SaveChangesAsync();
-                 return RedirectToAction(nameof(Index));
-            }
+            InputModel.offers.Where(x => x.selected).ToList().ForEach(x => _context.OfferFlights.Add(new OfferFlight() { FlightId = InputModel.flightInfo.Id, OfferId = x.offer.Id }));
+            await _context.SaveChangesAsync();
 
-            ViewData["FlightId"] = new SelectList(_context.Flights, "Id", "FlightNo", offer.FlightId);
-            ViewData["TypeId"] = new SelectList(_context.OfferTypes, "Id", "Name", offer.Type);
+            return RedirectToAction(nameof(Index));
 
-            return View(offer);
         }
 
         // GET: Offers/Edit/5
@@ -146,7 +157,7 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            ViewData["FlightId"] = new SelectList(_context.Flights, "Id", "FlightNo", offer.FlightId);
+            ViewData["FlightId"] = new SelectList(_context.Flights, "Id", "FlightNo", offer.Flights);
             ViewData["TypeId"] = new SelectList(_context.OfferTypes, "Id", "Name", offer.Type);
 
             return View(offer);
@@ -186,9 +197,9 @@ namespace WebApplication1.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["FlightId"] = new SelectList(_context.Flights, "Id", "FlightNo", offer.FlightId);
+            ViewData["FlightId"] = new SelectList(_context.Flights, "Id", "FlightNo", offer.Flights);
             ViewData["TypeId"] = new SelectList(_context.OfferTypes, "Id", "Name", offer.Type);
-            
+
             return View(offer);
         }
 
@@ -202,7 +213,7 @@ namespace WebApplication1.Controllers
             }
 
             var offer = await _context.Offers
-                .Include(o => o.Flight)
+                .Include(o => o.Flights)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (offer == null)
             {

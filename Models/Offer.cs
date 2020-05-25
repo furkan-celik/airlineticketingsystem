@@ -10,8 +10,6 @@ namespace WebApplication1.Models
     public class Offer
     {
         public int Id { get; set; }
-        [ForeignKey("Flight")]
-        public int? FlightId { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
@@ -22,9 +20,12 @@ namespace WebApplication1.Models
         public float ChildPrice { get; set; }
         [ForeignKey("OfferType")]
         public int Type { get; set; }
+        public int CompanyId { get; set; }
 
-        public virtual Flight Flight { get; set; }
+        [ForeignKey("CompanyId")]
+        public virtual Company Company { get; set; }
         public virtual OfferType OfferType { get; set; }
+        public virtual ICollection<OfferFlight> Flights { get; set; }
         public virtual ICollection<OfferTicket> Tickets { get; set; }
         public virtual ICollection<ReservationOffer> Reservations { get; set; }
     }

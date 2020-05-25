@@ -310,6 +310,19 @@ else
                     <dd class="col-sm-8 textcolor">
                         @Html.DisplayFor(model => model.Organizer.Description)
                     </dd>
+                    <dt class="col-sm-4 infocolor">
+                        Offers
+                    </dt>
+                    <dd class="col-sm-8 textcolor">
+                        <select name="credit_card" size="10" class="form-control">
+                            @{
+                                foreach (var item in Model.Offers.Select(x => x.Offer))
+                                {
+                                    <option value="@item.Name">@item.Name</option>
+                                }
+                            }
+                        </select>
+                    </dd>
                 </dl>
 
                 <div class="row" style="margin-left:21px">

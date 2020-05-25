@@ -26,7 +26,7 @@
                 @Html.DisplayNameFor(model => model.ChildPrice)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Flight)
+                @Html.DisplayNameFor(model => model.Flights)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.OfferType)
@@ -51,7 +51,7 @@
                 @Html.DisplayFor(modelItem => item.ChildPrice)
             </td>
             <td style="color:lightgrey">
-                @Html.DisplayFor(modelItem => item.Flight.FlightNo)
+                @Html.DisplayFor(modelItem => item.Flights.Count)
             </td>
             <td style="color:lightgrey">
                 @Html.DisplayFor(modelItem => item.OfferType.Name)

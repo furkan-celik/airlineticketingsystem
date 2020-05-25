@@ -20,6 +20,7 @@ namespace WebApplication1.Data
         public DbSet<Offer> Offers { get; set; }
         public DbSet<OfferType> OfferTypes { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<OfferFlight> OfferFlights { get; set; }
         public DbSet<OfferTicket> OfferTickets { get; set; }
         public DbSet<ReservationOffer> ReservationOffers { get; set; }
         public DbSet<Seat> Seats { get; set; }
@@ -47,6 +48,7 @@ namespace WebApplication1.Data
             //builder.Entity<CreditCard>().HasKey(o => new { o.CardNumber, o.Id});
             builder.Entity<AppUser>().Property(p => p.Gender).HasConversion(v => v.ToString(), v => (Genders)Enum.Parse(typeof(Genders), v));
 
+            builder.Entity<OfferFlight>().HasKey(o => new { o.OfferId, o.FlightId });
             builder.Entity<OfferTicket>().HasKey(o => new { o.OfferId, o.TicketId });
             builder.Entity<ReservationOffer>().HasKey(o => new { o.OfferId, o.ReservationId });
         }

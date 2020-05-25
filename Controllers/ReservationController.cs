@@ -160,7 +160,7 @@ namespace WebApplication1.Controllers
                 .Include(x => x.OfferType)
                 .Where(x => x.FlightId == flight.Id).ToList();
 
-            var selectedOffers = _context.Offers.Where(x => x.FlightId == flight.Id).ToList();
+            var selectedOffers = flight.Offers.Select(x => x.Offer).ToList();
 
             List<Seat> selectedSeats = seats.Where(x => x.Availability && !inputModel.seats[x.Col - 1][x.Row.ToCharArray()[0] - 'a'].Availability).ToList();
             ViewData["Err"] = "";

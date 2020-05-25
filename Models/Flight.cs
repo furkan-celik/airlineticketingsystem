@@ -25,11 +25,12 @@ namespace WebApplication1.Models
         public string FlightNo { get; set; }
         [Required]
         public int RouteId { get; set; }
-        public virtual Company Organizer { get; set; }
+
         [ForeignKey("RouteId")]
         public virtual Route Route { get; set; }
+        public virtual Company Organizer { get; set; }
         public virtual ICollection<Seat> Seats { get; set; }
-        public virtual ICollection<Offer> Offers { get; set; }
+        public virtual ICollection<OfferFlight> Offers { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }
         public virtual ICollection<Reservation> Reservations { get; set; }
     }
