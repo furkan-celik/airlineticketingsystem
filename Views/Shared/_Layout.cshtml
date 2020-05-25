@@ -508,12 +508,18 @@ else
         <nav class="navbar navbar-expand-sm navbar-toggleable-md navbar-light border-bottom box-shadow mb-3" style="background-color:transparent;height:70px">
             @*bg-white*@
             <div class="container" style="max-width:1400px">
-                <ul class="nav">
+                <ul class="nav" style="margin-top:16px">
+                    <li class="nav-item active">
+                        <a class="nav-link" style="font-size:larger" asp-area="" asp-controller="Home" asp-action="Index">
+                            <p>
+                                Flightviewer
+                            </p>
+                        </a>
+                    </li>
                     <li class="nav-item active">
                         <a class="nav-link" asp-area="" asp-controller="Flights" asp-action="Search">
                             <p>
-                                <text style="font-size:larger">FlightViewer</text>
-                                <i class="material-icons" style="margin-left:20px">flight</i>
+                                <i class="material-icons" style="margin-left:10px">flight</i>
                                 Home
                             </p>
                         </a>

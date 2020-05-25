@@ -15,11 +15,11 @@
             <div class="form-group">
                 <div class="form-checkbox">
                     <label for="roundtrip">
-                        <input type="radio" id="roundtrip" name="flight-type">
+                        <input type="radio" id="roundtrip" name="flight-type" onchange="enabled(this)">
                         <span></span>Roundtrip
                     </label>
                     <label for="one-way">
-                        <input type="radio" id="one-way" name="flight-type">
+                        <input type="radio" id="one-way" name="flight-type" onchange="enabled(roundtrip)">
                         <span></span>One way
                     </label>
                 </div>
@@ -64,7 +64,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <span class="form-label">Returning</span>
-                        <input class="form-control" type="date" id="arrival" value=@ViewData["Date"] min="@DateTime.Now.ToString("yyyy-MM-dd")" required>
+                        <input class="form-control" type="date" id="arrival" value=@ViewData["Date"] min="@DateTime.Now.ToString("yyyy-MM-dd")" disabled="disabled" required>
                     </div>
                 </div>
             </div>
@@ -105,6 +105,17 @@
 </div>
 
 <script type="text/javascript">
+
+
+    function enabled(roundtrip) {
+        var arrival = document.getElementById("arrival");
+        arrival.disabled = roundtrip.checked ? false : true;
+        if (!arrival.disabled) {
+            arrival.focus();
+        }  
+    }
+
+
 
     function GiveError(name, value) {
         console.log(name);
