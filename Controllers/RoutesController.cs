@@ -94,18 +94,46 @@ namespace WebApplication1.Controllers
         //[Authorize(Roles = "WebAdmin,CompAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RouteId,DepartureId,ArrivalId,ETA")] Route route)
+        public async Task<IActionResult> Create([Bind("RouteId,DepartureId,ArrivalId,ETA")] Route route, [Bind("RouteId,DepartureId,ArrivalId,ETA")] Route route2)
         {
+            ViewData["AirportId"] = new SelectList(_context.Airports, "Id", "AirportName");
+            ViewData["Err"] = "";
+
+           var routeIdCheck = await _context.Routes
+                .FirstOrDefaultAsync(m => m.RouteId == route.RouteId);
+
+            if(routeIdCheck != null)
+            {
+                ViewData["Err"] = "Give different Route Id";
+                return View(route);
+            }
+
             if (route.DepartureId != route.ArrivalId)
             {
                 if (ModelState.IsValid)
                 {
                     _context.Add(route);
                     await _context.SaveChangesAsync();
+
+                    // Return route automatically added 
+                    /*
+                    route2.RouteId += 1;
+                    int arrivalid = route2.ArrivalId;
+                    route2.ArrivalId = route2.DepartureId;
+                    route2.DepartureId = arrivalid;
+
+                    _context.Add(route2);
+                    await _context.SaveChangesAsync();*/
+
                     return RedirectToAction(nameof(Index));
                 }
             }
-            ViewData["AirportId"] = new SelectList(_context.Airports, "Id", "AirportName");
+            else
+            {
+                ViewData["Err"] = "Departure and Arrival can't be the same.";
+                return View(route);
+            }
+            
             return View(route);
         }
 

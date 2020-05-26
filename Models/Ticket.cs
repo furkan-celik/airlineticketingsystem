@@ -19,6 +19,8 @@ namespace WebApplication1.Models
         public int EventId { get; set; }
         [Required]
         public bool isChild { get; set; }
+        [Required]
+        public bool CheckIn { get; set; }
 
         public virtual AppUser Owner { get; set; }
         [ForeignKey("EventId")]

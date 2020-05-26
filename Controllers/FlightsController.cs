@@ -505,7 +505,7 @@ namespace WebApplication1.Controllers
             else
             {
                 Purchase purchase = new Purchase() { IsProcessed = false, OwnerId = _userManager.GetUserId(HttpContext.User), Price = 0, ProcessTime = DateTime.Now };
-                purchase.Price += _context.Offers.FirstOrDefault(x => x.Id == inputModel.ticketClass).Price * (inputModel.numOfChild + inputModel.numOfAdult);
+                purchase.Price += _context.Offers.FirstOrDefault(x => x.Type == inputModel.ticketClass).Price * (inputModel.numOfChild + inputModel.numOfAdult);
                 purchase.Tickets = new List<Ticket>();
 
                 int counter = 0;
@@ -515,6 +515,7 @@ namespace WebApplication1.Controllers
                     tic.ProcessTime = DateTime.Now;
                     tic.EventId = inputModel.flightInfo.Id;
                     tic.OwnerId = _userManager.GetUserId(HttpContext.User);
+                    tic.CheckIn = false;
                     tic.isChild = counter < inputModel.numOfAdult ? false : true;
                     _context.Add(tic);
                     await _context.SaveChangesAsync();

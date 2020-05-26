@@ -1,23 +1,22 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models;
 
 namespace WebApplication1.Areas.Identity.Pages.Account.Manage
 {
-    public class TicketModel : PageModel
+    public class CheckInModel : PageModel
     {
         private readonly WebApplication1.Data.ApplicationDbContext _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
 
-        public TicketModel(WebApplication1.Data.ApplicationDbContext context,
+        public CheckInModel(WebApplication1.Data.ApplicationDbContext context,
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager)
         {
@@ -29,7 +28,6 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
         public IList<Ticket> tickets { get; set; }
         public IList<Ticket> events { get; set; }
 
-
         public async Task OnGetAsync(AppUser user)
         {
             var Userid = _signInManager.Context.User.Claims.FirstOrDefault().Value;
@@ -40,9 +38,6 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
                 .Include(a => a.Flight)
                 .Include(a => a.Seats).ToListAsync();
 
-
-
         }
-       
     }
 }
