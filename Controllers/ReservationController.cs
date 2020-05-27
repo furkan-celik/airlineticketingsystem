@@ -17,9 +17,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WebApplication1.Areas.Identity.Pages.Account.Manage;
 using Microsoft.Data.SqlClient;
+using System.Threading;
+
 
 namespace WebApplication1.Controllers
 {
+
     [Authorize(Roles = "User")]
     public class ReservationController : Controller
     {
@@ -56,7 +59,6 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-
         public async Task<IActionResult> Cancel_Reservation(int id, int type, int countOfSeats, int countOfChild, int countOfBaby)
         {
             var Res_deleted = _context.Reservations.Find(id);
@@ -263,10 +265,35 @@ namespace WebApplication1.Controllers
                     counter++;
                 }
 
+
+               
+
+
+
                 return RedirectToAction(nameof(Successful));
 
             }
 
+        }
+
+
+        public static async Task<IActionResult> TimeoutAfter<IActionResult>(Task<IActionResult> task, TimeSpan timeout)
+        {
+
+            using (var timeoutCancellationTokenSource = new CancellationTokenSource())
+            {
+                var completedTask = await Task.WhenAny(task, Task.Delay(timeout, timeoutCancellationTokenSource.Token));
+                if (completedTask == task)
+                {
+                    timeoutCancellationTokenSource.Cancel();
+                    return await task;
+                }
+                else
+                {
+        
+                   throw new TimeoutException("The reservation is incomplete due to the time.");
+                }
+            }
         }
 
         //Successful
@@ -282,4 +309,7 @@ namespace WebApplication1.Controllers
         }
 
     }
+
+
+
 }
