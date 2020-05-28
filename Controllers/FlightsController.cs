@@ -586,9 +586,10 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        public IActionResult Purchase(int id)
+        public IActionResult Purchase(int id, int countOfBaby)
         {
             var purchase = _context.Purchases.FirstOrDefault(x => x.Id == id);
+            
 
             if (purchase == null)
             {
@@ -603,8 +604,39 @@ namespace WebApplication1.Controllers
             var useradd = _context.Addresses.Where(x => x.OwnerId == OwnerId).ToList();
             var addlist = new SelectList(useradd, "Id", "Name");
             ViewData["Addresses"] = addlist;
+            
+           
+            var ticket = purchase.Tickets.FirstOrDefault(x => x.OwnerId == OwnerId);
+            int ticketid = ticket.Id;
+            var offerticket = _context.OfferTickets.Where(x => x.TicketId == ticketid).ToList();
+            if (offerticket != null)
+            {
+                string offer1 = "";
+                foreach (var item in offerticket)
+                {
+                    int offerid = item.OfferId;
+                    var offer = _context.Offers.FirstOrDefault(x => x.Id == offerid);
+                    offer1 += offer.Description + " ";
+                }
+                ViewData["Offer"] = offer1;
 
+                /*
+                int offerid = offerticket.OfferId;
+                var offer = _context.Offers.FirstOrDefault(x => x.Id == offerid);
+                string offer1 = offer.Description;
+                ViewData["Offer"] = offer1;*/
+            }
+            else
+            {
+                ViewData["Offer"] = "No offer selected.";
+            }
 
+            if (countOfBaby != 0)
+            {
+                ViewData["Baby"] = countOfBaby;
+            }
+            else { ViewData["Baby"] = 0; }
+            
 
             String name = _context.Users.Where(a => a.Id == _userManager.GetUserId(HttpContext.User)).Select(a => a.Name).FirstOrDefault().ToString() + " " +
                 _context.Users.Where(a => a.Id == _userManager.GetUserId(HttpContext.User)).Select(a => a.Surname).FirstOrDefault().ToString();

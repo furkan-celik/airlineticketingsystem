@@ -81,19 +81,31 @@
                             @Model.Tickets.Count
                         </dd>
                         <dt class="col-sm-6">
+                            Offers:
+                        </dt>
+                        <dd class="col-sm-6">
+                            @ViewData["Offer"]
+                        </dd>
+                        <dt class="col-sm-6">
+                            No of Infants
+                        </dt>
+                        <dd class="col-sm-6">
+                            @ViewData["Baby"]
+                        </dd>
+                        <dt class="col-sm-6">
                             Seats Taken:
                         </dt>
                         @foreach (var item in Model.Tickets)
                         {
                             <dd class="col-sm-1">
-                                @Html.Label(item.Seats.ToArray()[0].Row + item.Seats.ToArray()[0].Col)
+                                @Html.Label(item.Seats.ToArray()[0].Col + item.Seats.ToArray()[0].Row)
                             </dd>
                         }
                         <dt class="col-sm-6">
                             Total Price:
                         </dt>
                         <dd class="col-sm-1">
-                         @Model.Price
+                            @Model.Price
                         </dd>
                     </dl>
                 </div>

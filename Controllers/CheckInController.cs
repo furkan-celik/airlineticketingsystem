@@ -50,6 +50,24 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
+            var offerticket = _context.OfferTickets.Where(x => x.TicketId == id).ToList();
+
+            if (offerticket != null)
+            {
+                string offer1 = "";
+                foreach (var item in offerticket)
+                {
+                    int offerid = item.OfferId;
+                    var offer = _context.Offers.FirstOrDefault(x => x.Id == offerid);
+                    offer1 += offer.Description + " ";
+                }
+                ViewData["Offer"] = offer1;
+            }
+            else
+            {
+                ViewData["Offer"] = "No offer selected.";
+            }
+
             return View(ticket);
 
         }
