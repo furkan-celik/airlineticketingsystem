@@ -52,7 +52,7 @@ namespace WebApplication1.Controllers
 
             var offerticket = _context.OfferTickets.Where(x => x.TicketId == id).ToList();
 
-            if (offerticket != null)
+            if (offerticket.Count != 0)
             {
                 string offer1 = "";
                 foreach (var item in offerticket)

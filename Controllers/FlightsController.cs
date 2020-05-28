@@ -589,7 +589,7 @@ namespace WebApplication1.Controllers
         public IActionResult Purchase(int id, int countOfBaby)
         {
             var purchase = _context.Purchases.FirstOrDefault(x => x.Id == id);
-            
+
 
             if (purchase == null)
             {
@@ -609,7 +609,7 @@ namespace WebApplication1.Controllers
             var ticket = purchase.Tickets.FirstOrDefault(x => x.OwnerId == OwnerId);
             int ticketid = ticket.Id;
             var offerticket = _context.OfferTickets.Where(x => x.TicketId == ticketid).ToList();
-            if (offerticket != null)
+            if (offerticket.Count != 0)
             {
                 string offer1 = "";
                 foreach (var item in offerticket)
@@ -643,7 +643,6 @@ namespace WebApplication1.Controllers
             ViewData["Name"] = name;
             String email = _context.Users.Where(a => a.Id == _userManager.GetUserId(HttpContext.User)).Select(a => a.Email).FirstOrDefault().ToString();
             ViewData["Email"] = email;
-
 
             return View(purchase);
         }
