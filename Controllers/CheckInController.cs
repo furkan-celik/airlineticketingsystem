@@ -40,7 +40,7 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
-
+            
             var ticket = await _context.Tickets
                 .Include(x => x.Owner)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -73,12 +73,16 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CheckIn(int id, [Bind("Name")] Ticket ticket1)
+        { 
+            var ticket = _context.Tickets.Find(id);
+            ticket.CheckIn = true;
+            ticket.Name = ticket1.Name;
 
-        public async Task<IActionResult> CheckIn(int id, int type, int countOfSeats, int countOfChild, int countOfBaby)
-        {
-            var c_ticket = _context.Tickets.Find(id);
-            c_ticket.CheckIn = true;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+            //_context.SaveChanges();
 
             return RedirectToAction(nameof(Successful));
         }
@@ -87,6 +91,6 @@ namespace WebApplication1.Controllers
         public IActionResult Successful()
         {
             return View();
-        }
+        } 
     }
 }

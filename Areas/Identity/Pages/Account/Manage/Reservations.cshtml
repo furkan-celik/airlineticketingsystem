@@ -28,60 +28,62 @@ else
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.reservations[0].Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.reservations[0].Flight)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.reservations[0].Flight.Date)
-            </th>
-            <th>
-                @*@Html.DisplayNameFor(model => model.tickets[0].Event.FlightNo)*@Flight No
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.reservations[0].Seats)
-            </th>
+            @*
+        <th>
+            @Html.DisplayNameFor(model => model.reservations[0].Id)
+        </th>*@
+                <th>
+                    @Html.DisplayNameFor(model => model.reservations[0].Flight)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.reservations[0].Flight.Date)
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.tickets[0].Event.FlightNo)*@Flight No
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.reservations[0].Seats)
+                </th>
 
 
-            <th></th>
-        </tr>
+                <th></th>
+            </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.reservations)
         {
-            <tr>
-                <td class="textcolor">
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td class="textcolor">
-                    @Html.DisplayFor(modelItem => item.Flight.Name)
-                </td>
-                <td class="textcolor">
-                    @Html.DisplayFor(modelItem => item.Flight.Date)
-                </td>
-                <td class="textcolor">
-                    @Html.DisplayFor(modelItem => item.Flight.FlightNo)
-                </td>
-                <td class="textcolor">
-                    @foreach (var item2 in item.Seats)
-                    {
-                        @Html.DisplayFor(modelItem => item2.Col) @Html.DisplayFor(modelItem => item2.Row)
-                    }
-                </td>
+        <tr>
+            @*
+        <td class="textcolor">
+            @Html.DisplayFor(modelItem => item.Id)
+        </td>*@
+                    <td class="textcolor">
+                        @Html.DisplayFor(modelItem => item.Flight.Name)
+                    </td>
+                    <td class="textcolor">
+                        @Html.DisplayFor(modelItem => item.Flight.Date)
+                    </td>
+                    <td class="textcolor">
+                        @Html.DisplayFor(modelItem => item.Flight.FlightNo)
+                    </td>
+                    <td class="textcolor">
+                        @foreach (var item2 in item.Seats)
+                        {
+                            @Html.DisplayFor(modelItem => item2.Col) @Html.DisplayFor(modelItem => item2.Row)
+                        }
+                    </td>
 
-                <td class="textcolor">
+                    <td class="textcolor">
 
-                    <a asp-action="Buy_After_Reservation" asp-route-id="@item.Id " asp-controller="Reservation">Buy Now</a>
-                </td>
-                <td class="textcolor">
+                        <a asp-action="Buy_After_Reservation" asp-route-id="@item.Id " asp-controller="Reservation">Buy Now</a>
+                    </td>
+                    <td class="textcolor">
 
-                    <a asp-action="Cancel_Reservation" asp-route-id="@item.Id " asp-controller="Reservation">Cancel</a>
-                </td>
+                        <a asp-action="Cancel_Reservation" asp-route-id="@item.Id " asp-controller="Reservation">Cancel</a>
+                    </td>
 
 
-            </tr>
+                </tr>
         }
     </tbody>
 </table>

@@ -28,62 +28,70 @@ else
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.tickets[0].Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.tickets[0].Flight)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.tickets[0].Flight.Date)
-            </th>
-            <th>
-                @*@Html.DisplayNameFor(model => model.tickets[0].Event.FlightNo)*@Flight No
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.tickets[0].Seats)
-            </th>
-            <th>
-                Check-in
-            </th>
+            @*
+        <th>
+            @Html.DisplayNameFor(model => model.tickets[0].Id)
+        </th>*@
+                <th>
+                    @Html.DisplayNameFor(model => model.tickets[0].Flight)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.tickets[0].Flight.Date)
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.tickets[0].Event.FlightNo)*@Flight No
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.tickets[0].Seats)*@Seat
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Check-in
+                </th>
 
 
-            <th></th>
-        </tr>
+                <th></th>
+            </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.tickets)
         {
         <tr>
-            <td class="textcolor">
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td class="textcolor">
-                @Html.DisplayFor(modelItem => item.Flight.Name)
-            </td>
-            <td class="textcolor">
-                @Html.DisplayFor(modelItem => item.Flight.Date)
-            </td>
-            <td class="textcolor">
-                @Html.DisplayFor(modelItem => item.Flight.FlightNo)
-            </td>
-            <td class="textcolor">
-                @foreach (var item2 in item.Seats)
-                {
-                    @Html.DisplayFor(modelItem => item2.Col) @Html.DisplayFor(modelItem => item2.Row)
-                }
-            </td>
-            <td class="textcolor">
-                @if (item.Flight.Date <= DateTime.Now.AddDays(2))
-                {
-                    <a asp-action="CheckIn" asp-route-id="@item.Id " asp-controller="CheckIn">Check-in</a>
-                }
-                else
-                {
-                    @Html.DisplayFor(modelItem => item.CheckIn)
-                }
-            </td>
-        </tr>
+            @*
+        <td class="textcolor">
+            @Html.DisplayFor(modelItem => item.Id)
+        </td>*@
+                <td class="textcolor">
+                    @Html.DisplayFor(modelItem => item.Flight.Name)
+                </td>
+                <td class="textcolor">
+                    @Html.DisplayFor(modelItem => item.Flight.Date)
+                </td>
+                <td class="textcolor">
+                    @Html.DisplayFor(modelItem => item.Flight.FlightNo)
+                </td>
+                <td class="textcolor">
+                    @foreach (var item2 in item.Seats)
+                    {
+                        @Html.DisplayFor(modelItem => item2.Col) @Html.DisplayFor(modelItem => item2.Row)
+                    }
+                </td>
+                <td class="textcolor">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td class="textcolor">
+                    @if (item.Flight.Date <= DateTime.Now.AddDays(2) && !item.CheckIn)
+                    {
+                        <a asp-action="CheckIn" asp-route-id="@item.Id " asp-controller="CheckIn">Check-in</a>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.CheckIn)
+                    }
+                </td>
+            </tr>
         }
     </tbody>
 </table>

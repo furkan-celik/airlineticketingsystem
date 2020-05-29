@@ -5,56 +5,68 @@
 
 
 <h2>Check-in</h2>
-<div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Flight.Organizer)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Flight.Organizer.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Flight)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Flight.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Flight.Date)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Flight.Date)
-        </dd>
-        <dt class="col-sm-2">
-            Flight No
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Flight.FlightNo)
-        </dd>
-        <dt class="col-sm-2">
-            Offers
-        </dt>
-        <dd class="col-sm-10">
-            @ViewData["Offer"]
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Seats)
-        </dt>
-        <dd class="col-sm-10">
-            @foreach (var item in Model.Seats)
-            {
-                @Html.DisplayFor(modelItem => item.Col) @Html.DisplayFor(modelItem => item.Row)
-            }
-        </dd>
-    </dl>
-</div>
-
-
 
 <form asp-action="CheckIn">
 
-    <input type="hidden" asp-for="Id" />
-    <input type="submit" value="Check-in" class="btn btn-success" /> |
-    <a asp-area="Identity" asp-page="/Account/Manage/Ticket">Go back to Profile Page</a>
+    <div>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Flight.Organizer)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Flight.Organizer.Description)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Flight)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Flight.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Flight.Date)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Flight.Date)
+            </dd>
+            <dt class="col-sm-2">
+                Flight No
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Flight.FlightNo)
+            </dd>
+            <dt class="col-sm-2">
+                Offers
+            </dt>
+            <dd class="col-sm-10">
+                @ViewData["Offer"]
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Seats)
+            </dt>
+            <dd class="col-sm-10">
+                @foreach (var item in Model.Seats)
+                {
+                    @Html.DisplayFor(modelItem => item.Col) @Html.DisplayFor(modelItem => item.Row)
+                }
+            </dd>
+            <dt class="col-sm-2">
+                Name
+            </dt>
+            <dd>
+                <div class="form-group col-sm-10">
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </dd>
+        </dl>
+    </div>
+
+    <div>
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Check-in" class="btn btn-success" /> |
+        <a asp-area="Identity" asp-page="/Account/Manage/Ticket">Go back to Profile Page</a>
+    </div>
 </form>
+
+
