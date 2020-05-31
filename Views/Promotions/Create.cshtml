@@ -22,10 +22,26 @@
                 <input asp-for="Discount" class="form-control" />
                 <span asp-validation-for="Discount" class="text-danger"></span>
             </div>
+            <div>
+                <label asp-for="CompanyId" class="control-label">CompanyId @Html.TextBox("Company Id", @ViewData["comp"], new { @class = "company id", @readonly = "readonly" })</label>
+            </div>
+            @*@if (User.IsInRole("WebAdmin"))
+        {
             <div class="form-group">
                 <label asp-for="CompanyId" class="control-label"></label>
-                <select asp-for="CompanyId" class ="form-control" asp-items="ViewBag.CompanyId"></select>
+                <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.CompanyId"></select>
             </div>
+        }
+        @if (User.IsInRole("CompAdmin"))
+        {
+            <div class="form-group">
+                <label asp-for="CompanyId" class="control-label"></label>
+                <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.CompanyId"></select>
+            </div>
+            <label asp-for="CompanyId" class="control-label">Company Id @Html.TextBox("Company Id", @ViewData["comp"], new { @class = "company id", @readonly = "readonly" })</label>*@
+            @*Comp Name @Html.TextBox("company id", @ViewData["mancompid"], new { @class = "comp id", @readonly = "readonly" })
+        }*@
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

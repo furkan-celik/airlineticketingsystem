@@ -15,7 +15,7 @@ namespace WebApplication1.Models
         public float Discount { get; set; }
         [Required]
         [ForeignKey("Company")]
-        public int CompanyId { get; set; }
+        public int? CompanyId { get; set; }
 
         public virtual Company Organizer { get; set; }
 

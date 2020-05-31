@@ -7,23 +7,56 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication1.Controllers
 {
+    [Authorize(Roles = "CompAdmin")]
     public class PromotionsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public PromotionsController(ApplicationDbContext context)
+        public PromotionsController(ApplicationDbContext context,
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager)
         {
             _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
+
+        public int? compid { get; set; }
+
+
+        
 
         // GET: Promotions
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Promotions.Include(p => p.Organizer);
-            return View(await applicationDbContext.ToListAsync());
+
+            var user = await _userManager.GetUserAsync(User);
+            var mancompid = user.ManagingCompanyId;
+            
+            compid = mancompid;
+            ViewData["Compi"] = user.ManagingCompany;
+            if (mancompid == null)
+            {
+                var applicationDbContext = _context.Promotions.Include(p => p.Organizer);
+                return View(await applicationDbContext.ToListAsync());
+            }
+
+            else
+            {
+                var applicationDbContext = _context.Promotions
+                    .Where(t => t.Organizer.Id == mancompid)
+                    .Include(p => p.Organizer);
+                return View(await applicationDbContext.ToListAsync());
+            }
+            
         }
 
         // GET: Promotions/Details/5
@@ -46,9 +79,12 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Promotions/Create
-        public IActionResult Create()
+        public IActionResult Create(  Company compi  )
         {
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Description");
+            int companyid = compi.Id;
+            ViewData["comp"] = companyid;
+           // ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Description");
+            
             return View();
         }
 
@@ -59,14 +95,44 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Discount,CompanyId")] Promotion promotion)
         {
-            if (ModelState.IsValid)
+            /*var user = await _userManager.GetUserAsync(User);
+            var mancompid = user.ManagingCompanyId;
+            ViewData["mancompid"] = mancompid;
+            var applicationDbContext = _context.Companies
+                    .Where(o => o == comp);
+            promotion.CompanyId= mancompid;*/
+            var user = await _userManager.GetUserAsync(User);
+            var mancompid = user.ManagingCompanyId;
+            var compan = user.ManagingCompany;
+            if (mancompid == null )
             {
-                _context.Add(promotion);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(promotion);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                
+                return View(promotion);
+
             }
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Description", promotion.CompanyId);
-            return View(promotion);
+            else
+            {
+                
+                
+                if (ModelState.IsValid)
+                {
+                    promotion.CompanyId = mancompid;
+                    _context.Add(promotion);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                
+                return View(promotion);
+
+            }
+
+            
         }
 
         // GET: Promotions/Edit/5
