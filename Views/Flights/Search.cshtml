@@ -142,6 +142,9 @@
         var noChild = $("#numOfChild").val();
         var mClass = $("#ticketClass").val();
 
+        disablePrevDayBtn(new Date(date));
+        setDateTexts(new Date(date));
+
         if (GiveError("Departure", dest) && GiveError("Arrival", arr) && GiveError("Departure Date", date) && GiveError("Adult Number", noAdult) && GiveError("Ticket Class", mClass)) {
             var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass;
             $.get(url, function () { }).done(function (data) {
@@ -163,6 +166,10 @@
         var noChild = $("#numOfChild").val();
         var mClass = $("#ticketClass").val();
         var newDate = new Date(Date.parse(date) + 86400000);
+
+        disablePrevDayBtn(newDate);
+        setDateTexts(newDate);
+
         $("#date").val(newDate.toISOString().substring(0, 10));
         date = $("#date").val();
         var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass;
@@ -184,6 +191,10 @@
         var noChild = $("#numOfChild").val();
         var mClass = $("#ticketClass").val();
         var newDate = new Date(Date.parse(date) - 86400000);
+
+        disablePrevDayBtn(newDate);
+        setDateTexts(newDate);
+
         $("#date").val(newDate.toISOString().substring(0, 10));
         date = $("#date").val();
         var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass;
@@ -195,6 +206,22 @@
                 $("#modelView .modal-body").text("Error!!");
                 $(".pop").modal("show");
             })
+    }
+
+    function disablePrevDayBtn(newDate) {
+        if (newDate.toDateString() === new Date().toDateString()) {
+            $("#btnPrevDay").attr("disabled", true);
+        } else {
+            $("#btnPrevDay").attr("disabled", false);
+        }
+    }
+
+    function setDateTexts(date) {
+        var prevDate = new Date(date - 86400000);
+        var nextDate = new Date(date + 86400000);
+
+        $("#btnPrevDay").html(prevDate.toDateString());
+        $("#btnNextDay").html(nextDate.toDateString());
     }
 
     $(document).ready(function () {

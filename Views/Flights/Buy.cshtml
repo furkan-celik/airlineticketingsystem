@@ -516,7 +516,12 @@
                         <div class="form-group">
                             <input type="hidden" asp-for="flightInfo.Id" />
                             <input type="submit" value="Buy" formaction="~/Flights/Buy" class="btn btn-success" onclick="changeAction('/Flights/Buy')"/>
-                            <input type="submit" value="Reservation" formaction="~/Reservation/ReservationNow" class="btn btn-success" onclick="changeAction('/Reservation/ReservationNow')"/>
+                            @{ 
+                                if((DateTime.Now + Model.flightInfo.ResCancelTime) <= Model.flightInfo.Date)
+                                {
+                                    <input type="submit" value="Reservation" formaction="~/Reservation/ReservationNow" class="btn btn-success" onclick="changeAction('/Reservation/ReservationNow')"/>
+                                }
+                            }
                         </div>
                     </div>
                 </div>
