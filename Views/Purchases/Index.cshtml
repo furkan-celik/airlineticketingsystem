@@ -51,7 +51,7 @@
         <form id="custom-search-form" class="form-search form-horizontal pull-right" asp-action="Details">
             <div class="input-append span12">
                 <input type="number" class="search-query" placeholder="Search">
-                <button type="submit" class="btn"><i class="icon-search"></i></button>
+                <button type="submit" class="btn"><i class="material-icons">search</i></button>
             </div>
         </form>
     </div>
@@ -91,7 +91,7 @@
                 @Html.DisplayFor(modelItem => item.Owner.Id)
             </td>
             <td class="btn-group" role="group">
-                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a> |
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
                 <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
             </td>
         </tr>

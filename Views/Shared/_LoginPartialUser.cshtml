@@ -2,9 +2,15 @@
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
 
-    <ul class="navbar-nav">
-        @if (SignInManager.IsSignedIn(User))
-        {
+<style type="text/css">
+    .dropdown-menu {
+        min-width: 20em !important;
+    }
+</style>
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
         <li class="nav-item">
             <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserAsync(User).Result.Name!</a>
         </li>
@@ -14,20 +20,34 @@
             </form>
 
         </li>
-        }
-        else
-        {
+    }
+    else
+    {
         <li class="nav-item">
-            <a class="nav-link" id="btnRegister">Register</a>
+            <div class="btn-group">
+                <button type="button" class="nav-link btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="btnRegister">
+                    Register
+                </button>
+                <div class="dropdown-menu dropdown-menu-lg-right p-4">
+                    <partial name="RegisterModal" model="null" />
+                </div>
+            </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="btnLogin">Login</a>
+            <div class="btn-group">
+                <button type="button" class="nav-link btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="btnLogin">
+                    Login
+                </button>
+                <div class="dropdown-menu dropdown-menu-lg-right p-4">
+                    <partial name="LoginModal" model="null" />
+                </div>
+            </div>
         </li>
-        }
-        @if ((await AuthorizationService.AuthorizeAsync(User, "ReqWebAdmin")).Succeeded)
-        {
+    }
+    @if ((await AuthorizationService.AuthorizeAsync(User, "ReqWebAdmin")).Succeeded)
+    {
         <li class="nav-item">
             <a class="nav-link" asp-area="" asp-controller="Companies" asp-action="Index">Show Companies</a>
         </li>
-        }
-    </ul>
+    }
+</ul>

@@ -29,9 +29,10 @@ namespace WebApplication1.Controllers
         {
             if (User.IsInRole("CompAdmin"))
             {
-                var applicationDbContext = _context.Purchases.Where(x => x.Tickets.ToList()[0].Flight.CompanyId == _userManager.GetUserAsync(User).Result.ManagingCompanyId)
+                var applicationDbContext = _context.Purchases.Where(x => x.Tickets.Count > 0)
                     .Include(p => p.Owner).Include(p => p.Tickets);
-                return View(await applicationDbContext.ToListAsync());
+                var purchaseList = await applicationDbContext.ToListAsync();
+                return View(purchaseList.FindAll(x => x.Tickets.ToList()[0].Flight.CompanyId == _userManager.GetUserAsync(User).Result.ManagingCompanyId));
             }
             else
             {
