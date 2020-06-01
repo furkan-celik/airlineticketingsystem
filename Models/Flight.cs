@@ -9,6 +9,22 @@ namespace WebApplication1.Models
 {
     public class Flight
     {
+        public Flight()
+        {
+        }
+
+        public Flight(Flight _flight)
+        {
+            CompanyId = _flight.CompanyId;
+            Name = _flight.Name;
+            RefundTime = _flight.RefundTime;
+            ResCancelTime = _flight.ResCancelTime;
+            RefundPortion = _flight.RefundPortion;
+            Date = _flight.Date;
+            FlightNo = _flight.FlightNo;
+            RouteId = _flight.RouteId;
+        }
+
         public int Id { get; set; }
         [Required]
         [ForeignKey("Company")]
@@ -33,5 +49,7 @@ namespace WebApplication1.Models
         public virtual ICollection<OfferFlight> Offers { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }
         public virtual ICollection<Reservation> Reservations { get; set; }
+
+
     }
 }

@@ -215,6 +215,8 @@ namespace WebApplication1.Controllers
         {
             public Flight Flight { get; set; }
             public List<OfferInput> Offers { get; set; }
+            public TimeSpan RepeatTime { get; set; }
+            public int RepeatCount { get; set; }
         }
 
         [BindProperty]
@@ -247,39 +249,45 @@ namespace WebApplication1.Controllers
                 var user = _userManager.GetUserAsync(User).Result;
                 CreateInput.Flight.CompanyId = user.ManagingCompanyId.Value;
             }
-            var flight = CreateInput.Flight;
-            var flightMan = _context.Routes.Where(a => a.RouteId == flight.RouteId).ToList();
-            flight.Name = flightMan.ElementAt(0).DepartureAirport.AirportName + "-" + flightMan.ElementAt(0).ArrivalAirport.AirportName;
-            _context.Flights.Add(flight);
-            await _context.SaveChangesAsync();
-
-            CreateInput.Offers.Where(x => x.selected).ToList().ForEach(x => _context.OfferFlights.Add(new OfferFlight() { Flight = flight, OfferId = x.offer.Id }));
-            await _context.SaveChangesAsync();
-
-            //Create seats for event
-            string seatLet = "abcdef";
-            int i = 0;
-            int c = 1;
-            int r = 0;
-            int t = 1;
-            while (i < 30)
+            
+            for (int x = 0; x <= CreateInput.RepeatCount; x++)
             {
-                if (c > 2) { t = 2; }
-                Seat seat = new Seat();
-                seat.Id = 0;
-                seat.Row = seatLet.ElementAt(r).ToString();
-                seat.Col = c;
-                seat.FlightId = flight.Id;
-                seat.Availability = true;
-                seat.TypeId = 1;
-                seat.ReservationId = null;
-                seat.TicketId = null;
-                _context.Add(seat);
+                var flight = new Flight(CreateInput.Flight);
+                var flightMan = _context.Routes.Where(a => a.RouteId == flight.RouteId).ToList();
+                flight.Name = flightMan.ElementAt(0).DepartureAirport.AirportName + "-" + flightMan.ElementAt(0).ArrivalAirport.AirportName;
+                flight.Date = CreateInput.Flight.Date + (x * CreateInput.RepeatTime);
+                _context.Flights.Add(flight);
                 await _context.SaveChangesAsync();
-                r++;
-                i++;
-                if (r > 5) { r = 0; c++; }
+
+                CreateInput.Offers.Where(x => x.selected).ToList().ForEach(x => _context.OfferFlights.Add(new OfferFlight() { Flight = flight, OfferId = x.offer.Id }));
+                await _context.SaveChangesAsync();
+
+                //Create seats for event
+                string seatLet = "abcdef";
+                int i = 0;
+                int c = 1;
+                int r = 0;
+                int t = 1;
+                while (i < 30)
+                {
+                    if (c > 2) { t = 2; }
+                    Seat seat = new Seat();
+                    seat.Id = 0;
+                    seat.Row = seatLet.ElementAt(r).ToString();
+                    seat.Col = c;
+                    seat.FlightId = flight.Id;
+                    seat.Availability = true;
+                    seat.TypeId = 1;
+                    seat.ReservationId = null;
+                    seat.TicketId = null;
+                    _context.Add(seat);
+                    await _context.SaveChangesAsync();
+                    r++;
+                    i++;
+                    if (r > 5) { r = 0; c++; }
+                }
             }
+            
             return RedirectToAction(nameof(Index));
 
             /*ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Description", flight.CompanyId);
