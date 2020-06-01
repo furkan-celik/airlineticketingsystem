@@ -217,6 +217,7 @@ namespace WebApplication1.Controllers
         public class CreateInputModel
         {
             public Flight Flight { get; set; }
+            public List<Airplane> Airplanes { get; set; }
             public List<OfferInput> Offers { get; set; }
             public TimeSpan RepeatTime { get; set; }
             public int RepeatCount { get; set; }
@@ -232,6 +233,7 @@ namespace WebApplication1.Controllers
             createInputModel = new CreateInputModel();
             createInputModel.Flight = new Flight();
             createInputModel.Offers = new List<OfferInput>();
+            createInputModel.Airplanes = _context.Airplanes.ToList();
             //_context.Offers.Where(x => x.Flight.CompanyId == user.ManagingCompanyId).ToList().ForEach(x => createInputModel.Offers.Add(new OfferInput() { offer = x, selected = false }));
             _context.Offers.ToList().ForEach(x => createInputModel.Offers.Add(new OfferInput() { offer = x, selected = false }));
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Description");
@@ -260,6 +262,7 @@ namespace WebApplication1.Controllers
                 var flightMan = _context.Routes.Where(a => a.RouteId == flight.RouteId).ToList();
                 flight.Name = flightMan.ElementAt(0).DepartureAirport.AirportName + "-" + flightMan.ElementAt(0).ArrivalAirport.AirportName;
                 flight.Date = CreateInput.Flight.Date + (x * CreateInput.RepeatTime);
+                flight.Airplane = _context.Airplanes.Find(flight.AirplaneId);
                 _context.Flights.Add(flight);
                 await _context.SaveChangesAsync();
 

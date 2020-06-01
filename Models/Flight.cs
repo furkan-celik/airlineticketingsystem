@@ -23,6 +23,7 @@ namespace WebApplication1.Models
             Date = _flight.Date;
             FlightNo = _flight.FlightNo;
             RouteId = _flight.RouteId;
+            AirplaneId = _flight.AirplaneId;
         }
 
         public int Id { get; set; }
