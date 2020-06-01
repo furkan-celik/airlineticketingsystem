@@ -15,7 +15,7 @@ namespace WebApplication1.Models
         public int DepartureId { get; set; }
         [Required]
         public int ArrivalId { get; set; }
-        public DateTime ETA { get; set; }
+        public TimeSpan ETA { get; set; }
 
         [ForeignKey("DepartureId")]
         public virtual Airport DepartureAirport { get; set; }
