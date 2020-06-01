@@ -236,7 +236,7 @@ namespace WebApplication1.Controllers
             createInputModel.Offers = new List<OfferInput>();
             createInputModel.Airplanes = _context.Airplanes.ToList();
             //_context.Offers.Where(x => x.Flight.CompanyId == user.ManagingCompanyId).ToList().ForEach(x => createInputModel.Offers.Add(new OfferInput() { offer = x, selected = false }));
-            _context.Offers.ToList().ForEach(x => createInputModel.Offers.Add(new OfferInput() { offer = x, selected = false }));
+            _context.Offers.Where(x => x.CompanyId == _userManager.GetUserAsync(User).Result.ManagingCompanyId).ToList().ForEach(x => createInputModel.Offers.Add(new OfferInput() { offer = x, selected = false }));
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Description");
             ViewData["RouteId"] = new SelectList(_context.Routes, "RouteId", "RouteId");
 
@@ -282,7 +282,7 @@ namespace WebApplication1.Controllers
                 {
                     for (int j = 1; j <= flight.Airplane.BusinessColumnNo; j++)
                     {
-                        AddSeat(i, j, flight.Id, 1);
+                        AddSeat(i, j, flight.Id, _context.OfferTypes.FirstOrDefault(x => x.Name == "Business").Id);
                     }
                 }
 
@@ -290,7 +290,7 @@ namespace WebApplication1.Controllers
                 {
                     for (int j = 1; j <= flight.Airplane.EconomyColumnNo; j++)
                     {
-                        AddSeat(i, j + flight.Airplane.BusinessColumnNo, flight.Id, 2);
+                        AddSeat(i, j + flight.Airplane.BusinessColumnNo, flight.Id, _context.OfferTypes.FirstOrDefault(x => x.Name == "Economy").Id);
                     }
                 }
 
@@ -298,7 +298,7 @@ namespace WebApplication1.Controllers
                 {
                     for (int j = 1; j <= flight.Airplane.SuperCheapColumnNo; j++)
                     {
-                        AddSeat(i, j + flight.Airplane.BusinessColumnNo + flight.Airplane.EconomyColumnNo, flight.Id, 3);
+                        AddSeat(i, j + flight.Airplane.BusinessColumnNo + flight.Airplane.EconomyColumnNo, flight.Id, _context.OfferTypes.FirstOrDefault(x => x.Name == "Super Cheap").Id);
                     }
                 }
             }
