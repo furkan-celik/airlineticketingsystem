@@ -41,10 +41,14 @@ namespace WebApplication1.Models
         public string FlightNo { get; set; }
         [Required]
         public int RouteId { get; set; }
+        [Required]
+        [ForeignKey("Airplane")]
+        public string AirplaneId { get; set; }
 
         [ForeignKey("RouteId")]
         public virtual Route Route { get; set; }
         public virtual Company Organizer { get; set; }
+        public virtual Airplane Airplane { get; set; }
         public virtual ICollection<Seat> Seats { get; set; }
         public virtual ICollection<OfferFlight> Offers { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }

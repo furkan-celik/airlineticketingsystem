@@ -28,10 +28,10 @@
                 </div>
             }
             @*<div class="form-group">
-                    <label asp-for="Name" class="control-label"></label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>*@
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>*@
             <div class="form-group">
                 <label asp-for="Flight.FlightNo" class="control-label">Flight No</label>
                 <input asp-for="Flight.FlightNo" class="form-control" />
@@ -60,6 +60,11 @@
             <div class="form-group">
                 <label asp-for="Flight.RouteId" class="control-label">Route Id</label>
                 <select asp-for="Flight.RouteId" class="form-control" asp-items="ViewBag.RouteId"></select>
+                <a class="nav-link" asp-area="" asp-controller="Routes" asp-action="Create">Create New Route</a>
+            </div>
+            <div class="form-group">
+                <label asp-for="Flight.AirplaneId" class="control-label">Route Id</label>
+                <select asp-for="Flight.AirplaneId" class="form-control" asp-items="ViewBag.AirplaneId"></select>
                 <a class="nav-link" asp-area="" asp-controller="Routes" asp-action="Create">Create New Route</a>
             </div>
             <div class="row" id="accordion">

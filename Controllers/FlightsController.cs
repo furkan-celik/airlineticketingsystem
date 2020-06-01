@@ -233,6 +233,7 @@ namespace WebApplication1.Controllers
             _context.Offers.ToList().ForEach(x => createInputModel.Offers.Add(new OfferInput() { offer = x, selected = false }));
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Description");
             ViewData["RouteId"] = new SelectList(_context.Routes, "RouteId", "RouteId");
+            ViewData["AirplaneId"] = new SelectList(_context.Airplanes, "Id", "Id");
             return View(createInputModel);
         }
 
@@ -249,7 +250,7 @@ namespace WebApplication1.Controllers
                 var user = _userManager.GetUserAsync(User).Result;
                 CreateInput.Flight.CompanyId = user.ManagingCompanyId.Value;
             }
-            
+
             for (int x = 0; x <= CreateInput.RepeatCount; x++)
             {
                 var flight = new Flight(CreateInput.Flight);
@@ -262,37 +263,46 @@ namespace WebApplication1.Controllers
                 CreateInput.Offers.Where(x => x.selected).ToList().ForEach(x => _context.OfferFlights.Add(new OfferFlight() { Flight = flight, OfferId = x.offer.Id }));
                 await _context.SaveChangesAsync();
 
-                //Create seats for event
-                string seatLet = "abcdef";
-                int i = 0;
-                int c = 1;
-                int r = 0;
-                int t = 1;
-                while (i < 30)
+                for (int i = 0; i < flight.Airplane.BusinessRowNo; i++)
                 {
-                    if (c > 2) { t = 2; }
-                    Seat seat = new Seat();
-                    seat.Id = 0;
-                    seat.Row = seatLet.ElementAt(r).ToString();
-                    seat.Col = c;
-                    seat.FlightId = flight.Id;
-                    seat.Availability = true;
-                    seat.TypeId = 1;
-                    seat.ReservationId = null;
-                    seat.TicketId = null;
-                    _context.Add(seat);
-                    await _context.SaveChangesAsync();
-                    r++;
-                    i++;
-                    if (r > 5) { r = 0; c++; }
+                    for (int j = 0; j < flight.Airplane.BusinessColumnNo; j++)
+                    {
+                        AddSeat(i, j, flight.Id, 1);
+                    }
+                }
+
+                for (int i = 0; i < flight.Airplane.EconomyRowNo; i++)
+                {
+                    for (int j = 0; j < flight.Airplane.EconomyColumnNo; j++)
+                    {
+                        AddSeat(i, j, flight.Id, 2);
+                    }
+                }
+
+                for (int i = 0; i < flight.Airplane.SuperCheapRowNo; i++)
+                {
+                    for (int j = 0; j < flight.Airplane.SuperCheapColumnNo; j++)
+                    {
+                        AddSeat(i, j, flight.Id, 3);
+                    }
                 }
             }
-            
             return RedirectToAction(nameof(Index));
+        }
 
-            /*ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Description", flight.CompanyId);
-            ViewData["RouteId"] = new SelectList(_context.Routes, "RouteId", "RouteId");
-            return View(createInputModel);*/
+        public void AddSeat(int row, int col, int flightId, int type)
+        {
+            Seat seat = new Seat();
+            seat.Id = 0;
+            seat.Row = ((char)(row + (int)'A')).ToString();
+            seat.Col = col;
+            seat.FlightId = flightId;
+            seat.Availability = true;
+            seat.TypeId = type;
+            seat.ReservationId = null;
+            seat.TicketId = null;
+            _context.Add(seat);
+            _context.SaveChanges();
         }
 
         [Authorize("ReqAdmin")]
@@ -612,8 +622,8 @@ namespace WebApplication1.Controllers
             var useradd = _context.Addresses.Where(x => x.OwnerId == OwnerId).ToList();
             var addlist = new SelectList(useradd, "Id", "Name");
             ViewData["Addresses"] = addlist;
-            
-           
+
+
             var ticket = purchase.Tickets.FirstOrDefault(x => x.OwnerId == OwnerId);
             int ticketid = ticket.Id;
             var offerticket = _context.OfferTickets.Where(x => x.TicketId == ticketid).ToList();
@@ -644,7 +654,7 @@ namespace WebApplication1.Controllers
                 ViewData["Baby"] = countOfBaby;
             }
             else { ViewData["Baby"] = 0; }
-            
+
 
             String name = _context.Users.Where(a => a.Id == _userManager.GetUserId(HttpContext.User)).Select(a => a.Name).FirstOrDefault().ToString() + " " +
                 _context.Users.Where(a => a.Id == _userManager.GetUserId(HttpContext.User)).Select(a => a.Surname).FirstOrDefault().ToString();
