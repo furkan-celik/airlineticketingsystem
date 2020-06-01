@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication1.Controllers
 {
-    [Authorize(Roles = "CompAdmin")]
+    [Authorize("ReqAdmin")]
     public class PromotionsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -81,10 +81,16 @@ namespace WebApplication1.Controllers
         // GET: Promotions/Create
         public IActionResult Create(  Company compi  )
         {
-            int companyid = compi.Id;
-            ViewData["comp"] = companyid;
-           // ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Description");
-            
+            ViewData["TypeId"] = new SelectList(_context.OfferTypes, "Id", "Name");
+            if (User.IsInRole("WebAdmin"))
+            {
+                ViewData["Company"] = new SelectList(_context.Companies, "Id", "Name");
+            }
+            else if (User.IsInRole("CompAdmin"))
+            {
+                var comp = _userManager.GetUserAsync(User).Result.ManagingCompany.Id;
+                ViewData["Company"] = new SelectList(_context.Companies.Where(x => x.Id == comp), "Id", "Name");
+            }
             return View();
         }
 
@@ -95,42 +101,26 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Discount,CompanyId")] Promotion promotion)
         {
-            /*var user = await _userManager.GetUserAsync(User);
-            var mancompid = user.ManagingCompanyId;
-            ViewData["mancompid"] = mancompid;
-            var applicationDbContext = _context.Companies
-                    .Where(o => o == comp);
-            promotion.CompanyId= mancompid;*/
-            var user = await _userManager.GetUserAsync(User);
-            var mancompid = user.ManagingCompanyId;
-            var compan = user.ManagingCompany;
-            if (mancompid == null )
+
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    _context.Add(promotion);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                
+                _context.Add(promotion);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+
+            if (User.IsInRole("WebAdmin"))
+            {
+                ViewData["Company"] = new SelectList(_context.Companies, "Id", "Name");
+            }
+            else if (User.IsInRole("CompAdmin"))
+            {
+                var comp = _userManager.GetUserAsync(User).Result.ManagingCompany.Id;
+                ViewData["Company"] = new SelectList(_context.Companies.Where(x => x.Id == comp), "Id", "Name");
+            }
                 return View(promotion);
 
-            }
-            else
-            {
-                
-                
-                if (ModelState.IsValid)
-                {
-                    promotion.CompanyId = mancompid;
-                    _context.Add(promotion);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                
-                return View(promotion);
-
-            }
 
             
         }
