@@ -220,7 +220,7 @@ namespace WebApplication1.Controllers
             public Flight Flight { get; set; }
             public List<Airplane> Airplanes { get; set; }
             public List<OfferInput> Offers { get; set; }
-            public TimeSpan RepeatTime { get; set; }
+            public int RepeatTime { get; set; }
             public int RepeatCount { get; set; }
         }
 
@@ -270,7 +270,7 @@ namespace WebApplication1.Controllers
                 var flight = new Flight(CreateInput.Flight);
                 var flightMan = _context.Routes.Where(a => a.RouteId == flight.RouteId).ToList();
                 flight.Name = flightMan.ElementAt(0).DepartureAirport.AirportName + "-" + flightMan.ElementAt(0).ArrivalAirport.AirportName;
-                flight.Date = CreateInput.Flight.Date + (x * CreateInput.RepeatTime);
+                flight.Date = CreateInput.Flight.Date.AddDays(x * CreateInput.RepeatTime);
                 flight.Airplane = _context.Airplanes.Find(flight.AirplaneId);
                 _context.Flights.Add(flight);
                 await _context.SaveChangesAsync();
