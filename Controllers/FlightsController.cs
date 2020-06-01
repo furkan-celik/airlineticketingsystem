@@ -290,7 +290,7 @@ namespace WebApplication1.Controllers
                 {
                     for (int j = 1; j <= flight.Airplane.EconomyColumnNo; j++)
                     {
-                        AddSeat(i + flight.Airplane.BusinessRowNo, j + flight.Airplane.BusinessColumnNo, flight.Id, 2);
+                        AddSeat(i, j + flight.Airplane.BusinessColumnNo, flight.Id, 2);
                     }
                 }
 
@@ -298,7 +298,7 @@ namespace WebApplication1.Controllers
                 {
                     for (int j = 1; j <= flight.Airplane.SuperCheapColumnNo; j++)
                     {
-                        AddSeat(i + flight.Airplane.BusinessRowNo + flight.Airplane.EconomyRowNo, j + flight.Airplane.BusinessColumnNo + flight.Airplane.EconomyColumnNo, flight.Id, 3);
+                        AddSeat(i, j + flight.Airplane.BusinessColumnNo + flight.Airplane.EconomyColumnNo, flight.Id, 3);
                     }
                 }
             }
