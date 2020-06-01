@@ -68,7 +68,10 @@ namespace WebApplication1.Controllers
                 }
 
             }
-            return View(flights.ToList());
+            if (flights != null)
+                return View(flights.ToList());
+            else
+                return View(null);
         }
 
         public IActionResult Search()
