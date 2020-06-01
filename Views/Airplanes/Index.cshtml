@@ -16,22 +16,22 @@
                 @Html.DisplayNameFor(model => model.Id) 
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BusinessRowNo)
+                @*@Html.DisplayNameFor(model => model.BusinessRowNo)*@Business Row
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BusinessColumnNo)
+                @*@Html.DisplayNameFor(model => model.BusinessColumnNo)*@Business Column
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EconomyRowNo)
+                @* @Html.DisplayNameFor(model => model.EconomyRowNo)*@Economy Row
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EconomyColumnNo)
+                @* @Html.DisplayNameFor(model => model.EconomyColumnNo)*@Economy Column
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SuperCheapRowNo)
+                @*@Html.DisplayNameFor(model => model.SuperCheapRowNo)*@Super Cheap Row
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SuperCheapColumnNo)
+                @*@Html.DisplayNameFor(model => model.SuperCheapColumnNo)*@Super Cheap Column
             </th>
             <th></th>
         </tr>
@@ -39,25 +39,25 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            <td style="color:lightgrey">
                 @Html.DisplayFor(modelitem => item.Id)
             </td>
-            <td>
+            <td style="color:lightgrey">
                 @Html.DisplayFor(modelItem => item.BusinessRowNo)
             </td>
-            <td>
+            <td style="color:lightgrey">
                 @Html.DisplayFor(modelItem => item.BusinessColumnNo)
             </td>
-            <td>
+            <td style="color:lightgrey">
                 @Html.DisplayFor(modelItem => item.EconomyRowNo)
             </td>
-            <td>
+            <td style="color:lightgrey">
                 @Html.DisplayFor(modelItem => item.EconomyColumnNo)
             </td>
-            <td>
+            <td style="color:lightgrey">
                 @Html.DisplayFor(modelItem => item.SuperCheapRowNo)
             </td>
-            <td>
+            <td style="color:lightgrey">
                 @Html.DisplayFor(modelItem => item.SuperCheapColumnNo)
             </td>
             <td>
