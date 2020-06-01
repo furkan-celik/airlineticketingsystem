@@ -238,7 +238,15 @@ namespace WebApplication1.Controllers
             _context.Offers.ToList().ForEach(x => createInputModel.Offers.Add(new OfferInput() { offer = x, selected = false }));
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Description");
             ViewData["RouteId"] = new SelectList(_context.Routes, "RouteId", "RouteId");
-            ViewData["AirplaneId"] = new SelectList(_context.Airplanes, "Id", "Id");
+
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+            selectListItems.Add(new SelectListItem() { Value = "null", Text = "Select an Airplane" });
+            foreach (var item in _context.Airplanes.ToList())
+            {
+                selectListItems.Add(new SelectListItem(item.Id + "Business Row/Col" + item.BusinessRowNo + "/" + item.BusinessColumnNo + ". Economy Row/Col: " + item.EconomyRowNo + "/" + item.EconomyColumnNo, item.Id));
+            }
+            ViewData["AirplaneId"] = new SelectList(selectListItems, "Value", "Text");  
+
             return View(createInputModel);
         }
 
