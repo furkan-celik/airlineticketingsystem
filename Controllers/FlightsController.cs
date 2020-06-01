@@ -20,6 +20,7 @@ using MailKit.Net.Smtp;
 
 using System.Reflection.Metadata.Ecma335;
 using SQLitePCL;
+using WebApplication1.Class;
 
 namespace WebApplication1.Controllers
 {
@@ -540,6 +541,13 @@ namespace WebApplication1.Controllers
                 purchase.Price += _context.Offers.FirstOrDefault(x => x.Type == inputModel.ticketClass).Price * (inputModel.numOfChild + inputModel.numOfAdult);
                 purchase.Tickets = new List<Ticket>();
 
+                String msg;
+                String userId = _userManager.GetUserId(HttpContext.User);
+                MailAdapter mailAdapter = new MailAdapter();
+
+                msg = "Thank you for your ticket purchase. Here are the details < br /> ";
+                msg = msg + "Flight: " + flight.Name + "<br />" + "Fllght NO : " + inputModel.flightInfo.FlightNo + " < br /> ";
+
                 int counter = 0;
                 while (counter < inputModel.numOfAdult + inputModel.numOfChild)
                 {
@@ -593,10 +601,16 @@ namespace WebApplication1.Controllers
 
                     counter++;
                     purchase.Tickets.Add(tic);
+
+                    msg = msg + "Ticket: " + "<br />" + tic.Id + "<br />" + "Seat: " + seat.Col + seat.Row + "< br /><br />";
+
                 }
 
                 _context.Purchases.Add(purchase);
                 _context.SaveChanges();
+
+                String to = _context.Users.Where(a => a.Id == userId).Select(a => a.Email).FirstOrDefault().ToString();
+                mailAdapter.SendMail(_userManager.GetUserId(HttpContext.User), msg, to);
 
                 return RedirectToAction("Purchase", new { id = purchase.Id });
             }
@@ -697,23 +711,30 @@ namespace WebApplication1.Controllers
             _context.SaveChanges();
 
 
-            String mail = _context.Users.Where(a => a.Id == _userManager.GetUserId(HttpContext.User)).Select(a => a.Email).FirstOrDefault().ToString();
-            var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("flightviewerticket@gmail.com"));
-            message.To.Add(new MailboxAddress(mail));
-            message.Subject = "test";
-            message.Body = new TextPart("test")
-            {
-                Text = "test"
-            };
-            using (var client = new SmtpClient())
-            {
-                client.Connect("smtp.gmail.com", 587, false);
-                client.Authenticate("flightviewerticket@gmail.com", "Cs308proje");
+            //------------------------------------Send Mail Start------------------------------------------//
 
-                client.Send(message);
-                client.Disconnect(true);
-            }
+            //String msg;
+            //MailAdapter mailAdapter = new MailAdapter();
+
+            //msg = "Thank you for your ticket purchase. Here are the details < br /> ";
+            //msg = msg + "Fllght NO : " + inputModel.flightInfo.FlightNo + " < br /> ";
+
+            //var flt = _context.Flights.Where(a => a.FlightNo.Equals(inputModel.flightInfo.FlightNo)).FirstOrDefault();
+            //var tic = _context.Tickets.Where(a => a.EventId.Equals(flt.Id) && a.OwnerId.Equals(OwnerId)).ToList();
+
+            //foreach(var t in tic)
+            //    {
+            //    var seat = _context.Seats.Where(a => a.FlightId.Equals(flt.FlightNo) && a.TicketId.Equals(t.Id)).FirstOrDefault();
+
+            //    msg = msg + "Flight: " + flt.Name + "<br />" + "Ticket: " + "<br />" + t.Id + "<br />" + "Seat: " + seat.Col + seat.Row + "< br /><br />";
+            //}
+            
+
+            //String to = _context.Users.Where(a => a.Id == OwnerId).Select(a => a.Email).FirstOrDefault().ToString();
+            //mailAdapter.SendMail(_userManager.GetUserId(HttpContext.User), msg, to);
+
+            //------------------------------------Send Mail End------------------------------------------//
+
 
             return RedirectToAction(nameof(Successful));
         }
