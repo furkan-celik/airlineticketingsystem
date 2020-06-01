@@ -44,10 +44,10 @@
     }
 </style>
 
-<h1>Index</h1>
+<h1 style="color:lightgrey">Index</h1>
 
 <p>
-    <div class="span12">
+    <div class="span12" style="color:lightgrey">
         <form id="custom-search-form" class="form-search form-horizontal pull-right" asp-action="Details">
             <div class="input-append span12">
                 <input type="number" class="search-query" placeholder="Search">
@@ -61,10 +61,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ProcessTime)
+                @*@Html.DisplayNameFor(model => model.ProcessTime)*@Process Time
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsProcessed)
+                @*@Html.DisplayNameFor(model => model.IsProcessed)*@Is Processed
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Price)
@@ -78,17 +78,17 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            <td style="color:lightgrey">
                 @Html.DisplayFor(modelItem => item.ProcessTime)
             </td>
-            <td>
+            <td style="color:lightgrey">
                 @Html.DisplayFor(modelItem => item.IsProcessed)
             </td>
-            <td>
+            <td style="color:lightgrey">
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Owner.Id)
+            <td style="color:lightgrey">
+                @Html.DisplayFor(modelItem => item.Owner.Name) @Html.DisplayFor(modelItem => item.Owner.Surname)
             </td>
             <td class="btn-group" role="group">
                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>

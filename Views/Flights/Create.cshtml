@@ -19,106 +19,120 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @if (User.IsInRole("WebAdmin"))
-            {
-                <div class="form-group">
-                    <label asp-for="Flight.CompanyId" class="control-label">Company</label>
-                    <select asp-for="Flight.CompanyId" class="form-control" asp-items="ViewBag.CompanyId"></select>
-                </div>
-            }
-            @*<div class="form-group">
-                    <label asp-for="Name" class="control-label"></label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>*@
-            <div class="form-group">
-                <label asp-for="Flight.FlightNo" class="control-label">Flight No</label>
-                <input asp-for="Flight.FlightNo" class="form-control" />
-                <span asp-validation-for="Flight.FlightNo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Flight.RefundTime" class="control-label">Refund Time</label>
-                <input asp-for="Flight.RefundTime" class="form-control" />
-                <span asp-validation-for="Flight.RefundTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Flight.ResCancelTime" class="control-label">Reservation Cancel Time</label>
-                <input asp-for="Flight.ResCancelTime" class="form-control" />
-                <span asp-validation-for="Flight.ResCancelTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Flight.RefundPortion" class="control-label">Refund Portion</label>
-                <input asp-for="Flight.RefundPortion" class="form-control" />
-                <span asp-validation-for="Flight.RefundPortion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Flight.Date" class="control-label"></label>
-                <input asp-for="Flight.Date" class="form-control" />
-                <span asp-validation-for="Flight.Date" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Flight.RouteId" class="control-label">Route Id</label>
-                <select asp-for="Flight.RouteId" class="form-control" asp-items="ViewBag.RouteId"></select>
-                <a class="nav-link" asp-area="" asp-controller="Routes" asp-action="Create">Create New Route</a>
-            </div>
-            <div class="row" id="accordion">
-                <div class="card">
-                    <div class="card-header" id="headingRes">
-                        <h5 class="mb-0">
-                            <span class="btn btn-link" data-toggle="collapse" data-target="#collapseRes" aria-expanded="true" aria-controls="collapseRes" style="color:lightgray">
-                                Offers
-                            </span>
-                        </h5>
-                    </div>
-                    <div class="collapse" id="collapseRes" aria-labelledby="headingRes" data-parent="#accordion">
-                        <div class="card-body">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col">Child Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @for (int i = 0; i < Model.Offers.ToList().Count; i++)
-                                    {
-                                        <tr>
-                                            <th scope="row" style="color:lightgray">@Model.Offers[i].offer.Name</th>
-                                            <td style="color:lightgray">@Model.Offers[i].offer.Description</td>
-                                            <td style="color:lightgray">@Model.Offers[i].offer.Price</td>
-                                            <td style="color:lightgray">@Model.Offers[i].offer.ChildPrice</td>
-                                            <td style="color:lightgray">
-                                                <label class="btn btn-primary">
-                                                    @Html.CheckBoxFor(model => model.Offers[i].selected)
-                                                    <i class="fas fa-check"></i>
-                                                </label>
-                                            </td>
-                                            @Html.HiddenFor(model => model.Offers[i].offer.Id)
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+
+            <table class="table">
+                <tr class="row">
+                    <td class="col-sm-12">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        @if (User.IsInRole("WebAdmin"))
+                        {
+                            <div class="form-group">
+                                <label asp-for="Flight.CompanyId" class="control-label">Company</label>
+                                <select asp-for="Flight.CompanyId" class="form-control" asp-items="ViewBag.CompanyId"></select>
+                            </div>
+                        }
+                        @*<div class="form-group">
+                                <label asp-for="Name" class="control-label"></label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>*@
+                        <div class="form-group">
+                            <label asp-for="Flight.FlightNo" class="control-label">Flight No</label>
+                            <input asp-for="Flight.FlightNo" class="form-control" />
+                            <span asp-validation-for="Flight.FlightNo" class="text-danger"></span>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                Multiple event: <input type="checkbox" id="trigger" name="question">
-                <div id="muiltipleField">
-                    <label asp-for="RepeatTime" class="control-label" id="repeatTime">Repeat Time</label>
-                    <input asp-for="RepeatTime" class="form-control" />
-                    <label asp-for="RepeatCount" class="control-label" id="repeatCount">Repeat Count</label>
-                    <input asp-for="RepeatCount" class="form-control" />
-                </div>
-            </div>
-            <div class="form-group">
-                <input asp-for="Flight.Name" type="hidden" value="empty" class="form-control" />
-                <input type="submit" value="Create" class="btn btn-primary" /> |
-                <a asp-action="Index">Back to List</a>
-            </div>
+                        <div class="form-group">
+                            <label asp-for="Flight.RefundTime" class="control-label">Refund Time</label>
+                            <input asp-for="Flight.RefundTime" class="form-control" />
+                            <span asp-validation-for="Flight.RefundTime" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Flight.ResCancelTime" class="control-label">Reservation Cancel Time</label>
+                            <input asp-for="Flight.ResCancelTime" class="form-control" />
+                            <span asp-validation-for="Flight.ResCancelTime" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Flight.RefundPortion" class="control-label">Refund Portion</label>
+                            <input asp-for="Flight.RefundPortion" class="form-control" />
+                            <span asp-validation-for="Flight.RefundPortion" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Flight.Date" class="control-label"></label>
+                            <input asp-for="Flight.Date" class="form-control" />
+                            <span asp-validation-for="Flight.Date" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Flight.RouteId" class="control-label">Route Id</label>
+                            <select asp-for="Flight.RouteId" class="form-control" asp-items="ViewBag.RouteId"></select>
+                            <a class="nav-link" asp-area="" asp-controller="Routes" asp-action="Create">Create New Route</a>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Flight.AirplaneId" class="control-label">Airplane Id</label>
+                            <select asp-for="Flight.AirplaneId" class="form-control" asp-items="ViewBag.AirplaneId"></select>
+                            <a class="nav-link" asp-area="" asp-controller="Routes" asp-action="Create">Create New Route</a>
+                        </div>
+                        <div class="row" id="accordion">
+                            <div class="card">
+                                <div class="card-header" id="headingRes">
+                                    <h5 class="mb-0">
+                                        <span class="btn btn-link" data-toggle="collapse" data-target="#collapseRes" aria-expanded="true" aria-controls="collapseRes" style="color:lightgray">
+                                            Offers
+                                        </span>
+                                    </h5>
+                                </div>
+                                <div class="collapse" id="collapseRes" aria-labelledby="headingRes" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Description</th>
+                                                    <th scope="col">Price</th>
+                                                    <th scope="col">Child Price</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @for (int i = 0; i < Model.Offers.ToList().Count; i++)
+                                                {
+                                                    <tr>
+                                                        <th scope="row" style="color:lightgray">@Model.Offers[i].offer.Name</th>
+                                                        <td style="color:lightgray">@Model.Offers[i].offer.Description</td>
+                                                        <td style="color:lightgray">@Model.Offers[i].offer.Price</td>
+                                                        <td style="color:lightgray">@Model.Offers[i].offer.ChildPrice</td>
+                                                        <td style="color:lightgray">
+                                                            <label class="btn btn-primary">
+                                                                @Html.CheckBoxFor(model => model.Offers[i].selected)
+                                                                <i class="fas fa-check"></i>
+                                                            </label>
+                                                        </td>
+                                                        @Html.HiddenFor(model => model.Offers[i].offer.Id)
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            Multiple event: <input type="checkbox" id="trigger" name="question">
+                            <div id="muiltipleField">
+                                <label asp-for="RepeatTime" class="control-label" id="repeatTime">Repeat Time</label>
+                                <input asp-for="RepeatTime" class="form-control" />
+                                <label asp-for="RepeatCount" class="control-label" id="repeatCount">Repeat Count</label>
+                                <input asp-for="RepeatCount" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input asp-for="Flight.Name" type="hidden" value="empty" class="form-control" />
+                            <input type="submit" value="Create" class="btn btn-primary" /> |
+                            <a asp-action="Index">Back to List</a>
+                        </div>
+                    </td>
+
+                </tr>
+            </table>
         </form>
     </div>
 </div>

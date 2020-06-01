@@ -94,7 +94,7 @@ namespace WebApplication1.Controllers
         //[Authorize(Roles = "WebAdmin,CompAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RouteId,DepartureId,ArrivalId,ETA")] Route route, [Bind("RouteId,DepartureId,ArrivalId,ETA")] Route route2)
+        public async Task<IActionResult> Create(Route route, bool twoWay)
         {
             ViewData["AirportId"] = new SelectList(_context.Airports, "Id", "AirportName");
             ViewData["Err"] = "";
@@ -115,15 +115,19 @@ namespace WebApplication1.Controllers
                     _context.Add(route);
                     await _context.SaveChangesAsync();
 
-                    // Return route automatically added 
-                    /*
-                    route2.RouteId += 1;
-                    int arrivalid = route2.ArrivalId;
-                    route2.ArrivalId = route2.DepartureId;
-                    route2.DepartureId = arrivalid;
+                    if (twoWay)
+                    {
+                        route.RouteId = default;
+                        route.DepartureAirport = null;
+                        route.ArrivalAirport = null;
+                        
+                        int tmp = route.DepartureId;
+                        route.DepartureId = route.ArrivalId;
+                        route.ArrivalId = tmp;
+                        _context.Routes.Add(route);
+                    }
 
-                    _context.Add(route2);
-                    await _context.SaveChangesAsync();*/
+                    await _context.SaveChangesAsync();
 
                     return RedirectToAction(nameof(Index));
                 }

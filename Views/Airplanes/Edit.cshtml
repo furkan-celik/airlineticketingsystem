@@ -4,9 +4,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>Airplane</h4>
+<h2 style="color:lightgrey">Edit Airplane</h2>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,45 +12,43 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="BusinessRowNo" class="control-label"></label>
+                <label asp-for="BusinessRowNo" class="control-label">Business Row No</label>
                 <input asp-for="BusinessRowNo" class="form-control" />
                 <span asp-validation-for="BusinessRowNo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="BusinessColumnNo" class="control-label"></label>
+                <label asp-for="BusinessColumnNo" class="control-label">Business Column No</label>
                 <input asp-for="BusinessColumnNo" class="form-control" />
                 <span asp-validation-for="BusinessColumnNo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EconomyRowNo" class="control-label"></label>
+                <label asp-for="EconomyRowNo" class="control-label">Economy Row No</label>
                 <input asp-for="EconomyRowNo" class="form-control" />
                 <span asp-validation-for="EconomyRowNo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EconomyColumnNo" class="control-label"></label>
+                <label asp-for="EconomyColumnNo" class="control-label">Economy Column No</label>
                 <input asp-for="EconomyColumnNo" class="form-control" />
                 <span asp-validation-for="EconomyColumnNo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SuperCheapRowNo" class="control-label"></label>
+                <label asp-for="SuperCheapRowNo" class="control-label">Super Cheap Row No</label>
                 <input asp-for="SuperCheapRowNo" class="form-control" />
                 <span asp-validation-for="SuperCheapRowNo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SuperCheapColumnNo" class="control-label"></label>
+                <label asp-for="SuperCheapColumnNo" class="control-label">Super Cheap Column No</label>
                 <input asp-for="SuperCheapColumnNo" class="form-control" />
                 <span asp-validation-for="SuperCheapColumnNo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" /> |
+                <a asp-action="Index">Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

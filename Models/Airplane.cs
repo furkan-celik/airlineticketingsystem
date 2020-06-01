@@ -24,6 +24,6 @@ namespace WebApplication1.Models
         [Required]
         public int SuperCheapColumnNo { get; set; }
 
-        
+        public virtual ICollection<Flight> Flights { get; set; }
     }
 }

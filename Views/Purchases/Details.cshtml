@@ -5,35 +5,34 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<h3 style="color:lightgrey">Purchase Details</h3>
 
 <div>
-    <h4>Purchase</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProcessTime)
+        <dt class = "col-sm-2" style="color:lightslategrey">
+            @*@Html.DisplayNameFor(model => model.ProcessTime)*@Process Time
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-10" style="color:lightgrey">
             @Html.DisplayFor(model => model.ProcessTime)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsProcessed)
+        <dt class = "col-sm-2" style="color:lightslategrey">
+            @*@Html.DisplayNameFor(model => model.IsProcessed)*@Is Processed
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-10" style="color:lightgrey">
             @Html.DisplayFor(model => model.IsProcessed)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class = "col-sm-2" style="color:lightslategrey">
             @Html.DisplayNameFor(model => model.Price)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-10" style="color:lightgrey">
             @Html.DisplayFor(model => model.Price)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class = "col-sm-2" style="color:lightslategrey">
             @Html.DisplayNameFor(model => model.Owner)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Owner.Id)
+        <dd class="col-sm-10" style="color:lightgrey">
+            @Html.DisplayFor(model => model.Owner.Name) @Html.DisplayFor(model => model.Owner.Surname)
         </dd>
     </dl>
 </div>
