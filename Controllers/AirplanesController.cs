@@ -11,7 +11,7 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
-    [Authorize(Roles = "WebAdmin")]
+    [Authorize( "ReqAdmin")]
     public class AirplanesController : Controller
     {
         private readonly ApplicationDbContext _context;
