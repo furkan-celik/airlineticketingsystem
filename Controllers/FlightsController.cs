@@ -94,13 +94,25 @@ namespace WebApplication1.Controllers
             return View(list2);
         }
 
+        public IActionResult SearchAsPage(string arr, string dest, DateTime date, int numOfAdult, int numOfChild, int ticketClass, int pId)
+        {
+            return View(GetListOfFlights(arr, dest, date, numOfAdult, numOfChild, ticketClass));
+        }
+
         public class SearchResultModel
         {
             public Flight Flight { get; set; }
             public int Price { get; set; }
+            public DateTime ReturnDate { get; set; }
+            public int? pId { get; set; }
         }
 
-        public IActionResult SearchResults(string arr, string dest, DateTime date, int numOfAdult, int numOfChild, int ticketClass)
+        public IActionResult SearchResults(string arr, string dest, DateTime date, int numOfAdult, int numOfChild, int ticketClass, DateTime returnDate)
+        {
+            return PartialView(GetListOfFlights(arr, dest, date, numOfAdult, numOfChild, ticketClass, returnDate));
+        }
+
+        public List<SearchResultModel> GetListOfFlights(string arr, string dest, DateTime date, int numOfAdult, int numOfChild, int ticketClass, DateTime returnDate = default, int? pId = null)
         {
             var flights = from selectList in _context.Flights.Include(x => x.Organizer)
                           select selectList;
@@ -168,11 +180,11 @@ namespace WebApplication1.Controllers
                 foreach (var item in flights.ToArray())
                 {
                     var price = (int)(item.Offers.FirstOrDefault(x => x.Offer.Type == ticketClass).Offer.ChildPrice * numOfChild + item.Offers.FirstOrDefault(x => x.Offer.Type == ticketClass).Offer.Price * numOfAdult);
-                    srm.Add(new SearchResultModel() { Flight = item, Price = price });
+                    srm.Add(new SearchResultModel() { Flight = item, Price = price, ReturnDate = returnDate, pId = pId });
                 }
             }
 
-            return PartialView(srm);
+            return srm;
         }
 
         // GET: Events/Details/5
@@ -246,7 +258,7 @@ namespace WebApplication1.Controllers
             {
                 selectListItems.Add(new SelectListItem(item.Id + "Business Row/Col" + item.BusinessRowNo + "/" + item.BusinessColumnNo + ". Economy Row/Col: " + item.EconomyRowNo + "/" + item.EconomyColumnNo, item.Id));
             }
-            ViewData["AirplaneId"] = new SelectList(selectListItems, "Value", "Text");  
+            ViewData["AirplaneId"] = new SelectList(selectListItems, "Value", "Text");
 
             return View(createInputModel);
         }
@@ -309,7 +321,7 @@ namespace WebApplication1.Controllers
         {
             Seat seat = new Seat();
             seat.Id = 0;
-            seat.Row = ((char)(row + (int)'A')).ToString();
+            seat.Row = ((char)(row + (int)'a')).ToString();
             seat.Col = col;
             seat.FlightId = flightId;
             seat.Availability = true;
@@ -446,13 +458,15 @@ namespace WebApplication1.Controllers
             public int numOfChild { get; set; }
             public int ticketClass { get; set; }
             public int basePrice { get; set; }
+            public DateTime returnDate { get; set; }
+            public int PId { get; set; }
         }
 
         [BindProperty]
         public InputModel inputModel { get; set; }
 
         [HttpGet]
-        public async Task<IActionResult> Buy(int? id, int numOfAdult, int numOfChild, int ticketClass)
+        public async Task<IActionResult> Buy(int? id, int numOfAdult, int numOfChild, int ticketClass, DateTime? returnDate, int? pId)
         {
             ViewData["Err"] = "";
             if (id == null)
@@ -491,7 +505,20 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            return PartialView(inputModel);
+            if (returnDate.HasValue)
+            {
+                inputModel.returnDate = returnDate.Value;
+            }
+            else
+            {
+                inputModel.returnDate = default;
+                if (pId.HasValue)
+                {
+                    inputModel.PId = pId.Value;
+                }
+            }
+
+            return View(inputModel);
         }
 
         //POST: Events/
@@ -537,9 +564,19 @@ namespace WebApplication1.Controllers
             }*/
             else
             {
-                Purchase purchase = new Purchase() { IsProcessed = false, OwnerId = _userManager.GetUserId(HttpContext.User), Price = 0, ProcessTime = DateTime.Now };
+                Purchase purchase;
+                if (inputModel.PId == default)
+                {
+                    purchase = new Purchase() { IsProcessed = false, OwnerId = _userManager.GetUserId(HttpContext.User), Price = 0, ProcessTime = DateTime.Now };
+                    purchase.Tickets = new List<Ticket>();
+                    purchase.Price = 0;
+                }
+                else
+                {
+                    purchase = _context.Purchases.Find(inputModel.PId);
+                }
+
                 purchase.Price += _context.Offers.FirstOrDefault(x => x.Type == inputModel.ticketClass).Price * (inputModel.numOfChild + inputModel.numOfAdult);
-                purchase.Tickets = new List<Ticket>();
 
                 String msg;
                 String userId = _userManager.GetUserId(HttpContext.User);
@@ -606,13 +643,24 @@ namespace WebApplication1.Controllers
 
                 }
 
-                _context.Purchases.Add(purchase);
+                if (inputModel.PId == default)
+                    _context.Purchases.Add(purchase);
+                else
+                    _context.Purchases.Update(purchase);
+
                 _context.SaveChanges();
 
                 String to = _context.Users.Where(a => a.Id == userId).Select(a => a.Email).FirstOrDefault().ToString();
                 mailAdapter.SendMail(_userManager.GetUserId(HttpContext.User), msg, to);
 
-                return RedirectToAction("Purchase", new { id = purchase.Id });
+                if (inputModel.returnDate == default)
+                {
+                    return RedirectToAction("Purchase", new { id = purchase.Id });
+                }
+                else
+                {
+                    return RedirectToAction("SearchAsPage", new { arr = flight.Route.DepartureAirport.AirportName, dest = flight.Route.ArrivalAirport.AirportName, date = inputModel.returnDate, numOfAdult = inputModel.numOfAdult, numOfChild = inputModel.numOfChild, ticketClass = inputModel.ticketClass });
+                }
             }
         }
 
@@ -728,7 +776,7 @@ namespace WebApplication1.Controllers
 
             //    msg = msg + "Flight: " + flt.Name + "<br />" + "Ticket: " + "<br />" + t.Id + "<br />" + "Seat: " + seat.Col + seat.Row + "< br /><br />";
             //}
-            
+
 
             //String to = _context.Users.Where(a => a.Id == OwnerId).Select(a => a.Email).FirstOrDefault().ToString();
             //mailAdapter.SendMail(_userManager.GetUserId(HttpContext.User), msg, to);

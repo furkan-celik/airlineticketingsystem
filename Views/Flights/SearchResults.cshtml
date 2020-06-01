@@ -25,29 +25,36 @@
         <tbody>
             @foreach (var item in Model)
             {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Flight.Date)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Flight.FlightNo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Flight.Organizer.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Flight.Route.ArrivalAirport.AirportName)
-                    -
-                    @Html.DisplayFor(modelItem => item.Flight.Route.DepartureAirport.AirportName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    <a class="btn btn-primary" id="btnBuy" data-target="/Flights/Buy?id=@item.Flight.Id&numOfAdult=@Context.Request.Query["numOfAdult"]&numOfChild=@Context.Request.Query["numOfChild"]&ticketClass=@Context.Request.Query["ticketClass"]">Buy/Reservation</a> |
-                    <a asp-action="Details" asp-route-id="@item.Flight.Id">Details</a>
-                </td>
-            </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Flight.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Flight.FlightNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Flight.Organizer.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Flight.Route.ArrivalAirport.AirportName)
+                        -
+                        @Html.DisplayFor(modelItem => item.Flight.Route.DepartureAirport.AirportName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @if (item.pId.HasValue)
+                        {
+                            <a class="btn btn-primary" href="~/Flights/Buy?id=@item.Flight.Id&numOfAdult=@Context.Request.Query["numOfAdult"]&numOfChild=@Context.Request.Query["numOfChild"]&ticketClass=@Context.Request.Query["ticketClass"]&pId=@item.pId.Value">Buy/Reservation</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-primary" href="~/Flights/Buy?id=@item.Flight.Id&numOfAdult=@Context.Request.Query["numOfAdult"]&numOfChild=@Context.Request.Query["numOfChild"]&ticketClass=@Context.Request.Query["ticketClass"]&returnDate=@item.ReturnDate">Buy/Reservation</a>
+                        }
+                        | <a asp-action="Details" asp-route-id="@item.Flight.Id">Details</a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>

@@ -14,13 +14,13 @@
         <div class="booking-form">
             <div class="form-group">
                 <div class="form-checkbox">
+                    <label for="one-way">
+                        <input type="radio" id="one-way" name="flight-type" onchange="enabled(roundtrip)" checked="checked">
+                        <span></span>One way
+                    </label>
                     <label for="roundtrip">
                         <input type="radio" id="roundtrip" name="flight-type" onchange="enabled(this)">
                         <span></span>Roundtrip
-                    </label>
-                    <label for="one-way">
-                        <input type="radio" id="one-way" name="flight-type" onchange="enabled(roundtrip)">
-                        <span></span>One way
                     </label>
                 </div>
             </div>
@@ -124,6 +124,18 @@
         return true;
     }
 
+    function CheckReturnDate(date, returnDate) {
+        if (returnDate == null) {
+            alert("Returning date field cannot left blank when two way option is selected! Please select a return date");
+            return false;
+        }
+        if (date >= returnDate) {
+            alert("Returning date cannot be earlier than or same as departing date!");
+            return false;
+        }
+        return true;
+    }
+
     var firstTime = true;
     $("#btnSearch").click(function () {
         if (firstTime) {
@@ -141,12 +153,18 @@
         var noAdult = $("#numOfAdult").val();
         var noChild = $("#numOfChild").val();
         var mClass = $("#ticketClass").val();
+        var returnDate = new Date(0);
+
+        if ($("#roundtrip").is(":checked")) {
+            returnDate = new Date($("#arrival").val());
+            alert(returnDate);
+        }
 
         disablePrevDayBtn(new Date(date));
         setDateTexts(new Date(date));
 
-        if (GiveError("Departure", dest) && GiveError("Arrival", arr) && GiveError("Departure Date", date) && GiveError("Adult Number", noAdult) && GiveError("Ticket Class", mClass)) {
-            var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass;
+        if (GiveError("Departure", dest) && GiveError("Arrival", arr) && GiveError("Departure Date", date) && GiveError("Adult Number", noAdult) && GiveError("Ticket Class", mClass) && CheckReturnDate(new Date(date), returnDate)) {
+            var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass + "&returnDate=" + returnDate.toISOString().substring(0, 10);
             $.get(url, function () { }).done(function (data) {
                 $("#modelView .modal-body").html(data);
                 $(".pop").modal("show");
@@ -166,13 +184,21 @@
         var noChild = $("#numOfChild").val();
         var mClass = $("#ticketClass").val();
         var newDate = new Date(Date.parse(date) + 86400000);
+        var returnDate = new Date(0);
+
+        if ($("#roundtrip").attr("checked").val()) {
+            returnDate = new Date($("#arrival").val());
+            if (returnDate == newDate) {
+                returnDate = new Date(returnDate + 86400000);
+            }
+        }
 
         disablePrevDayBtn(newDate);
         setDateTexts(newDate);
 
         $("#date").val(newDate.toISOString().substring(0, 10));
         date = $("#date").val();
-        var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass;
+        var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass + "&returnDate=" + returnDate.toISOString().substring(0, 10);
         $.get(url, function () { }).done(function (data) {
             $("#modelView .modal-body").html(data);
             $(".pop").modal("show");
@@ -191,13 +217,18 @@
         var noChild = $("#numOfChild").val();
         var mClass = $("#ticketClass").val();
         var newDate = new Date(Date.parse(date) - 86400000);
+        var returnDate = new Date(0);
+
+        if ($("#roundtrip").attr("checked").val()) {
+            returnDate = new Date($("#arrival").val());
+        }
 
         disablePrevDayBtn(newDate);
         setDateTexts(newDate);
 
         $("#date").val(newDate.toISOString().substring(0, 10));
         date = $("#date").val();
-        var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass;
+        var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass + "&returnDate=" + returnDate.toISOString().substring(0, 10);
         $.get(url, function () { }).done(function (data) {
             $("#modelView .modal-body").html(data);
             $(".pop").modal("show");

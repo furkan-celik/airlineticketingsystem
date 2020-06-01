@@ -24,7 +24,6 @@
         /* The sidebar menu */
         .sidenav {
             width: 400px;
-            position: fixed;
             z-index: 1;
             top: 40px;
             left: 10px;
@@ -77,10 +76,14 @@
         }
 
         .plane {
-            margin: 20px auto;
+            background-color: azure;
+            margin: 50px;
+            border-style: solid;
+            border-color: azure;
+            border-width: 8px;
+            border-radius: 15px;
             max-width: 300px;
             display: inline-block;
-            margin: 0 auto;
         }
 
         .cockpit {
@@ -310,221 +313,228 @@
     </style>
 </head>
 
-
 <body>
     <h3>Buy ticket</h3>
     <div class="container">
         <div class="row">
 
             <form asp-action="Buy" id="Buy">
-                <div style="text-align: center;">
+                <table class="table">
+                    <tr>
+                        <th>
+                            <div class="sidenav">
+                                <div class="scroolable">
+                                    <div>
+                                        <dl class="row">
+                                            <dt class="col-sm-3">
+                                                @Html.DisplayNameFor(model => model.flightInfo.Organizer)
+                                            </dt>
+                                            <dd class="col-sm-9">
+                                                @Html.DisplayFor(model => model.flightInfo.Organizer.Description)
+                                            </dd>
+                                            <dt class="col-sm-3">
+                                                @*@Html.DisplayNameFor(model => model.FlightNo)*@Flight No
+                                            </dt>
+                                            <dd class="col-sm-9">
+                                                @Html.DisplayFor(model => model.flightInfo.FlightNo)
+                                            </dd>
+                                            <dt class="col-sm-3">
+                                                @Html.DisplayNameFor(model => model.flightInfo.Name)
+                                            </dt>
+                                            <dd class="col-sm-9">
+                                                @Html.DisplayFor(model => model.flightInfo.Name)
+                                            </dd>
+                                            <dt class="col-sm-3">
+                                                @Html.DisplayNameFor(model => model.flightInfo.Date)
+                                            </dt>
+                                            <dd class="col-sm-9">
+                                                @Html.DisplayFor(model => model.flightInfo.Date)
+                                            </dd>
+                                        </dl>
+                                    </div>
 
-                    <div class="plane">
-                        <div class="cockpit">
-                            <h1>Please select a seat</h1>
-                        </div>
-                        <div class="exit exit--front fuselage">
+                                    <button onclick="myFunction()" class="btn btn-info">Extra Info </button>
+                                    <div id="myDIV" style="display: none">
 
-                        </div>
-                        <ol class="cabin fuselage">
-                            @for (int i = 0; i < Model.seats.Count; i++)
-                            {
-                                <li class="row row--@i">
-                                    <ol class="seats" type="A">
-                                        @for (int j = 0; j < Model.seats[i].Count; j++)
+                                        <hr />
+                                        <dl class="row">
+
+                                            <dt class="col-sm-2">
+                                                @*@Html.DisplayNameFor(model => model.RefundTime)*@Refund Time
+                                            </dt>
+                                            <dd class="col-sm-10">
+                                                @Html.DisplayFor(model => model.flightInfo.RefundTime)
+                                            </dd>
+                                            <dt class="col-sm-2">
+                                                @*@Html.DisplayNameFor(model => model.RefundPortion)*@Refund Portion
+                                            </dt>
+                                            <dd class="col-sm-10">
+                                                @Html.DisplayFor(model => model.flightInfo.RefundPortion)
+                                            </dd>
+                                        </dl>
+
+                                    </div>
+
+                                    <hr />
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">Additional Offers</h4>
+                                        </div>
+                                        <ul class="list-group">
+                                            @for (int i = 0; i < Model.offers.Count; i++)
+                                            {
+                                                <li class="list-group-item">
+                                                    <div class="row toggle" id="dropdown-detail-@Model.offers[i].offer.Id" data-toggle="detail-@Model.offers[i].offer.Id">
+                                                        <div class="col-xs-10">
+                                                            @Model.offers[i].offer.Name
+                                                        </div>
+                                                        <div class="col-xs-2"><i class="fa fa-chevron-down pull-right"></i></div>
+                                                    </div>
+                                                    <div id="detail-@Model.offers[i].offer.Id">
+                                                        <hr></hr>
+                                                        <div class="container">
+                                                            <div class="fluid-row">
+                                                                <div class="col-xs-1">
+                                                                    Detail:
+                                                                </div>
+                                                                <div class="col-xs-5">
+                                                                    @Model.offers[i].offer.Description
+                                                                </div>
+                                                                <div class="col-xs-1">
+                                                                    Price:
+                                                                </div>
+                                                                <div class="col-xs-5">
+                                                                    @Model.offers[i].offer.Price
+                                                                </div>
+                                                                <div class="col-xs-1">
+                                                                    Adult Quantity:
+                                                                </div>
+                                                                <div class="col-xs-5">
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-btn">
+                                                                            <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus" data-field="quantity-adult-@i" data-price="@Model.offers[i].offer.Price" data-cap="countOfSeats">
+                                                                                <i class="fa fa-minus"></i>
+                                                                            </button>
+                                                                        </span>
+                                                                        @Html.HiddenFor(model => model.offers[i].offer.Id)
+                                                                        @Html.TextBoxFor(model => model.offers[i].quantity, new { id = "quantity-adult-" + i, @class = "form-control input-number", min = "0", max = "100" })
+                                                                        <span class="input-group-btn">
+                                                                            <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="quantity-adult-@i" data-price="@Model.offers[i].offer.Price" data-cap="countOfSeats">
+                                                                                <i class="fa fa-plus"></i>
+                                                                            </button>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-xs-1">
+                                                                    Child Quantity:
+                                                                </div>
+                                                                <div class="col-xs-5">
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-btn">
+                                                                            <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus" data-field="quantity-child-@i" data-price="@Model.offers[i].offer.ChildPrice" data-cap="countOfChild">
+                                                                                <i class="fa fa-minus"></i>
+                                                                            </button>
+                                                                        </span>
+                                                                        @Html.HiddenFor(model => model.offers[i].offer.Id)
+                                                                        @Html.TextBoxFor(model => model.offers[i].childQuantity, new { id = "quantity-child-" + i, @class = "form-control input-number", min = "0", max = "100" })
+                                                                        <span class="input-group-btn">
+                                                                            <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="quantity-child-@i" data-price="@Model.offers[i].offer.ChildPrice" data-cap="countOfChild">
+                                                                                <i class="fa fa-plus"></i>
+                                                                            </button>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+
+                                    <hr />
+                                    <p style="color:crimson"> @ViewData["Err"]</p>
+
+                                    <div class="form-group">
+                                        @Html.HiddenFor(model => model.ticketClass)
+                                        @Html.HiddenFor(model => model.numOfAdult)
+                                        @Html.HiddenFor(model => model.numOfChild)
+                                        <input type="hidden" asp-for="@Model.basePrice" id="basePrice" />
+                                        <input type="hidden" id="countOfSeats" name="countOfSeats" class="form-control input-number" asp-for="@Model.numOfAdult">
+                                        <input type="hidden" id="countOfChild" name="countOfChild" class="form-control input-number" asp-for="@Model.numOfChild">
+                                        <input type="hidden" asp-for="@Model.returnDate"/>
+                                        <label>Select @Model.numOfAdult seats for adults</label><br />
+                                        <label>Select @Model.numOfChild seats for children</label><br />
+                                        <label for="countOfBaby" class="control-label"> Infant(s) (Age 0-2): </label>
+                                        <input type="number" id="countOfBaby" name="countOfBaby" value="0" min="0" max="@Model.numOfAdult" class="form-control" />
+                                    </div>
+                                </div>
+
+                                <hr />
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <h3><span class="control-label" id="priceLabel">@Model.basePrice</span>TL</h3>
+                                    </div>
+                                    <div style="border-left:1px solid #000;height:40px; margin-left:10px; margin-right:10px;"></div>
+                                    <div class="form-group">
+                                        <input type="hidden" asp-for="flightInfo.Id" />
+                                        <input type="submit" value="Buy" formaction="~/Flights/Buy" class="btn btn-success" onclick="changeAction('/Flights/Buy')" />
+                                        @{
+                                            if ((DateTime.Now + Model.flightInfo.ResCancelTime) <= Model.flightInfo.Date)
+                                            {
+                                                <input type="submit" value="Reservation" formaction="~/Reservation/ReservationNow" class="btn btn-success" onclick="changeAction('/Reservation/ReservationNow')" />
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                        <th><hr/></th>
+                        <th>
+                            <div style="text-align: center;">
+                                <div class="plane">
+                                    <div class="cockpit">
+                                        <h1>Please select a seat</h1>
+                                    </div>
+                                    <div class="exit exit--front fuselage">
+
+                                    </div>
+                                    <ol class="cabin fuselage">
+                                        @for (int i = 0; i < Model.seats.Count; i++)
                                         {
-                                            <li class="seat">
-                                                @{
-                                                    object enabled = Model.seats[i][j].Availability == true ? null : new { disabled = "disabled" };
-                                                }
-                                                @if (Model.seats[i][j].Availability && Model.seats[i][j].Type == Model.ticketClass)
-                                                {
-                                                    <input type="checkbox" asp-for="@Model.seats[i][j].Availability" id="@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())" />
-                                                }
-                                                else
-                                                {
-                                                    Model.seats[i][j].Availability = true;
-                                                    <input type="checkbox" asp-for="@Model.seats[i][j].Availability" id="@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())" disabled />
-                                                }
-                                                <label for="@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())">'@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())'</label>
-                                                <input type="hidden" asp-for="@Model.seats[i][j].Id" />
+                                            <li class="row row--@i">
+                                                <ol class="seats" type="A">
+                                                    @for (int j = 0; j < Model.seats[i].Count; j++)
+                                                    {
+                                                        <li class="seat">
+                                                            @{
+                                                                object enabled = Model.seats[i][j].Availability == true ? null : new { disabled = "disabled" };
+                                                            }
+                                                            @if (Model.seats[i][j].Availability && Model.seats[i][j].Type == Model.ticketClass)
+                                                            {
+                                                                <input type="checkbox" asp-for="@Model.seats[i][j].Availability" id="@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())" />
+                                                            }
+                                                            else
+                                                            {
+                                                                Model.seats[i][j].Availability = true;
+                                                                <input type="checkbox" asp-for="@Model.seats[i][j].Availability" id="@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())" disabled />
+                                                            }
+                                                            <label for="@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())">'@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())'</label>
+                                                            <input type="hidden" asp-for="@Model.seats[i][j].Id" />
+                                                        </li>
+                                                    }
+                                                </ol>
                                             </li>
                                         }
                                     </ol>
-                                </li>
-                            }
-                        </ol>
-                        <div class="exit exit--back fuselage">
+                                    <div class="exit exit--back fuselage">
 
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sidenav">
-                    <div class="scroolable">
-                        <div>
-                            <dl class="row">
-                                <dt class="col-sm-3">
-                                    @Html.DisplayNameFor(model => model.flightInfo.Organizer)
-                                </dt>
-                                <dd class="col-sm-9">
-                                    @Html.DisplayFor(model => model.flightInfo.Organizer.Description)
-                                </dd>
-                                <dt class="col-sm-3">
-                                    @*@Html.DisplayNameFor(model => model.FlightNo)*@Flight No
-                                </dt>
-                                <dd class="col-sm-9">
-                                    @Html.DisplayFor(model => model.flightInfo.FlightNo)
-                                </dd>
-                                <dt class="col-sm-3">
-                                    @Html.DisplayNameFor(model => model.flightInfo.Name)
-                                </dt>
-                                <dd class="col-sm-9">
-                                    @Html.DisplayFor(model => model.flightInfo.Name)
-                                </dd>
-                                <dt class="col-sm-3">
-                                    @Html.DisplayNameFor(model => model.flightInfo.Date)
-                                </dt>
-                                <dd class="col-sm-9">
-                                    @Html.DisplayFor(model => model.flightInfo.Date)
-                                </dd>
-                            </dl>
-                        </div>
-
-                        <button onclick="myFunction()" class="btn btn-info">Extra Info </button>
-                        <div id="myDIV" style="display: none">
-
-                            <hr />
-                            <dl class="row">
-
-                                <dt class="col-sm-2">
-                                    @*@Html.DisplayNameFor(model => model.RefundTime)*@Refund Time
-                                </dt>
-                                <dd class="col-sm-10">
-                                    @Html.DisplayFor(model => model.flightInfo.RefundTime)
-                                </dd>
-                                <dt class="col-sm-2">
-                                    @*@Html.DisplayNameFor(model => model.RefundPortion)*@Refund Portion
-                                </dt>
-                                <dd class="col-sm-10">
-                                    @Html.DisplayFor(model => model.flightInfo.RefundPortion)
-                                </dd>
-                            </dl>
-
-                        </div>
-
-                        <hr />
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">Additional Offers</h4>
+                                    </div>
+                                </div>
                             </div>
-                            <ul class="list-group">
-                                @for (int i = 0; i < Model.offers.Count; i++)
-                                {
-                                    <li class="list-group-item">
-                                        <div class="row toggle" id="dropdown-detail-@Model.offers[i].offer.Id" data-toggle="detail-@Model.offers[i].offer.Id">
-                                            <div class="col-xs-10">
-                                                @Model.offers[i].offer.Name
-                                            </div>
-                                            <div class="col-xs-2"><i class="fa fa-chevron-down pull-right"></i></div>
-                                        </div>
-                                        <div id="detail-@Model.offers[i].offer.Id">
-                                            <hr></hr>
-                                            <div class="container">
-                                                <div class="fluid-row">
-                                                    <div class="col-xs-1">
-                                                        Detail:
-                                                    </div>
-                                                    <div class="col-xs-5">
-                                                        @Model.offers[i].offer.Description
-                                                    </div>
-                                                    <div class="col-xs-1">
-                                                        Price:
-                                                    </div>
-                                                    <div class="col-xs-5">
-                                                        @Model.offers[i].offer.Price
-                                                    </div>
-                                                    <div class="col-xs-1">
-                                                        Adult Quantity:
-                                                    </div>
-                                                    <div class="col-xs-5">
-                                                        <div class="input-group">
-                                                            <span class="input-group-btn">
-                                                                <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus" data-field="quantity-adult-@i" data-price="@Model.offers[i].offer.Price" data-cap="countOfSeats">
-                                                                    <i class="fa fa-minus"></i>
-                                                                </button>
-                                                            </span>
-                                                            @Html.HiddenFor(model => model.offers[i].offer.Id)
-                                                            @Html.TextBoxFor(model => model.offers[i].quantity, new { id = "quantity-adult-" + i, @class = "form-control input-number", min = "0", max = "100" })
-                                                            <span class="input-group-btn">
-                                                                <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="quantity-adult-@i" data-price="@Model.offers[i].offer.Price" data-cap="countOfSeats">
-                                                                    <i class="fa fa-plus"></i>
-                                                                </button>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-xs-1">
-                                                        Child Quantity:
-                                                    </div>
-                                                    <div class="col-xs-5">
-                                                        <div class="input-group">
-                                                            <span class="input-group-btn">
-                                                                <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus" data-field="quantity-child-@i" data-price="@Model.offers[i].offer.ChildPrice" data-cap="countOfChild">
-                                                                    <i class="fa fa-minus"></i>
-                                                                </button>
-                                                            </span>
-                                                            @Html.HiddenFor(model => model.offers[i].offer.Id)
-                                                            @Html.TextBoxFor(model => model.offers[i].childQuantity, new { id = "quantity-child-" + i, @class = "form-control input-number", min = "0", max = "100" })
-                                                            <span class="input-group-btn">
-                                                                <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="quantity-child-@i" data-price="@Model.offers[i].offer.ChildPrice" data-cap="countOfChild">
-                                                                    <i class="fa fa-plus"></i>
-                                                                </button>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-
-                        <hr />
-                        <p style="color:crimson"> @ViewData["Err"]</p>
-
-                        <div class="form-group">
-                            @Html.HiddenFor(model => model.ticketClass)
-                            @Html.HiddenFor(model => model.numOfAdult)
-                            @Html.HiddenFor(model => model.numOfChild)
-                            <input type="hidden" asp-for="@Model.basePrice" id="basePrice" />
-                            <input type="hidden" id="countOfSeats" name="countOfSeats" class="form-control input-number" asp-for="@Model.numOfAdult">
-                            <input type="hidden" id="countOfChild" name="countOfChild" class="form-control input-number" asp-for="@Model.numOfChild">
-                            <label>Select @Model.numOfAdult seats for adults</label><br />
-                            <label>Select @Model.numOfChild seats for children</label><br />
-                            <label for="countOfBaby" class="control-label"> Infant(s) (Age 0-2): </label>
-                            <input type="number" id="countOfBaby" name="countOfBaby" value="0" min="0" max="@Model.numOfAdult" class="form-control" />
-                        </div>
-                    </div>
-
-                    <hr />
-                    <div class="form-row">
-                        <div class="form-group">
-                            <h3><span class="control-label" id="priceLabel">@Model.basePrice</span>TL</h3>
-                        </div>
-                        <div style="border-left:1px solid #000;height:40px; margin-left:10px; margin-right:10px;"></div>
-                        <div class="form-group">
-                            <input type="hidden" asp-for="flightInfo.Id" />
-                            <input type="submit" value="Buy" formaction="~/Flights/Buy" class="btn btn-success" onclick="changeAction('/Flights/Buy')"/>
-                            @{ 
-                                if((DateTime.Now + Model.flightInfo.ResCancelTime) <= Model.flightInfo.Date)
-                                {
-                                    <input type="submit" value="Reservation" formaction="~/Reservation/ReservationNow" class="btn btn-success" onclick="changeAction('/Reservation/ReservationNow')"/>
-                                }
-                            }
-                        </div>
-                    </div>
-                </div>
+                        </th>
+                    </tr>
+                </table>
             </form>
         </div>
     </div>
