@@ -9,6 +9,56 @@
 
 <form asp-action="Buy_After_Reservation">
 
+    <div>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Flight.Organizer)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Flight.Organizer.Description)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Flight)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Flight.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @*@Html.DisplayNameFor(model => model.Flight.Date)*@Departure Time
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Flight.Date)
+            </dd>
+            <dt class="col-sm-2">
+                Arrival Time
+            </dt>
+            <dd class="col-sm-10">
+                @ViewData["ArrivalDate"]
+            </dd>
+            <dt class="col-sm-2">
+                Flight No
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Flight.FlightNo)
+            </dd>
+            <dt class="col-sm-2">
+                Offers
+            </dt>
+            <dd class="col-sm-10">
+                @ViewData["Offer"]
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Seats)
+            </dt>
+            <dd class="col-sm-10">
+                @foreach (var item in Model.Seats)
+                {
+                    @Html.DisplayFor(modelItem => item.Col) @Html.DisplayFor(modelItem => item.Row)
+                }
+            </dd>
+        </dl>
+    </div>
 
     <input type="hidden" asp-for="Id" />
     <input type="submit" value="Confirm" class="btn btn-success" /> |

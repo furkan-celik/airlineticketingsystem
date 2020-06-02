@@ -85,7 +85,33 @@ namespace WebApplication1.Controllers
 
             var @event = await _context.Reservations
                 .Include(x => x.Owner)
+                .Include(x => x.Flight)
+                .Include(x => x.Offers)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            var resoffer = _context.ReservationOffers.Where(x => x.ReservationId == id).ToList();
+
+            if (resoffer.Count != 0)
+            {
+                string offer1 = "";
+                foreach (var item in resoffer)
+                {
+                    int offerid = item.OfferId;
+                    var offer = _context.Offers.FirstOrDefault(x => x.Id == offerid);
+                    offer1 += offer.Description + " ";
+                }
+                ViewData["Offer"] = offer1;
+            }
+            else
+            {
+                ViewData["Offer"] = "No offer selected.";
+            }
+
+            DateTime date = @event.Flight.Date;
+            TimeSpan eta = @event.Flight.Route.ETA;
+
+            var arrivaldate = date + eta;
+            ViewData["ArrivalDate"] = arrivaldate;
 
             if (@event == null)
             {
@@ -98,7 +124,7 @@ namespace WebApplication1.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Buy_After_Reservation(int id, int type, int countOfSeats, int countOfChild, int countOfBaby)
+        public async Task<IActionResult> Buy_After_Reservation(int id, int type, int countOfSeats, int countOfChild, int countOfBaby, FlightsController.InputModel inputModel)
         {
             var seatList = _context.Seats.Where(a => a.ReservationId == id).ToList();
 
@@ -125,13 +151,13 @@ namespace WebApplication1.Controllers
                 await _context.SaveChangesAsync();
 
                 counter++;
-
             }
-
+            
             _context.Reservations.Remove(_context.Reservations.Find(id));
             _context.SaveChanges();
 
             return RedirectToAction(nameof(Successful));
+
 
         }
 
