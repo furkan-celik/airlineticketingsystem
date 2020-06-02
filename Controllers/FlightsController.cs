@@ -77,6 +77,25 @@ namespace WebApplication1.Controllers
 
         public IActionResult Search()
         {
+            foreach (var purchase in _context.Purchases)
+            {
+                if (!purchase.IsProcessed)
+                {
+                    double returnTime = 0;
+                    if(DateTime.Now.Subtract(purchase.ProcessTime).TotalMinutes < 10)
+                    {
+                        returnTime = DateTime.Now.Subtract(purchase.ProcessTime).TotalMinutes;
+                    }
+
+                    AutoCancelManager.AutoCancelManagerStatic.DeleteOverTime(purchase.Id, _context, delayMinutes: returnTime);
+                }
+            }
+
+            foreach (var item in _context.Reservations.Include(x => x.Flight).Include(x => x.Seats))
+            {
+                AutoCancelManager.AutoCancelManagerStatic.DeleteOverTime(item, _context);
+            }
+
             if (User.IsInRole("WebAdmin") || User.IsInRole("CompAdmin"))
             {
                 return RedirectToAction("Index");
@@ -813,7 +832,7 @@ namespace WebApplication1.Controllers
 
         public IActionResult ListTicket(int id)
         {
-            return View();
+            return View(_context.Purchases.FirstOrDefault(x => x.Id == id));
         }
 
         private bool FlightExists(int id)

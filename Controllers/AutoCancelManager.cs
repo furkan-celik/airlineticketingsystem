@@ -15,11 +15,12 @@ namespace WebApplication1.Controllers
         private static AutoCancelManager _autoCancelManager { get; set; }
         public static AutoCancelManager AutoCancelManagerStatic
         {
-            get { 
-                if (_autoCancelManager == null) 
-                    _autoCancelManager = new AutoCancelManager(); 
-                return _autoCancelManager; 
-            } 
+            get
+            {
+                if (_autoCancelManager == null)
+                    _autoCancelManager = new AutoCancelManager();
+                return _autoCancelManager;
+            }
         }
 
         public async void DeleteOverTime(Reservation reservation, ApplicationDbContext _context)
@@ -27,17 +28,10 @@ namespace WebApplication1.Controllers
             var db = _context.Database.GetDbConnection().ConnectionString;
             await Task.Delay(Math.Max(0, (int)(reservation.processTime + reservation.Flight.ResCancelTime - DateTime.Now).TotalMilliseconds));
 
-            try
-            {
-                _context.Database.EnsureCreated();
-            }
-            catch (ObjectDisposedException)
-            {
-                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-                optionsBuilder.UseLazyLoadingProxies().UseMySql(db);
-                _context = new ApplicationDbContext(optionsBuilder.Options);
-                _context.Database.EnsureCreated();
-            }
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            optionsBuilder.UseLazyLoadingProxies().UseMySql(db);
+            _context = new ApplicationDbContext(optionsBuilder.Options);
+            _context.Database.EnsureCreated();
 
             if (_context.Reservations.Contains(reservation))
             {
@@ -51,22 +45,15 @@ namespace WebApplication1.Controllers
             }
         }
 
-        public async void DeleteOverTime(int purchaseId, ApplicationDbContext _context)
+        public async void DeleteOverTime(int purchaseId, ApplicationDbContext _context, double delayMinutes = 10)
         {
             var db = _context.Database.GetDbConnection().ConnectionString;
-            await Task.Delay(TimeSpan.FromMinutes(10));
+            await Task.Delay(TimeSpan.FromMinutes(delayMinutes));
 
-            try
-            {
-                _context.Database.EnsureCreated();
-            }
-            catch (ObjectDisposedException)
-            {
-                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-                optionsBuilder.UseLazyLoadingProxies().UseMySql(db);
-                _context = new ApplicationDbContext(optionsBuilder.Options);
-                _context.Database.EnsureCreated();
-            }
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            optionsBuilder.UseLazyLoadingProxies().UseMySql(db);
+            _context = new ApplicationDbContext(optionsBuilder.Options);
+            _context.Database.EnsureCreated();
 
             Purchase purchase = ApplicationDbContext._context.Purchases.Find(purchaseId);
 

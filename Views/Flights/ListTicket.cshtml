@@ -1,12 +1,47 @@
-﻿
+﻿@model WebApplication1.Models.Purchase
+
 @{
     ViewData["Title"] = "ListTicket";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var destUrl = "./Ticket?id=" + @Context.Request.Query["id"].ToString();
 }
 
-<div style="margin: 0 auto;">
 <h1>Ticket(s)</h1>
 
-    <iframe src=@destUrl style="border:none;height:400px;width:800px;margin: 0 auto;"></iframe>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Panel List Group with Expandable Setail Section</h3>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <div class="row toggle" id="dropdown-detail-1" data-toggle="detail-@(Model.Id)">
+                <div class="col-xs-10">
+                    @(Model.Tickets.ToArray()[0].Name)
+                </div>
+                <div class="col-xs-2"><i class="fa fa-chevron-down pull-right"></i></div>
+            </div>
+            <div id="detail-@(Model.Id)">
+                <hr></hr>
+                <div class="container">
+                    @foreach (var item in Model.Tickets)
+                    {
+                        <div class="row">
+                            <iframe src="./Ticket?id=@(item.Id)" style="border:none;height:240px;width:100%;overflow:hidden"></iframe>
+                        </div>
+                    }
+                </div>
+            </div>
+        </li>
+    </ul>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('[id^=detail-]').hide();
+        $('.toggle').click(function () {
+            $input = $(this);
+            $target = $('#' + $input.attr('data-toggle'));
+            $target.slideToggle();
+        });
+    });
+</script>

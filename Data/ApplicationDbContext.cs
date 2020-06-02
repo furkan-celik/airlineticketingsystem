@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using WebApplication1.Controllers;
 using WebApplication1.Models;
 
 namespace WebApplication1.Data
@@ -39,6 +40,7 @@ namespace WebApplication1.Data
             if(_context.OfferTypes.Count() < 4)
             {
                 _context.OfferTypes.AddRange(new OfferType[] { new OfferType() { Name = "Business" }, new OfferType() { Name = "Economy" }, new OfferType() { Name = "Super Cheap" }, new OfferType() { Name = "Other" } });
+                _context.SaveChanges();
             }
         }
 
