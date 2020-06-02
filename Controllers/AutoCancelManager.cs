@@ -54,7 +54,7 @@ namespace WebApplication1.Controllers
         public async void DeleteOverTime(int purchaseId, ApplicationDbContext _context)
         {
             var db = _context.Database.GetDbConnection().ConnectionString;
-            await Task.Delay(TimeSpan.FromMinutes(1));
+            await Task.Delay(TimeSpan.FromMinutes(10));
 
             try
             {

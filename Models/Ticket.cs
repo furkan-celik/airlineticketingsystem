@@ -22,7 +22,7 @@ namespace WebApplication1.Models
         [Required]
         public bool CheckIn { get; set; }
         public string Name { get; set; }
-        public int PurchaseId { get; set; }
+        public int? PurchaseId { get; set; }
 
         public virtual AppUser Owner { get; set; }
         [ForeignKey("EventId")]

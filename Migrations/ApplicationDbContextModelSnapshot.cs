@@ -681,7 +681,7 @@ namespace WebApplication1.Migrations
                     b.Property<DateTime>("ProcessTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("PurchaseId")
+                    b.Property<int?>("PurchaseId")
                         .HasColumnType("int");
 
                     b.Property<bool>("isChild")
