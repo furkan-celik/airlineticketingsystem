@@ -85,14 +85,17 @@
                 @Html.DisplayFor(modelItem => item.IsProcessed)
             </td>
             <td style="color:lightgrey">
-                @Html.DisplayFor(modelItem => item.Price)
+                @Html.DisplayFor(modelItem => item.Tickets)
             </td>
             <td style="color:lightgrey">
                 @Html.DisplayFor(modelItem => item.Owner.Name) @Html.DisplayFor(modelItem => item.Owner.Surname)
             </td>
             <td class="btn-group" role="group">
                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
-                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                @if (item.Tickets.ToList()[0].Flight.Date >= DateTime.Now + item.Tickets.ToList()[0].Flight.RefundTime)
+                {
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                }
             </td>
         </tr>
 }

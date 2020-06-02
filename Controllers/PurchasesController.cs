@@ -31,6 +31,7 @@ namespace WebApplication1.Controllers
             {
                 var applicationDbContext = _context.Purchases.Where(x => x.Tickets.Count > 0)
                     .Include(p => p.Owner).Include(p => p.Tickets);
+                //applicationDbContext.Where(Tickets)
                 var purchaseList = await applicationDbContext.ToListAsync();
                 return View(purchaseList.FindAll(x => x.Tickets.ToList()[0].Flight.CompanyId == _userManager.GetUserAsync(User).Result.ManagingCompanyId));
             }
@@ -75,8 +76,9 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
-
-            return View(purchase);
+            
+                return View(purchase);
+            
         }
 
         // POST: Purchases/Delete/5
@@ -84,6 +86,24 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var ticketList = _context.Tickets.Where(x => x.Seats.Count>0)
+                .Where(a => a.PurchaseId == id).ToList();
+            int sizeoftickets = ticketList.Count();
+            for (int i = 0; i < sizeoftickets; i++)
+            {
+                Ticket t = ticketList.ElementAt(i);
+                var seatList = _context.Seats
+                    .Where(a => a.TicketId == t.Id).ToList();
+                
+                Seat seat = seatList.ElementAt(0);
+                seat.TicketId = null;
+                seat.Availability = true;
+                seat.ReservationId = null;
+                seat.IsConfirmed = false;
+                _context.Update(seat);
+                await _context.SaveChangesAsync();
+
+            }
             var purchase = await _context.Purchases.FindAsync(id);
             _context.Purchases.Remove(purchase);
             await _context.SaveChangesAsync();
