@@ -29,12 +29,12 @@
         {
             <tr>
                 <td>
-                    @{string path = item.LogoLocation;
+                    @{string path = "~/images/" +item.LogoLocation;
                         int length = path.Length;
                         path = path.Substring(1, length - 1);
                     }
 
-                    <img src=@path width="80" height="60" />
+                    <img src=@path width="80" height="80" />
                 </td>
                 <td style="color:lightgrey">
                     @Html.DisplayFor(modelItem => item.Name)

@@ -344,3 +344,4 @@ healthchecksdb
 
 #dp options
 appsettings.json
+/wwwroot/images/test.jpg
