@@ -58,13 +58,16 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-8">
-                <input type="hidden" name="pId" value="@Model.Id" />
-                <button class="subscribe btn btn-success btn-lg btn-block" type="button">Complete Purchase</button>
-                <button class="subscribe btn btn-dark btn-lg btn-block" type="button">Cancel Puchase</button>
+        <form asp-action="Purchase">
+            <div class="row">
+                <div class="col-md-8">
+                    <input type="hidden" name="pId" value="@Model.Id" />
+                    <button class="subscribe btn btn-success btn-lg btn-block" type="button">Complete Purchase</button>
+                    <a asp-action="Index">Cancel Purchase</a>
+                    @*<button class="subscribe btn btn-dark btn-lg btn-block" type="button">Cancel Puchase</button>*@
+                </div>
             </div>
-        </div> 
+        </form>
     </div>
     <div class="column-left ticket-info">
         <div class="row">
