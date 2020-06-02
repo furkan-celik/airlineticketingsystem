@@ -115,7 +115,7 @@ namespace WebApplication1.Controllers
 
         public IActionResult SearchAsPage(string arr, string dest, DateTime date, int numOfAdult, int numOfChild, int ticketClass, int pId)
         {
-            return View(GetListOfFlights(arr, dest, date, numOfAdult, numOfChild, ticketClass));
+            return View(GetListOfFlights(arr, dest, date, numOfAdult, numOfChild, ticketClass, pId: pId));
         }
 
         public class SearchResultModel
@@ -682,7 +682,7 @@ namespace WebApplication1.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("SearchAsPage", new { arr = flight.Route.DepartureAirport.AirportName, dest = flight.Route.ArrivalAirport.AirportName, date = inputModel.returnDate, numOfAdult = inputModel.numOfAdult, numOfChild = inputModel.numOfChild, ticketClass = inputModel.ticketClass });
+                    return RedirectToAction("SearchAsPage", new { arr = flight.Route.DepartureAirport.AirportName, dest = flight.Route.ArrivalAirport.AirportName, date = inputModel.returnDate, numOfAdult = inputModel.numOfAdult, numOfChild = inputModel.numOfChild, ticketClass = inputModel.ticketClass, pId = purchase.Id });
                 }
             }
         }

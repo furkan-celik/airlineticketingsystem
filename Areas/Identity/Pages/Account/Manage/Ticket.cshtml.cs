@@ -38,6 +38,7 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
                 .Where(a => a.OwnerId == Userid)
                 .OrderByDescending(x => x.Flight.Date)
                 .Include(a => a.Flight)
+                .Include(a => a.Purchase)
                 .Include(a => a.Seats).ToListAsync();
 
         }

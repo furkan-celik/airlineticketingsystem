@@ -252,6 +252,11 @@ textarea {
   line-height: inherit;
 }
 
+option{
+    color:darkred;
+    background-color:azure;
+}
+
 button,
 input {
   overflow: visible;

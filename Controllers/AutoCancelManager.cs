@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.Data;
@@ -25,13 +27,18 @@ namespace WebApplication1.Controllers
 
         public async void DeleteOverTime(Reservation reservation, ApplicationDbContext _context)
         {
-            var db = _context.Database.GetDbConnection().ConnectionString;
             await Task.Delay(Math.Max(0, (int)(reservation.processTime + reservation.Flight.ResCancelTime - DateTime.Now).TotalMilliseconds));
 
-            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            optionsBuilder.UseLazyLoadingProxies().UseMySql(db);
-            _context = new ApplicationDbContext(optionsBuilder.Options);
-            _context.Database.EnsureCreated();
+            AppSettings appSettings;
+            using (StreamReader r = new StreamReader("./appsettings.json"))
+            {
+                string json = r.ReadToEnd();
+                appSettings = JsonConvert.DeserializeObject<AppSettings>(json);
+                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+                optionsBuilder.UseLazyLoadingProxies().UseMySql(appSettings.ConnectionStrings["DefaultConnection"]);
+                _context = new ApplicationDbContext(optionsBuilder.Options);
+                _context.Database.EnsureCreated();
+            }
 
             if (_context.Reservations.Contains(reservation))
             {
@@ -47,13 +54,18 @@ namespace WebApplication1.Controllers
 
         public async void DeleteOverTime(int purchaseId, ApplicationDbContext _context, double delayMinutes = 10)
         {
-            var db = _context.Database.GetDbConnection().ConnectionString;
             await Task.Delay(TimeSpan.FromMinutes(delayMinutes));
 
-            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            optionsBuilder.UseLazyLoadingProxies().UseMySql(db);
-            _context = new ApplicationDbContext(optionsBuilder.Options);
-            _context.Database.EnsureCreated();
+            AppSettings appSettings;
+            using (StreamReader r = new StreamReader("./appsettings.json"))
+            {
+                string json = r.ReadToEnd();
+                appSettings = JsonConvert.DeserializeObject<AppSettings>(json);
+                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+                optionsBuilder.UseLazyLoadingProxies().UseMySql(appSettings.ConnectionStrings["DefaultConnection"]);
+                _context = new ApplicationDbContext(optionsBuilder.Options);
+                _context.Database.EnsureCreated();
+            }
 
             Purchase purchase = ApplicationDbContext._context.Purchases.Find(purchaseId);
 
@@ -72,5 +84,9 @@ namespace WebApplication1.Controllers
             }
         }
 
+        public class AppSettings
+        {
+            public Dictionary<string, string> ConnectionStrings { get; set; }
+        }
     }
 }
