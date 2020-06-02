@@ -27,7 +27,7 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
         }
 
         public IList<Ticket> tickets { get; set; }
-        public IList<Ticket> events { get; set; }
+        public IList<Purchase> purchases { get; set; }
 
         public async Task OnGetAsync(AppUser user)
         {
@@ -36,11 +36,15 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
 
             tickets = await _context.Tickets
                 .Where(a => a.OwnerId == Userid)
+                .Where(x => x.PurchaseId.HasValue)
                 .OrderByDescending(x => x.Flight.Date)
                 .Include(a => a.Flight)
                 .Include(a => a.Purchase)
                 .Include(a => a.Seats).ToListAsync();
 
+            purchases = await _context.Purchases.Where(x => x.OwnerId == Userid)
+                .OrderByDescending(x => x.ProcessTime)
+                .Include(x => x.Tickets).ToListAsync();
         }
        
     }

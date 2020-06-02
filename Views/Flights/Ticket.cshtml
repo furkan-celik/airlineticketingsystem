@@ -11,7 +11,7 @@
         margin: 1em auto;
         color: #fff;
         font-family: sans-serif;
-        overflow:hidden;
+        overflow: hidden;
     }
 
     .ticketcard {
@@ -156,7 +156,18 @@
 
 <div class="ticketcardWrap col-lg-12">
     <div class="ticketcard ticketcardLeft">
-        <h1>Flightviewer <span>Flight</span></h1>
+        <h1>
+            @Html.DisplayFor(model => model.Flight.Organizer.Name) <span style="float:right">
+                @if (Model.Flight.Date <= DateTime.Now.AddDays(2) && !Model.CheckIn && Model.Purchase.IsProcessed == true)
+                {
+                    <a class="btn btn-danger" asp-action="CheckIn" asp-route-id="@Model.Id " asp-controller="CheckIn">Check-in</a>
+                }
+                else
+                {
+                    @Html.DisplayFor(modelItem => Model.CheckIn)
+                }
+            </span>
+        </h1>
         <div class="title">
             <h2>@Html.DisplayFor(model => model.Flight.Name)</h2>
             <span>@Html.DisplayFor(model => model.Flight.Organizer.Name)</span>

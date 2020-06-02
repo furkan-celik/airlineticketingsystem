@@ -25,73 +25,43 @@ else
 <h3 class="textcolor">@ViewData["Title"]</h3>
 
 
-<table class="table">
-    <thead>
-        <tr>
-            @*
-        <th>
-            @Html.DisplayNameFor(model => model.tickets[0].Id)
-        </th>*@
-                <th>
-                    @Html.DisplayNameFor(model => model.tickets[0].Flight)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.tickets[0].Flight.Date)
-                </th>
-                <th>
-                    @*@Html.DisplayNameFor(model => model.tickets[0].Event.FlightNo)*@Flight No
-                </th>
-                <th>
-                    @*@Html.DisplayNameFor(model => model.tickets[0].Seats)*@Seat
-                </th>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Check-in
-                </th>
-
-
-                <th></th>
-            </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.tickets)
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Panel List Group with Expandable Setail Section</h3>
+    </div>
+    <ul class="list-group">
+        @foreach (var purchase in Model.purchases)
         {
-        <tr>
-            @*
-        <td class="textcolor">
-            @Html.DisplayFor(modelItem => item.Id)
-        </td>*@
-                <td class="textcolor">
-                    @Html.DisplayFor(modelItem => item.Flight.Name)
-                </td>
-                <td class="textcolor">
-                    @Html.DisplayFor(modelItem => item.Flight.Date)
-                </td>
-                <td class="textcolor">
-                    @Html.DisplayFor(modelItem => item.Flight.FlightNo)
-                </td>
-                <td class="textcolor">
-                    @foreach (var item2 in item.Seats)
-                    {
-                        @Html.DisplayFor(modelItem => item2.Col) @Html.DisplayFor(modelItem => item2.Row)
-                    }
-                </td>
-                <td class="textcolor">
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td class="textcolor">
-                    @if (item.Flight.Date <= DateTime.Now.AddDays(2) && !item.CheckIn && item.Purchase.IsProcessed == true)
-                    {
-                        <a asp-action="CheckIn" asp-route-id="@item.Id " asp-controller="CheckIn">Check-in</a>
-                    }
-                    else
-                    {
-                        @Html.DisplayFor(modelItem => item.CheckIn)
-                    }
-                </td>
-            </tr>
+            <li class="list-group-item">
+                <div class="row toggle" id="dropdown-detail-1" data-toggle="detail-@(purchase.Id)">
+                    <div class="col-xs-10">
+                        @(purchase.Tickets.ToList()[0].Flight.Name)     @(purchase.Tickets.ToList()[0].Flight.Date)
+                    </div>
+                    <div class="col-xs-2"><i class="fa fa-chevron-down pull-right"></i></div>
+                </div>
+                <div id="detail-@(purchase.Id)">
+                    <hr></hr>
+                    <div class="container">
+                        @foreach (var item in purchase.Tickets)
+                        {
+                            <div class="row">
+                                <iframe src="~/Flights/Ticket?id=@(item.Id)" style="border:none;height:240px;width:100%;overflow:hidden"></iframe>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </li>
         }
-    </tbody>
-</table>
+    </ul>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('[id^=detail-]').hide();
+        $('.toggle').click(function () {
+            $input = $(this);
+            $target = $('#' + $input.attr('data-toggle'));
+            $target.slideToggle();
+        });
+    });
+</script>
