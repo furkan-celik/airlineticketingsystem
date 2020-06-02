@@ -24,11 +24,10 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
-
         }
+
         public IList<Ticket> tickets { get; set; }
         public IList<Ticket> events { get; set; }
-
 
         public async Task OnGetAsync(AppUser user)
         {
@@ -37,10 +36,9 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
 
             tickets = await _context.Tickets
                 .Where(a => a.OwnerId == Userid)
+                .OrderByDescending(x => x.Flight.Date)
                 .Include(a => a.Flight)
                 .Include(a => a.Seats).ToListAsync();
-
-
 
         }
        
