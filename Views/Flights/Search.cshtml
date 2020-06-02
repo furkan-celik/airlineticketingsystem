@@ -165,7 +165,7 @@
         }
 
         disablePrevDayBtn(new Date(date));
-        setDateTexts(new Date.parse(date));
+        setDateTexts(Date.parse(date));
 
         if (GiveError("Departure", dest) && GiveError("Arrival", arr) && GiveError("Departure Date", date) && GiveError("Adult Number", noAdult) && GiveError("Ticket Class", mClass) && CheckReturnDate(new Date(date), returnDate)) {
             var url = "/Flights/SearchResults?dest=" + dest + "&arr=" + arr + "&date=" + date + "&numOfAdult=" + noAdult + "&numOfChild=" + noChild + "&ticketClass=" + mClass + "&returnDate=" + returnDate.toISOString().substring(0, 10);
