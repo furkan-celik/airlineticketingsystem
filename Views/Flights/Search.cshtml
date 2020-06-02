@@ -125,15 +125,19 @@
     }
 
     function CheckReturnDate(date, returnDate) {
-        if (returnDate == null) {
-            alert("Returning date field cannot left blank when two way option is selected! Please select a return date");
-            return false;
+        if ($("#roundtrip").is(":checked")) {
+            
+            if (returnDate == null) {
+                alert("Returning date field cannot left blank when two way option is selected! Please select a return date");
+                return false;
+            }
+            if (date >= returnDate) {
+                alert("Returning date cannot be earlier than or same as departing date!");
+                return false;
+            }
         }
-        if (date >= returnDate) {
-            alert("Returning date cannot be earlier than or same as departing date!");
-            return false;
-        }
-        return true;
+            return true;
+
     }
 
     var firstTime = true;
