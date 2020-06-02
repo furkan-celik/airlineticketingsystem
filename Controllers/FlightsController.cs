@@ -646,7 +646,6 @@ namespace WebApplication1.Controllers
                     Seat seat = selectedSeats.ElementAt(counter);
                     seat.TicketId = (int)tic.Id;
                     seat.Availability = false;
-                    seat.TypeId = 1;
                     var tmp2 = _context.Seats.Update(seat);
                     try
                     {

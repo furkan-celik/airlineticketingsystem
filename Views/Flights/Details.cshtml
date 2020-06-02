@@ -405,7 +405,8 @@ else
                             <tr>
                                 <th scope="col">Seat</th>
                                 <th scope="col">Name Surname</th>
-                                <th scope="col">IsChild</th>
+                                <th scope="col">Adult Seats</th>
+                                <th scope="col">Child Seats</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -414,7 +415,8 @@ else
                                 <tr>
                                     <th scope="row" style="color:lightgray">@item.Seats.ToArray()[0].Col@item.Seats.ToArray()[0].Row.ToUpper()</th>
                                     <td style="color:lightgray">@item.Owner.Name @item.Owner.Surname</td>
-                                    <td style="color:lightgray">@item.isChild</td>
+                                    <td style="color:lightgray">@item.numOfAdult</td>
+                                    <td style="color:lightgray">@item.numOfChild</td>
                                 </tr>
                             }
                         </tbody>

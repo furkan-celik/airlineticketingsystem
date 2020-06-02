@@ -16,7 +16,9 @@ namespace WebApplication1.Models
         [ForeignKey("Flight")]
         public int FlightId { get; set; }
         [Required]
-        public bool isChild { get; set; }
+        public int numOfChild { get; set; }
+        [Required]
+        public int numOfAdult { get; set; }
         [Required]
         public DateTime processTime { get; set; }
 

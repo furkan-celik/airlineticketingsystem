@@ -35,7 +35,6 @@ namespace WebApplication1.Controllers
             _userManager = userManager;
         }
 
-
         [HttpGet]
         public async Task<IActionResult> Cancel_Reservation(int? id)
         {
@@ -122,46 +121,78 @@ namespace WebApplication1.Controllers
 
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> Buy_After_Reservation(int id, int type, int countOfSeats, int countOfChild, int countOfBaby, FlightsController.InputModel inputModel)
+        public async Task<IActionResult> Buy_After_Reservation(int id, int type, int countOfSeats, int countOfChild, int countOfBaby)
         {
             var seatList = _context.Seats.Where(a => a.ReservationId == id).ToList();
+            var reservation = _context.Reservations.Find(id);
 
             countOfSeats = seatList.Count();
 
             int counter = 0;
-            while (counter < countOfSeats + countOfChild)
+            Purchase purchase = new Purchase() { IsProcessed = false, OwnerId = _userManager.GetUserId(HttpContext.User), Price = 0, ProcessTime = DateTime.Now };
+            purchase.Tickets = new List<Ticket>();
+            purchase.Price = 0;
+            purchase.Price += _context.Offers.FirstOrDefault(x => x.Type == reservation.Seats.ToList()[0].TypeId).Price * (reservation.numOfChild + reservation.numOfAdult);
+
+            foreach (var seatItem in reservation.Seats)
             {
-
-
                 Ticket tic = new Ticket();
-                tic.EventId = id;
+                tic.EventId = seatItem.FlightId;
                 tic.ProcessTime = DateTime.Now;
                 tic.OwnerId = _userManager.GetUserId(HttpContext.User);
+                tic.CheckIn = false;
+                tic.isChild = counter < reservation.numOfAdult ? false : true;
                 _context.Tickets.Add(tic);
-
                 await _context.SaveChangesAsync();
+
+                int quantity = reservation.numOfAdult;
+                int childQuantity = reservation.numOfChild;
+
+                foreach (var item in reservation.Offers)
+                {
+                    if (!tic.isChild && quantity > 0)
+                    {
+                        OfferTicket tmp = new OfferTicket() { Offer = item.Offer, Ticket = tic };
+                        _context.OfferTickets.Add(tmp);
+                        if (_context.SaveChanges() > 0)
+                        {
+                            purchase.Price += tmp.Offer.Price;
+                            quantity--;
+                        }
+                    }
+                    else if (tic.isChild && childQuantity > 0)
+                    {
+                        OfferTicket tmp = new OfferTicket() { Offer = item.Offer, Ticket = tic };
+                        _context.OfferTickets.Add(tmp);
+                        if (_context.SaveChanges() > 0)
+                        {
+                            purchase.Price += tmp.Offer.ChildPrice;
+                            childQuantity--;
+                        }
+                    }
+                }
 
                 Seat seat = seatList.ElementAt(counter);
                 seat.TicketId = (int)tic.Id;
                 seat.Availability = false;
                 seat.ReservationId = null;
                 _context.Update(seat);
-                await _context.SaveChangesAsync();
 
                 counter++;
+                purchase.Tickets.Add(tic);
             }
+            await _context.SaveChangesAsync();
             
             _context.Reservations.Remove(_context.Reservations.Find(id));
             _context.SaveChanges();
 
-            return RedirectToAction(nameof(Successful));
+            _context.Purchases.Add(purchase);
+            _context.SaveChanges();
 
-
+            AutoCancelManager.AutoCancelManagerStatic.DeleteOverTime(purchase.Id, _context);
+            return RedirectToAction("Purchase", "Flights", new { id = purchase.Id });
         }
-
-
 
         [HttpGet]
         public async Task<IActionResult> ReservationNow(int? id)
@@ -194,11 +225,11 @@ namespace WebApplication1.Controllers
 
             var seats = _context.Seats
                 .Include(x => x.OfferType)
-                .Where(x => x.FlightId == flight.Id).ToList();
+                .Where(x => x.FlightId == flight.Id).OrderBy(x => x.Row).ToList();
 
             var selectedOffers = flight.Offers.Select(x => x.Offer).ToList();
 
-            List<Seat> selectedSeats = seats.Where(x => x.Availability && !inputModel.seats[x.Col - 1][x.Row.ToCharArray()[0] - 'a'].Availability).ToList();
+            List<Seat> selectedSeats = seats.Where(x => x.TypeId == inputModel.ticketClass && x.Availability && !(inputModel.seats[x.Col - 1][x.Row.ToCharArray()[0] - seats[0].Row.ToCharArray()[0]].Availability)).ToList();
             ViewData["Err"] = "";
 
             if (seats == null)
@@ -262,19 +293,21 @@ namespace WebApplication1.Controllers
                     res.FlightId = flight.Id;
                     res.OwnerId = _userManager.GetUserId(HttpContext.User);
                     res.processTime = DateTime.Now;
+                    res.numOfAdult = inputModel.numOfAdult;
+                    res.numOfChild = inputModel.numOfChild;
                     _context.Reservations.Add(res);
                     await _context.SaveChangesAsync();
 
                     foreach (var item in inputModel.offers)
                     {
-                        if (!res.isChild && item.quantity > 0)
+                        if (item.quantity > 0)
                         {
                             ReservationOffer tmp = new ReservationOffer() { Offer = selectedOffers.Find(x => x.Id == item.offer.Id), Reservation = res };
                             _context.ReservationOffers.Add(tmp);
                             if (_context.SaveChanges() > 0)
                                 item.quantity--;
                         }
-                        else if (res.isChild && item.childQuantity > 0)
+                        else if (item.childQuantity > 0)
                         {
                             ReservationOffer tmp = new ReservationOffer() { Offer = selectedOffers.Find(x => x.Id == item.offer.Id), Reservation = res };
                             _context.ReservationOffers.Add(tmp);
@@ -306,7 +339,6 @@ namespace WebApplication1.Controllers
             }
 
         }
-
 
         public static async Task<IActionResult> TimeoutAfter<IActionResult>(Task<IActionResult> task, TimeSpan timeout)
         {
@@ -340,7 +372,4 @@ namespace WebApplication1.Controllers
         }
 
     }
-
-
-
 }
