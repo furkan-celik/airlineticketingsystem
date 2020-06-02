@@ -653,7 +653,7 @@ namespace WebApplication1.Controllers
                 _context.SaveChanges();
 
                 String to = _context.Users.Where(a => a.Id == userId).Select(a => a.Email).FirstOrDefault().ToString();
-                mailAdapter.SendMail(_userManager.GetUserId(HttpContext.User), msg, to);
+                //mailAdapter.SendMail(_userManager.GetUserId(HttpContext.User), msg, to);
 
                 if (inputModel.returnDate <= DateTime.Now)
                 {
@@ -719,12 +719,6 @@ namespace WebApplication1.Controllers
                     offer1 += offer.Description + " ";
                 }
                 ViewData["Offer"] = offer1;
-
-                /*
-                int offerid = offerticket.OfferId;
-                var offer = _context.Offers.FirstOrDefault(x => x.Id == offerid);
-                string offer1 = offer.Description;
-                ViewData["Offer"] = offer1;*/
             }
             else
             {
@@ -751,44 +745,49 @@ namespace WebApplication1.Controllers
         [Authorize]
         [RequireHttps]
         [ValidateAntiForgeryToken]
-        public IActionResult Purchase(int pId, string cardNumber, string cardExpiry, string cardCVC, string couponCode)
+        public IActionResult Purchase(int pId, InputModel inputModel)
         {
+
             string OwnerId = _userManager.GetUserId(HttpContext.User);
             var usercard = _context.CreditCards.Where(x => x.OwnerId == OwnerId).ToList();
             var cardlist = new SelectList(usercard, "Id", "CardNumber");
             ViewData["CardId"] = cardlist;
             ViewData["Creditcards"] = "Select a card.";
 
-            if(_context.Purchases.Find(pId) != null)
+            var purchase = _context.Purchases.FirstOrDefault(x => x.Id == pId);
+            
+            if (purchase == null)
             {
-                var purchase = _context.Purchases.FirstOrDefault(x => x.Id == pId);
-                purchase.IsProcessed = true;
-                _context.Purchases.Update(purchase);
-                _context.SaveChanges();
+                return NotFound();
             }
+
+            var ticket = purchase.Tickets.FirstOrDefault(x => x.OwnerId == OwnerId);
+            purchase.IsProcessed = true;
+            _context.Purchases.Update(purchase);
+            _context.SaveChanges();
 
 
             //------------------------------------Send Mail Start------------------------------------------//
 
-            //String msg;
-            //MailAdapter mailAdapter = new MailAdapter();
+            String msg;
+            MailAdapter mailAdapter = new MailAdapter();
 
-            //msg = "Thank you for your ticket purchase. Here are the details < br /> ";
-            //msg = msg + "Fllght NO : " + inputModel.flightInfo.FlightNo + " < br /> ";
+            msg = "Thank you for your ticket purchase. Here are the details < br /> ";
+            msg = msg + "Fllght NO : " + ticket.Flight.FlightNo + " < br /> ";
 
-            //var flt = _context.Flights.Where(a => a.FlightNo.Equals(inputModel.flightInfo.FlightNo)).FirstOrDefault();
-            //var tic = _context.Tickets.Where(a => a.EventId.Equals(flt.Id) && a.OwnerId.Equals(OwnerId)).ToList();
+            var flt = _context.Flights.Where(a => a.FlightNo.Equals(ticket.Flight.FlightNo)).FirstOrDefault();
+            var tic = _context.Tickets.Where(a => a.EventId.Equals(flt.Id) && a.OwnerId.Equals(OwnerId)).ToList();
 
-            //foreach(var t in tic)
-            //    {
-            //    var seat = _context.Seats.Where(a => a.FlightId.Equals(flt.FlightNo) && a.TicketId.Equals(t.Id)).FirstOrDefault();
+            foreach(var t in tic)
+                {
+                var seat = _context.Seats.Where(a => a.FlightId.Equals(flt.FlightNo) && a.TicketId.Equals(t.Id)).FirstOrDefault();
 
-            //    msg = msg + "Flight: " + flt.Name + "<br />" + "Ticket: " + "<br />" + t.Id + "<br />" + "Seat: " + seat.Col + seat.Row + "< br /><br />";
-            //}
+                msg = msg + "Flight: " + flt.Name + "<br />" + "Ticket: " + "<br />" + t.Id + "<br />" + "Seat: " + seat.Col + seat.Row + "< br /><br />";
+            }
 
 
-            //String to = _context.Users.Where(a => a.Id == OwnerId).Select(a => a.Email).FirstOrDefault().ToString();
-            //mailAdapter.SendMail(_userManager.GetUserId(HttpContext.User), msg, to);
+            String to = _context.Users.Where(a => a.Id == OwnerId).Select(a => a.Email).FirstOrDefault().ToString();
+            mailAdapter.SendMail(_userManager.GetUserId(HttpContext.User), msg, to);
 
             //------------------------------------Send Mail End------------------------------------------//
 
