@@ -535,7 +535,8 @@ namespace WebApplication1.Controllers
 
             var seats = _context.Seats
                 .Include(x => x.OfferType)
-                .Where(x => x.FlightId == flight.Id).ToList();
+                .Where(x => x.FlightId == flight.Id)
+                .OrderBy(x => x.Row).ToList();
 
             var selectedOffers = flight.Offers.Select(x => x.Offer).ToList();
 
