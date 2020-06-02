@@ -794,7 +794,7 @@ namespace WebApplication1.Controllers
 
             msg = "Thank you for your ticket purchase. Here are the details \n ";
             msg = msg + "Flight No : " + ticket.Flight.FlightNo + " \n ";
-            msg = msg + "Flight: " + ticket.Flight.Name + "\n" + "Ticket: " + ticket.Id + "\n" + "Price:" + purchase.Price + " TL" +"\n" + "Seat: ";
+            msg = msg + "Flight: " + ticket.Flight.Name + "\n" + "Ticket: " + ticket.Id + "\n" + "Price: " + purchase.Price + " TL" +"\n" + "Seat: ";
 
             //var flt = _context.Flights.Where(a => a.FlightNo.Equals(ticket.Flight.FlightNo)).FirstOrDefault();
             //var tic = _context.Tickets.Where(a => a.EventId.Equals(flt.Id) && a.OwnerId.Equals(OwnerId)).ToList();

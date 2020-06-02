@@ -82,7 +82,7 @@ else
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td class="textcolor">
-                    @if (item.Flight.Date <= DateTime.Now.AddDays(2) && !item.CheckIn)
+                    @if (item.Flight.Date <= DateTime.Now.AddDays(2) && !item.CheckIn && item.Purchase.IsProcessed == true)
                     {
                         <a asp-action="CheckIn" asp-route-id="@item.Id " asp-controller="CheckIn">Check-in</a>
                     }
