@@ -68,6 +68,12 @@ namespace WebApplication1.Controllers
                 ViewData["Offer"] = "No offer selected.";
             }
 
+            DateTime date = ticket.Flight.Date;
+            TimeSpan eta = ticket.Flight.Route.ETA;
+
+            var arrivaldate = date + eta;
+            ViewData["ArrivalDate"] = arrivaldate;
+
             return View(ticket);
 
         }

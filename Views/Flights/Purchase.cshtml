@@ -26,43 +26,43 @@
 <div class="row">
     
     <div class="column-left">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="form-group">
-                    <span class="form-label">Name Surname</span>
-                    @Html.TextBox("Name", @ViewData["Name"], new { @class = "form-control", @readonly = "readonly" })
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-8">
-                <div class="form-group">
-                    <span class="form-label">Email</span>
-                    @Html.TextBox("Email", @ViewData["Email"], new { @class = "form-control", @readonly = "readonly" })
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-8">
-                <div class="form-group">
-                    <span class="form-label">Card Number</span>
-                    @Html.DropDownList("CreditCard", ViewData["CardId"] as SelectList, "Last 4 digits.", new { required = "required", @class = "form-control" })
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-8">
-                <div class="form-group">
-                    <span class="form-label">Billing Adress</span>
-                    @Html.DropDownList("Adress", ViewData["Addresses"] as SelectList, "Address", new { required = "required", @class = "form-control" })
-                </div>
-            </div>
-        </div>
         <form asp-action="Purchase">
             <div class="row">
                 <div class="col-md-8">
+                    <div class="form-group">
+                        <span class="form-label">Name Surname</span>
+                        @Html.TextBox("Name", @ViewData["Name"], new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <span class="form-label">Email</span>
+                        @Html.TextBox("Email", @ViewData["Email"], new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <span class="form-label">Card Number</span>
+                        @Html.DropDownList("CreditCard", ViewData["CardId"] as SelectList, "Last 4 digits.", new { required = "required", @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <span class="form-label">Billing Adress</span>
+                        @Html.DropDownList("Adress", ViewData["Addresses"] as SelectList, "Address", new { required = "required", @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
                     <input type="hidden" name="pId" value="@Model.Id" />
-                    <button class="subscribe btn btn-success btn-lg btn-block" type="button">Complete Purchase</button>
+                    <input class="subscribe btn btn-success btn-lg btn-block" type="submit" value="Complete Purchase"/>
                     <a asp-action="Index">Cancel Purchase</a>
                     @*<button class="subscribe btn btn-dark btn-lg btn-block" type="button">Cancel Puchase</button>*@
                 </div>
