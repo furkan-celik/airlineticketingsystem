@@ -190,7 +190,7 @@
         var newDate = new Date(Date.parse(date) + 86400000);
         var returnDate = new Date(0);
 
-        if ($("#roundtrip").attr("checked").val()) {
+        if ($("#roundtrip").prop("checked")) {
             returnDate = new Date($("#arrival").val());
             if (returnDate == newDate) {
                 returnDate = new Date(returnDate + 86400000);
@@ -223,7 +223,7 @@
         var newDate = new Date(Date.parse(date) - 86400000);
         var returnDate = new Date(0);
 
-        if ($("#roundtrip").attr("checked").val()) {
+        if ($("#roundtrip").prop("checked")) {
             returnDate = new Date($("#arrival").val());
         }
 
