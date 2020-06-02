@@ -756,7 +756,7 @@ namespace WebApplication1.Controllers
             ViewData["Creditcards"] = "Select a card.";
 
             var purchase = _context.Purchases.FirstOrDefault(x => x.Id == pId);
-            
+
             if (purchase == null)
             {
                 return NotFound();
@@ -773,19 +773,29 @@ namespace WebApplication1.Controllers
             String msg;
             MailAdapter mailAdapter = new MailAdapter();
 
-            msg = "Thank you for your ticket purchase. Here are the details < br /> ";
-            msg = msg + "Fllght NO : " + ticket.Flight.FlightNo + " < br /> ";
+            msg = "Thank you for your ticket purchase. Here are the details \n ";
+            msg = msg + "Flight No : " + ticket.Flight.FlightNo + " \n ";
+            msg = msg + "Flight: " + ticket.Flight.Name + "\n" + "Ticket: " + ticket.Id + "\n" + "Price:" + purchase.Price + " TL" +"\n" + "Seat: ";
 
-            var flt = _context.Flights.Where(a => a.FlightNo.Equals(ticket.Flight.FlightNo)).FirstOrDefault();
-            var tic = _context.Tickets.Where(a => a.EventId.Equals(flt.Id) && a.OwnerId.Equals(OwnerId)).ToList();
+            //var flt = _context.Flights.Where(a => a.FlightNo.Equals(ticket.Flight.FlightNo)).FirstOrDefault();
+            //var tic = _context.Tickets.Where(a => a.EventId.Equals(flt.Id) && a.OwnerId.Equals(OwnerId)).ToList();
 
+            /*
             foreach(var t in tic)
                 {
                 var seat = _context.Seats.Where(a => a.FlightId.Equals(flt.FlightNo) && a.TicketId.Equals(t.Id)).FirstOrDefault();
 
-                msg = msg + "Flight: " + flt.Name + "<br />" + "Ticket: " + "<br />" + t.Id + "<br />" + "Seat: " + seat.Col + seat.Row + "< br /><br />";
-            }
+                msg = msg + "Flight: " + ticket.Flight.Name + "\n" + "Ticket: " + "\n" + t.Id + "\n" + "Seat: " + seat.Col + seat.Row + "\n\n";
+            }*/
 
+            var ticket1 = purchase.Tickets.Where(x => x.OwnerId == OwnerId).ToList();
+
+            foreach (var item in ticket1)
+            {
+                //var seat = _context.Seats.Where(a => a.FlightId.Equals(flt.FlightNo) && a.TicketId.Equals(t.Id)).FirstOrDefault();
+                msg = msg + item.Seats.ToArray()[0].Col + item.Seats.ToArray()[0].Row + " ";
+                //msg = msg + item.Seats.Col + item.Seats.Row + "\n\n" ;
+            }
 
             String to = _context.Users.Where(a => a.Id == OwnerId).Select(a => a.Email).FirstOrDefault().ToString();
             mailAdapter.SendMail(_userManager.GetUserId(HttpContext.User), msg, to);
