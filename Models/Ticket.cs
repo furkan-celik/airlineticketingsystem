@@ -22,11 +22,13 @@ namespace WebApplication1.Models
         [Required]
         public bool CheckIn { get; set; }
         public string Name { get; set; }
-
+        public int PurchaseId { get; set; }
 
         public virtual AppUser Owner { get; set; }
         [ForeignKey("EventId")]
         public virtual Flight Flight { get; set; }
+        [ForeignKey("PurchaseId")]
+        public virtual Purchase Purchase { get; set; }
         public virtual ICollection<OfferTicket> Offers { get; set; }
         public virtual ICollection<Seat> Seats { get; set; }
     }
