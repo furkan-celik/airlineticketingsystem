@@ -653,8 +653,9 @@ namespace WebApplication1.Controllers
                 String to = _context.Users.Where(a => a.Id == userId).Select(a => a.Email).FirstOrDefault().ToString();
                 mailAdapter.SendMail(_userManager.GetUserId(HttpContext.User), msg, to);
 
-                if (inputModel.returnDate == default)
+                if (inputModel.returnDate <= DateTime.Now)
                 {
+                    AutoCancelManager.AutoCancelManagerStatic.DeleteOverTime(purchase.Id, _context);
                     return RedirectToAction("Purchase", new { id = purchase.Id });
                 }
                 else
@@ -680,6 +681,9 @@ namespace WebApplication1.Controllers
             return View();
         }
 
+        [HttpGet]
+        [Authorize]
+        [RequireHttps]
         public IActionResult Purchase(int id, int countOfBaby)
         {
             var purchase = _context.Purchases.FirstOrDefault(x => x.Id == id);
@@ -743,6 +747,7 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         [Authorize]
+        [RequireHttps]
         [ValidateAntiForgeryToken]
         public IActionResult Purchase(int pId, string cardNumber, string cardExpiry, string cardCVC, string couponCode)
         {
@@ -752,11 +757,13 @@ namespace WebApplication1.Controllers
             ViewData["CardId"] = cardlist;
             ViewData["Creditcards"] = "Select a card.";
 
-
-            var purchase = _context.Purchases.FirstOrDefault(x => x.Id == pId);
-            purchase.IsProcessed = true;
-            _context.Purchases.Update(purchase);
-            _context.SaveChanges();
+            if(_context.Purchases.Find(pId) != null)
+            {
+                var purchase = _context.Purchases.FirstOrDefault(x => x.Id == pId);
+                purchase.IsProcessed = true;
+                _context.Purchases.Update(purchase);
+                _context.SaveChanges();
+            }
 
 
             //------------------------------------Send Mail Start------------------------------------------//

@@ -42,6 +42,8 @@ namespace WebApplication1.Data
             }
         }
 
+        public ApplicationDbContext() { }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -51,6 +53,11 @@ namespace WebApplication1.Data
             builder.Entity<OfferFlight>().HasKey(o => new { o.OfferId, o.FlightId });
             builder.Entity<OfferTicket>().HasKey(o => new { o.OfferId, o.TicketId });
             builder.Entity<ReservationOffer>().HasKey(o => new { o.OfferId, o.ReservationId });
+        }
+
+        public override void Dispose()
+        {
+
         }
     }
 }

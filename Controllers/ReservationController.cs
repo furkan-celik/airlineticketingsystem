@@ -62,12 +62,17 @@ namespace WebApplication1.Controllers
         public async Task<IActionResult> Cancel_Reservation(int id, int type, int countOfSeats, int countOfChild, int countOfBaby)
         {
             var Res_deleted = _context.Reservations.Find(id);
+
+            foreach (var item in Res_deleted.Seats)
+            {
+                item.Availability = true;
+                _context.Seats.Update(item);
+            }
+
             _context.Reservations.Remove(Res_deleted);
             _context.SaveChanges();
             return RedirectToAction(nameof(Cancel));
         }
-
-
 
         [HttpGet]
         public async Task<IActionResult> Buy_After_Reservation(int? id)
@@ -122,6 +127,9 @@ namespace WebApplication1.Controllers
                 counter++;
 
             }
+
+            _context.Reservations.Remove(_context.Reservations.Find(id));
+            _context.SaveChanges();
 
             return RedirectToAction(nameof(Successful));
 
@@ -227,6 +235,7 @@ namespace WebApplication1.Controllers
                     Reservation res = new Reservation();
                     res.FlightId = flight.Id;
                     res.OwnerId = _userManager.GetUserId(HttpContext.User);
+                    res.processTime = DateTime.Now;
                     _context.Reservations.Add(res);
                     await _context.SaveChangesAsync();
 
@@ -255,6 +264,7 @@ namespace WebApplication1.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
+                        AutoCancelManager.AutoCancelManagerStatic.DeleteOverTime(res, _context);
                     }
                     catch (Exception ex)
                     {
@@ -264,11 +274,6 @@ namespace WebApplication1.Controllers
 
                     counter++;
                 }
-
-
-               
-
-
 
                 return RedirectToAction(nameof(Successful));
 

@@ -17,6 +17,8 @@ namespace WebApplication1.Models
         public int FlightId { get; set; }
         [Required]
         public bool isChild { get; set; }
+        [Required]
+        public DateTime processTime { get; set; }
 
         public virtual AppUser Owner { get; set; }
         public virtual Flight Flight { get; set; }
