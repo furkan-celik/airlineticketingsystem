@@ -24,10 +24,16 @@
                 @Html.DisplayFor(model => model.Flight.Name)
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Flight.Date)
+                @*@Html.DisplayNameFor(model => model.Flight.Date)*@Departure Time
             </dt>
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.Flight.Date)
+            </dd>
+            <dt class="col-sm-2">
+                Arrival Time
+            </dt>
+            <dd class="col-sm-10">
+                @ViewData["ArrivalDate"]
             </dd>
             <dt class="col-sm-2">
                 Flight No

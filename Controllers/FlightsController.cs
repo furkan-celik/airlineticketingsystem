@@ -105,6 +105,7 @@ namespace WebApplication1.Controllers
             public int Price { get; set; }
             public DateTime ReturnDate { get; set; }
             public int? pId { get; set; }
+            public DateTime ArrivalDate { get; set; }
         }
 
         public IActionResult SearchResults(string arr, string dest, DateTime date, int numOfAdult, int numOfChild, int ticketClass, DateTime returnDate)
@@ -179,8 +180,9 @@ namespace WebApplication1.Controllers
 
                 foreach (var item in flights.ToArray())
                 {
+                    var arrivaldate = item.Date + item.Route.ETA;
                     var price = (int)(item.Offers.FirstOrDefault(x => x.Offer.Type == ticketClass).Offer.ChildPrice * numOfChild + item.Offers.FirstOrDefault(x => x.Offer.Type == ticketClass).Offer.Price * numOfAdult);
-                    srm.Add(new SearchResultModel() { Flight = item, Price = price, ReturnDate = returnDate, pId = pId });
+                    srm.Add(new SearchResultModel() { Flight = item, Price = price, ReturnDate = returnDate, pId = pId, ArrivalDate = arrivaldate });
                 }
             }
 
