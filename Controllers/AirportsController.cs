@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
@@ -19,6 +20,15 @@ namespace WebApplication1.Controllers
         public AirportsController(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        public JsonResult GetListOfAirports()
+        {
+            List<string> list = _context.Airports.Select(x => x.AirportName).ToList();
+            List<string> list2 = _context.Cities.Select(x => x.CityName).ToList();
+            list2.AddRange(list);
+
+            return Json(new SelectList(list));
         }
 
         // GET: Airports
