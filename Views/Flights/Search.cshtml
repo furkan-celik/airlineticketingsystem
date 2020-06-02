@@ -28,7 +28,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <span class="form-label">Flying from</span>
-                        @Html.DropDownList("dest", new SelectList(
+                        @Html.DropDownList("arr", new SelectList(
                          Model.Select(x => new { Value = x, Text = x }),//you have to pass data as model. If you use another way you must change this line.
                          "Value",
                          "Text"
@@ -41,7 +41,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <span class="form-label">Flying to</span>
-                        @Html.DropDownList("arr", new SelectList(
+                        @Html.DropDownList("dest", new SelectList(
                         Model.Select(x => new { Value = x, Text = x }),//you have to pass data as model. If you use another way you must change this line.
                         "Value",
                         "Text"
