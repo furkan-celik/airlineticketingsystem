@@ -539,7 +539,7 @@ namespace WebApplication1.Controllers
 
             var selectedOffers = flight.Offers.Select(x => x.Offer).ToList();
 
-            List<Seat> selectedSeats = seats.Where(x => x.Availability && !inputModel.seats[x.Col - 1][x.Row.ToCharArray()[0] - 'A'].Availability).ToList();
+            List<Seat> selectedSeats = seats.Where(x => x.TypeId == inputModel.ticketClass && x.Availability && !(inputModel.seats[x.Col - 1][x.Row.ToCharArray()[0] - seats[0].Row.ToCharArray()[0]].Availability)).ToList();
 
             ViewData["Err"] = "";
 

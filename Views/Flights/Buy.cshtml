@@ -516,8 +516,7 @@
                                                             }
                                                             else
                                                             {
-                                                                Model.seats[i][j].Availability = true;
-                                                                <input type="checkbox" asp-for="@Model.seats[i][j].Availability" id="@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())" disabled />
+                                                                <input type="checkbox" asp-for="@Model.seats[i][j].Availability" id="@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())" value="true" disabled />
                                                             }
                                                             <label for="@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())">'@(Model.seats[i][j].Col + Model.seats[i][j].Row.ToUpper())'</label>
                                                             <input type="hidden" asp-for="@Model.seats[i][j].Id" />
