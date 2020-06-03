@@ -36,6 +36,12 @@ else
                 <div class="row toggle" id="dropdown-detail-1" data-toggle="detail-@(purchase.Id)">
                     <div class="col-xs-10">
                         @(purchase.Tickets.ToList()[0].Flight.Name)     @(purchase.Tickets.ToList()[0].Flight.Date)
+                        <span style="float:right">
+                            @if (purchase.Tickets.ToList()[0].Flight.Date >= DateTime.Now + purchase.Tickets.ToList()[0].Flight.RefundTime)
+                            {
+                                <a asp-action="Delete" asp-controller="Purchases" asp-route-id="@purchase.Id" class="btn btn-danger">Delete</a>
+                            }
+                        </span>
                     </div>
                     <div class="col-xs-2"><i class="fa fa-chevron-down pull-right"></i></div>
                 </div>

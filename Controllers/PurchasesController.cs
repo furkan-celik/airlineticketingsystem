@@ -78,7 +78,6 @@ namespace WebApplication1.Controllers
             }
             
                 return View(purchase);
-            
         }
 
         // POST: Purchases/Delete/5
