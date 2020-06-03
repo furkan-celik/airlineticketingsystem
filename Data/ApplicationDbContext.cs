@@ -36,12 +36,6 @@ namespace WebApplication1.Data
             : base(options)
         {
             _context = this;
-            
-            if(_context.OfferTypes.Count() < 4)
-            {
-                _context.OfferTypes.AddRange(new OfferType[] { new OfferType() { Name = "Business" }, new OfferType() { Name = "Economy" }, new OfferType() { Name = "Super Cheap" }, new OfferType() { Name = "Other" } });
-                _context.SaveChanges();
-            }
         }
 
         public ApplicationDbContext() { }
