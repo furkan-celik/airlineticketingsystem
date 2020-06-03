@@ -113,9 +113,9 @@ namespace WebApplication1.Controllers
             String userId = _userManager.GetUserId(HttpContext.User);
             MailAdapter mailAdapter = new MailAdapter();
 
-            msg = "Thank you for your ticket purchase. Here are the details < br /> ";
-            msg = msg + "Flight: " + purchase.Tickets.ToList()[0].Flight.Name + "<br />" + "Fllght NO : " + purchase.Tickets.ToList()[0].Flight.FlightNo + " < br /> ";
-            msg = msg + "Ticket(s) refunded by refund money of: " + "<br />" + purchase.Price * (purchase.Tickets.ToList()[0].Flight.RefundPortion / 100f) + "<br />" + "Refunded price will be in your account in 3 to 5 work days.< br /><br />";
+            msg = "Thank you for your ticket purchase. Here are the details \n ";
+            msg = msg + "Flight: " + purchase.Tickets.ToList()[0].Flight.Name + "\n" + "Fllght NO : " + purchase.Tickets.ToList()[0].Flight.FlightNo + " \n ";
+            msg = msg + "Ticket(s) refunded by refund money of: " + "\n" + purchase.Price * (purchase.Tickets.ToList()[0].Flight.RefundPortion / 100f) + "\n" + "Refunded price will be in your account in 3 to 5 work days.\n\n";
             String to = _context.Users.Where(a => a.Id == userId).Select(a => a.Email).FirstOrDefault().ToString();
             mailAdapter.SendMail(_userManager.GetUserId(HttpContext.User), msg, to);
 
