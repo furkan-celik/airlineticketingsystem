@@ -13,7 +13,6 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
-    [Authorize(Policy = "ReqAdmin")]
     public class PurchasesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,6 +24,7 @@ namespace WebApplication1.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Policy = "ReqAdmin")]
         // GET: Purchases
         public async Task<IActionResult> Index()
         {
@@ -43,6 +43,7 @@ namespace WebApplication1.Controllers
             }
         }
 
+        [Authorize(Policy = "ReqAdmin")]
         // GET: Purchases/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -62,6 +63,7 @@ namespace WebApplication1.Controllers
             return View(purchase);
         }
 
+        [Authorize]
         // GET: Purchases/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -81,6 +83,7 @@ namespace WebApplication1.Controllers
                 return View(purchase);
         }
 
+        [Authorize]
         // POST: Purchases/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -118,7 +121,11 @@ namespace WebApplication1.Controllers
 
             _context.Purchases.Remove(purchase);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            if (User.IsInRole("CompAdmin") && User.IsInRole("WebAdmin"))
+                return RedirectToAction(nameof(Index));
+            else
+                return RedirectToAction("Search", "Flights");
         }
 
         private bool PurchaseExists(int id)
